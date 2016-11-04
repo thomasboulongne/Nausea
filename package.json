@@ -23,10 +23,11 @@
     "html-webpack-plugin": "^2.24.1",
     "json-loader": "^0.5.4",
     "node-sass": "^3.11.1",
-    "path": "^0.12.7",
+    "normalize.css": "^5.0.0",
     "port-number": "^1.0.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "vue-loader": "^9.7.0",
     "webpack": "^1.13.3",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-dev-server": "^1.16.2",
@@ -34,10 +35,8 @@
   },
   "dependencies": {
     "domready": "^1.0.8",
-    "normalize.css": "^5.0.0",
     "three": "^0.82.1",
     "vue": "^2.0.3",
-    "vue-loader": "^9.7.0",
     "vue-router": "^2.0.1"
   }
 }
