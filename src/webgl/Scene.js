@@ -2,6 +2,7 @@ import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 import './utils/PointerLockControls';
 import Field from './objects/Field';
+import Lights from './Lights';
 
 class Scene {
 
@@ -16,10 +17,12 @@ class Scene {
 
 		this.scene = new THREE.Scene();
 
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
+
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
-		this.renderer.setClearColor(0xcccccc);
-		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+		this.renderer.setClearColor(0xffffff);
+		this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 1000 );
 
 		this.setControls();
 
@@ -63,21 +66,19 @@ class Scene {
 		this.center = new THREE.Vector3( );
 
 		this.controls = new THREE.PointerLockControls(this.camera, {
-			z: 100,
-			y: 30,
-			x: 45
+			z: 1,
+			y: 10,
+			x: 10
 		}, this.center
 		);
 		this.add( this.controls.getObject() );
 	}
 
 	setLights() {
-
-		this.light = new THREE.DirectionalLight( 0xffffff, 2 );
-		this.light.position.set( 1500, 850, 1500 );
-
-		this.light.castShadow = true;
-		this.add( this.light );
+		this.lights = new Lights();
+		for (let i = 0; i < this.lights.list.length; i++) {
+			this.add(this.lights.list[i]);
+		}
 	}
 
 	setRaycast() {
