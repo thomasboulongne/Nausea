@@ -72,6 +72,15 @@ module.exports = {
 					"html",
 				]
 			},
+            {
+               test: /node_modules/,
+               loader: 'ify'
+             },
+             {
+               test: /\.(glsl|frag|vert)$/,
+               exclude: /node_modules/,
+               loader: 'raw!glslify'
+             }
 		],
 	},
 
@@ -90,7 +99,8 @@ module.exports = {
 		}),
 		new webpack.ProvidePlugin({
 			'Vue': 'vue',
-			'THREE': 'three'
+			'THREE': 'three',
+			'TweenMax': 'gsap/src/minified/TweenMax.min.js'
 		}),
 		new CopyWebpackPlugin(
 			[
