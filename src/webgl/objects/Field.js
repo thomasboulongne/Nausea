@@ -29,6 +29,8 @@ class Field {
 				geometry.computeVertexNormals();
 				this.mesh = new THREE.Mesh( geometry, material );
 
+				this.mesh.position.y = -5;
+
 				this.mesh.rotation.x = - Math.PI / 2;
 
 				//set height of vertices

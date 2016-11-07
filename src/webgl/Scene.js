@@ -2,6 +2,7 @@ import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 import './utils/PointerLockControls';
 import Field from './objects/Field';
+import Bench from './objects/Bench';
 import Lights from './Lights';
 
 class Scene {
@@ -66,9 +67,9 @@ class Scene {
 		this.center = new THREE.Vector3( );
 
 		this.controls = new THREE.PointerLockControls(this.camera, {
-			z: 1,
-			y: 10,
-			x: 10
+			z: 0,
+			y: 1,
+			x: 0
 		}, this.center
 		);
 		this.add( this.controls.getObject() );
@@ -102,10 +103,19 @@ class Scene {
 	}
 
 	createObjects() {
+		this.objects = [];
 		this.field = new Field();
 		this.field.load()
 		.then(() => {
+			this.objects.push(this.field.mesh);
 			this.add(this.field.mesh);
+		});
+
+		this.bench = new Bench();
+		this.bench.load()
+		.then(() => {
+			this.objects.push(this.bench.mesh);
+			this.add(this.bench.mesh);
 		});
 	}
 
@@ -131,11 +141,13 @@ class Scene {
 		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
 		this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-		let intersects = this.raycaster.intersectObjects( this.scene.children );
+		let intersects = this.raycaster.intersectObjects( this.objects );
 
 		if ( intersects.length > 0 ) {
 			// The raycast encouters an object
-			console.log('Casted object: ', intersects[0]);
+			if(intersects[0].object.name != 'field') {
+				console.log('Casted object: ', intersects[0]);
+			}
 		} else {
 			this.INTERSECTED = null;
 		}
