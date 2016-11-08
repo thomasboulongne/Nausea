@@ -5,25 +5,27 @@ class AWDObject {
 	/**
 	 * @constructor
 	 */
-	constructor() {
+	constructor(name, options) {
+		this.name = name;
+		this.options = options;
 	}
 
-	load(filename, opt) {
+	load() {
 
 		let loader = new THREE.AWDLoader();
 
 		const options = {
-			x : opt.x ? opt.x : 0,
-			y : opt.y ? opt.y : 0,
-			z : opt.z ? opt.z : 0,
-			color : opt.color ? opt.color : "0xcacaca"
+			x : this.options.x ? this.options.x : 0,
+			y : this.options.y ? this.options.y : 0,
+			z : this.options.z ? this.options.z : 0,
+			color : this.options.color ? this.options.color : "0xcacaca"
 		};
 
 		return new Promise(resolve => {
-			loader.load( './assets3d/' + filename + '.awd', function ( mesh ) {
+			loader.load( './assets3d/' + this.name + '.awd', function ( mesh ) {
 				this.mesh = mesh;
-
-				this.mesh.position.set(options.x, options.y, options.z)
+				this.mesh.name = this.name;
+				this.mesh.position.set(options.x, options.y, options.z);
 				this.mesh.children[0].material.color = new THREE.Color( options.color );
 
 				resolve('success');

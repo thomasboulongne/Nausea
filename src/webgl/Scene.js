@@ -4,10 +4,7 @@ import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 import './utils/PointerLockControls';
 
 import Field from './objects/Field';
-import Bench from './objects/Bench';
-import TreeBig from './objects/TreeBig';
-import TreeLittle from './objects/TreeLittle';
-import Rock from './objects/Rock';
+import AWDObject from './AWDObject';
 
 import Lights from './Lights';
 
@@ -117,28 +114,52 @@ class Scene {
 			this.add(this.field.mesh);
 		});
 
-		this.bench = new Bench();
+		this.bench = new AWDObject('bench',{
+			'name': 'bench',
+			'x': 0,
+			'y': 0,
+			'z': 0,
+			'color': 0xcacaca
+		});
 		this.bench.load()
 		.then(() => {
 			this.objects.push(this.bench.mesh);
 			this.add(this.bench.mesh);
 		});
 
-		this.treeBig = new TreeBig();
+		this.treeBig = new AWDObject('tree-big',{
+			'name': 'treeBig',
+			'x': 5,
+			'y': 0,
+			'z': 5,
+			'color': 0xcacaca
+		});
 		this.treeBig.load()
 		.then(() => {
 			this.objects.push(this.treeBig.mesh);
 			this.add(this.treeBig.mesh);
 		});
 
-		this.treeLittle = new TreeLittle();
+		this.treeLittle = new AWDObject('tree-little',{
+			'name': 'treeLittle',
+			'x': 9,
+			'y': 0,
+			'z': -6,
+			'color': 0xcacaca
+		});
 		this.treeLittle.load()
 		.then(() => {
 			this.objects.push(this.treeLittle.mesh);
 			this.add(this.treeLittle.mesh);
 		});
 
-		this.rock = new Rock();
+		this.rock = new AWDObject('rock',{
+			'name': 'rock',
+			'x': 6,
+			'y': 0,
+			'z': -2.6,
+			'color': 0xcacaca
+		});
 		this.rock.load()
 		.then(() => {
 			this.objects.push(this.rock.mesh);
