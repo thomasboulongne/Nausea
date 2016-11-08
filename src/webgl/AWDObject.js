@@ -25,6 +25,9 @@ class AWDObject {
 			loader.load( './assets3d/' + this.name + '.awd', function ( mesh ) {
 				this.mesh = mesh;
 				this.mesh.name = this.name;
+				for (let i = 0; i < this.mesh.children.length; i++) {
+					this.mesh.children[i].name = this.name;
+				}
 				this.mesh.position.set(options.x, options.y, options.z);
 				this.mesh.children[0].material.color = new THREE.Color( options.color );
 

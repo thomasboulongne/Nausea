@@ -110,7 +110,6 @@ class Scene {
 		this.field = new Field();
 		this.field.load()
 		.then(() => {
-			this.objects.push(this.field.mesh);
 			this.add(this.field.mesh);
 		});
 
@@ -189,13 +188,12 @@ class Scene {
 		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
 		this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-		let intersects = this.raycaster.intersectObjects( this.objects );
+		let intersects = this.raycaster.intersectObjects( this.objects, true );
+
 
 		if ( intersects.length > 0 ) {
 			// The raycast encouters an object
-			if(intersects[0].object.name != 'field') {
-				console.log('Casted object: ', intersects[0]);
-			}
+			console.log('Casted object: ', intersects[0].object.name);
 		} else {
 			this.INTERSECTED = null;
 		}
