@@ -7,13 +7,23 @@ class Lights {
 
 		this.list = [];
 
-		this.list.push( this.createSpotLight(0xffffff, 0, 28, 0) );
+		//this.list.push( this.createSpotLight(0xffffff, 0, 28, 0) );
 
 		this.list.push( this.createHemisphere() );
+
+		this.list.push( this.createDirectional() );
+	}
+
+	createDirectional() {
+		this.directionalLight = new THREE.DirectionalLight ( 0xffffff, 0.2 );
+		this.directionalLight.position.set( -10, 1, 0 );
+
+		return this.directionalLight;
 	}
 
 	createHemisphere() {
 		this.hemisphere = new THREE.HemisphereLight( 0xededed, 0xededed, 1 );
+
 		return this.hemisphere;
 	}
 

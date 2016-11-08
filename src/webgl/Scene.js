@@ -1,8 +1,14 @@
 import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
+
 import './utils/PointerLockControls';
+
 import Field from './objects/Field';
 import Bench from './objects/Bench';
+import TreeBig from './objects/TreeBig';
+import TreeLittle from './objects/TreeLittle';
+import Rock from './objects/Rock';
+
 import Lights from './Lights';
 
 class Scene {
@@ -18,7 +24,7 @@ class Scene {
 
 		this.scene = new THREE.Scene();
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.15 );
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
@@ -116,6 +122,27 @@ class Scene {
 		.then(() => {
 			this.objects.push(this.bench.mesh);
 			this.add(this.bench.mesh);
+		});
+
+		this.treeBig = new TreeBig();
+		this.treeBig.load()
+		.then(() => {
+			this.objects.push(this.treeBig.mesh);
+			this.add(this.treeBig.mesh);
+		});
+
+		this.treeLittle = new TreeLittle();
+		this.treeLittle.load()
+		.then(() => {
+			this.objects.push(this.treeLittle.mesh);
+			this.add(this.treeLittle.mesh);
+		});
+
+		this.rock = new Rock();
+		this.rock.load()
+		.then(() => {
+			this.objects.push(this.rock.mesh);
+			this.add(this.rock.mesh);
 		});
 	}
 

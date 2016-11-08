@@ -1,6 +1,6 @@
 import AWDObject from '../AWDObject';
 
-class Bench extends AWDObject {
+class TreeLittle extends AWDObject {
 
 	/**
 	 * @constructor
@@ -8,16 +8,16 @@ class Bench extends AWDObject {
 	constructor() {
 		super();
 		this.options = {
-			'name': 'bench',
-			'x': 0,
+			'name': 'treeLittle',
+			'x': 9,
 			'y': 0,
-			'z': 0,
+			'z': -6,
 			'color': 0xcacaca
 		};
 	}
 
 	load() {
-		return super.load("bench", this.options);
+		return super.load("tree-little", this.options);
 	}
 
 	/**
@@ -31,4 +31,4 @@ class Bench extends AWDObject {
 
 }
 
-export default Bench;
+export default TreeLittle;

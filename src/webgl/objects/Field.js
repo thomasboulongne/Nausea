@@ -20,7 +20,7 @@ class Field {
 				let geometry = new THREE.PlaneGeometry(50, 50, 63, 63);
 
 				let material = new THREE.MeshPhongMaterial( {
-					color: 0x575757,
+					color: 0x343434,
 					wireframe: false,
 					side: THREE.DoubleSide
 				});

@@ -8,17 +8,23 @@ class AWDObject {
 	constructor() {
 	}
 
-	load(filename, options) {
+	load(filename, opt) {
 
 		let loader = new THREE.AWDLoader();
+
+		const options = {
+			x : opt.x ? opt.x : 0,
+			y : opt.y ? opt.y : 0,
+			z : opt.z ? opt.z : 0,
+			color : opt.color ? opt.color : "0xcacaca"
+		};
 
 		return new Promise(resolve => {
 			loader.load( './assets3d/' + filename + '.awd', function ( mesh ) {
 				this.mesh = mesh;
 
-				for( let key in options) {
-					this.mesh[key] = options[key];
-				}
+				this.mesh.position.set(options.x, options.y, options.z)
+				this.mesh.children[0].material.color = new THREE.Color( options.color );
 
 				resolve('success');
 			}.bind(this) );

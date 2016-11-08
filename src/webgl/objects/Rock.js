@@ -1,6 +1,6 @@
 import AWDObject from '../AWDObject';
 
-class Bench extends AWDObject {
+class Rock extends AWDObject {
 
 	/**
 	 * @constructor
@@ -8,16 +8,16 @@ class Bench extends AWDObject {
 	constructor() {
 		super();
 		this.options = {
-			'name': 'bench',
-			'x': 0,
+			'name': 'rock',
+			'x': 6,
 			'y': 0,
-			'z': 0,
+			'z': -2.6,
 			'color': 0xcacaca
 		};
 	}
 
 	load() {
-		return super.load("bench", this.options);
+		return super.load("rock", this.options);
 	}
 
 	/**
@@ -31,4 +31,4 @@ class Bench extends AWDObject {
 
 }
 
-export default Bench;
+export default Rock;
