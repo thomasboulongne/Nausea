@@ -7,6 +7,8 @@ import Field from './objects/Field';
 import Particles from './objects/Particles';
 import AWDObject from './AWDObject';
 
+import SoundManager from './SoundManager';
+
 import Lights from './Lights';
 
 class Scene {
@@ -37,9 +39,12 @@ class Scene {
 
 		this.setComposer();
 
+		this.setAmbiantSound();
+
 		this.createObjects();
 
 		this.addEventListeners();
+
 	}
 
 	/**
@@ -104,6 +109,16 @@ class Scene {
 				amount: .05
 			})
 		];
+	}
+
+	setAmbiantSound() {
+		this.soundManager = new SoundManager();
+
+		this.soundAmbiant = this.soundManager.load('ambiant.wav');
+		this.soundExist = this.soundManager.load('exist.wav');
+
+		this.soundManager.play(this.soundAmbiant);
+		this.soundManager.play(this.soundExist);
 	}
 
 	createObjects() {
