@@ -26,6 +26,8 @@ module.exports = {
 		],
 	},
 
+	devTool: 'source-map',
+
 	module: {
 		preLoaders: [
 			{

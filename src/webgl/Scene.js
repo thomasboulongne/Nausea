@@ -4,6 +4,7 @@ import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 import './utils/PointerLockControls';
 
 import Field from './objects/Field';
+import Particles from './objects/Particles';
 import AWDObject from './AWDObject';
 
 import Lights from './Lights';
@@ -26,7 +27,7 @@ class Scene {
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
-		this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 1000 );
+		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
 
 		this.setControls();
 
@@ -164,6 +165,12 @@ class Scene {
 			this.objects.push(this.rock.mesh);
 			this.add(this.rock.mesh);
 		});
+
+		this.particles = new Particles();
+		this.particles.load()
+		.then(() => {
+			this.add(this.particles.mesh);
+		});
 	}
 
 	addEventListeners() {
@@ -182,6 +189,9 @@ class Scene {
 	 * @description Renders/Draw the scene
 	 */
 	render() {
+
+		//Particles 
+		this.particles.update();
 
 		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
 
