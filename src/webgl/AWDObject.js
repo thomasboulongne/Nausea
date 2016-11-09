@@ -31,6 +31,19 @@ class AWDObject {
 				this.mesh.position.set(options.x, options.y, options.z);
 				this.mesh.children[0].material.color = new THREE.Color( options.color );
 
+				this.boundingBox = new THREE.Box3().setFromObject(this.mesh);
+				this.boundingSize = this.boundingBox.getSize();
+
+				let hitboxGeometry = new THREE.BoxGeometry(this.boundingSize.x,this.boundingSize.y,this.boundingSize.z);
+
+				let hitboxMaterial = new THREE.MeshBasicMaterial( {transparent: true, opacity: 0} );
+
+				this.hitbox = new THREE.Mesh( hitboxGeometry, hitboxMaterial );
+
+				this.hitbox.position.set(options.x, options.y + this.boundingSize.y / 2, options.z);
+
+				this.hitbox.name = this.name + '_hb';
+
 				resolve('success');
 			}.bind(this) );
 		});

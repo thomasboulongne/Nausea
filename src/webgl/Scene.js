@@ -126,6 +126,7 @@ class Scene {
 		this.field = new Field();
 		this.field.load()
 		.then(() => {
+			this.objects.push(this.field.mesh);
 			this.add(this.field.mesh);
 		});
 
@@ -138,7 +139,8 @@ class Scene {
 		});
 		this.bench.load()
 		.then(() => {
-			this.objects.push(this.bench.mesh);
+			this.objects.push(this.bench.hitbox);
+			this.add(this.bench.hitbox);
 			this.add(this.bench.mesh);
 		});
 
@@ -151,7 +153,8 @@ class Scene {
 		});
 		this.treeBig.load()
 		.then(() => {
-			this.objects.push(this.treeBig.mesh);
+			this.objects.push(this.treeBig.hitbox);
+			this.add(this.treeBig.hitbox);
 			this.add(this.treeBig.mesh);
 		});
 
@@ -164,7 +167,8 @@ class Scene {
 		});
 		this.treeLittle.load()
 		.then(() => {
-			this.objects.push(this.treeLittle.mesh);
+			this.objects.push(this.treeLittle.hitbox);
+			this.add(this.treeLittle.hitbox);
 			this.add(this.treeLittle.mesh);
 		});
 
@@ -177,7 +181,8 @@ class Scene {
 		});
 		this.rock.load()
 		.then(() => {
-			this.objects.push(this.rock.mesh);
+			this.objects.push(this.rock.hitbox);
+			this.add(this.rock.hitbox);
 			this.add(this.rock.mesh);
 		});
 
@@ -216,7 +221,7 @@ class Scene {
 		let intersects = this.raycaster.intersectObjects( this.objects, true );
 
 
-		if ( intersects.length > 0 ) {
+		if ( intersects.length > 0 && intersects[0].object.name != 'field' ) {
 			// The raycast encouters an object
 			console.log('Casted object: ', intersects[0].object.name);
 		} else {

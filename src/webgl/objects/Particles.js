@@ -41,8 +41,6 @@ class Particles {
 					uniforms: 		  this.uniformsParticles,
 					vertexShader:     VertexShader,
 					fragmentShader:   FragmentShader,
-
-					//blending:		THREE.AdditiveBlending,
 					transparent:	true,
 					
 				});
