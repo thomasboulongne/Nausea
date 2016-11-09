@@ -44,7 +44,7 @@ class Scene {
 
 		this.setComposer();
 
-		this.setAmbiantSound();
+		//this.setAmbiantSound();
 
 		this.createObjects();
 
@@ -286,7 +286,7 @@ class Scene {
 
 	onKeydown(ev) {
 		if(ev.keyCode === 73) {
-			this.soundManager.play(this.soundExist);
+			//this.soundManager.play(this.soundExist);
 			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
 		}
 		if(ev.keyCode === 32) this.animationManager.animateScene1();
