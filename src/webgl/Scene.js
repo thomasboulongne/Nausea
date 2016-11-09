@@ -2,11 +2,14 @@ import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 
 import './utils/PointerLockControls';
+import Config from './config';
+import Dat from 'dat-gui';
 
 import Field from './objects/Field';
 import AWDObject from './AWDObject';
 
-import SoundManager from './SoundManager';
+import SoundManager from './sound/SoundManager';
+import AnimationManager from './animations/AnimationManager';
 
 import Lights from './Lights';
 
@@ -16,6 +19,9 @@ class Scene {
 	 * @constructor
 	 */
 	constructor(domElement) {
+		if(Config.gui) this.gui = new Dat.GUI;
+		console.log(this.gui);
+
 		this.domElement = domElement;
 
 		this.width = window.innerWidth;
@@ -44,6 +50,7 @@ class Scene {
 
 		this.addEventListeners();
 
+		this.animationManager = new AnimationManager();
 	}
 
 	/**
@@ -117,7 +124,6 @@ class Scene {
 		this.soundExist = this.soundManager.load('exist.wav');
 
 		this.soundManager.play(this.soundAmbiant);
-		this.soundManager.play(this.soundExist);
 	}
 
 	createObjects() {
@@ -143,48 +149,81 @@ class Scene {
 
 		this.treeBig = new AWDObject('tree-big',{
 			'name': 'treeBig',
-			'x': 5,
+			'x': 4,
 			'y': 0,
-			'z': 5,
+			'z': 8.5,
 			'color': 0xcacaca
 		});
 		this.treeBig.load()
 		.then(() => {
 			this.objects.push(this.treeBig.mesh);
 			this.add(this.treeBig.mesh);
+			if(Config.gui) this.treeBig.addToGUI(this.gui, 'bigTree');
 		});
 
 		this.treeLittle = new AWDObject('tree-little',{
 			'name': 'treeLittle',
-			'x': 9,
+			'x': 6,
 			'y': 0,
-			'z': -6,
+			'z': 8,
 			'color': 0xcacaca
 		});
 		this.treeLittle.load()
 		.then(() => {
 			this.objects.push(this.treeLittle.mesh);
 			this.add(this.treeLittle.mesh);
+			if(Config.gui) this.treeLittle.addToGUI(this.gui, 'littleTree');
+		});
+
+		this.statue = new AWDObject('statue001',{
+			'name': 'statue',
+			'x': 5,
+			'y': 0,
+			'z': 5,
+			'color': 0xcacaca
+		});
+		this.statue.load()
+		.then(() => {
+			this.objects.push(this.statue.mesh);
+			this.add(this.statue.mesh);
+			if(Config.gui) this.statue.addToGUI(this.gui, 'statue');
 		});
 
 		this.rock = new AWDObject('rock',{
 			'name': 'rock',
-			'x': 6,
+			'x': 3,
 			'y': 0,
-			'z': -2.6,
+			'z': 8,
 			'color': 0xcacaca
 		});
 		this.rock.load()
 		.then(() => {
 			this.objects.push(this.rock.mesh);
 			this.add(this.rock.mesh);
+			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
 		});
+
+		// this.fountain = new AWDObject('fountain001',{
+		// 	'name': 'fountain',
+		// 	'x': 3,
+		// 	'y': 0,
+		// 	'z': 0,
+		// 	'color': 0xcacaca
+		// });
+		// this.fountain.load()
+		// .then(() => {
+		// 	this.objects.push(this.fountain.mesh);
+		// 	this.add(this.fountain.mesh);
+		// 	this.fountain.mesh.set(0.2, 0.2, 0.2);
+		// 	if(Config.gui) this.fountain.addToGUI(this.gui, 'fountain');
+		// });
 	}
 
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		this.domElement.addEventListener('click', this.toggleCamera.bind(this));
+		window.addEventListener('keydown', this.onKeydown.bind(this));
 	}
 
 	toggleCamera() {
@@ -243,6 +282,14 @@ class Scene {
 
 		this.renderer.setSize(this.width, this.height);
 
+	}
+
+	onKeydown(ev) {
+		if(ev.keyCode === 73) {
+			this.soundManager.play(this.soundExist);
+			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
+		}
+		if(ev.keyCode === 32) this.animationManager.animateScene1();
 	}
 
 }
