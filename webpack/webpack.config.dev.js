@@ -26,6 +26,8 @@ module.exports = {
 		],
 	},
 
+	devTool: 'source-map',
+
 	module: {
 		preLoaders: [
 			{
@@ -79,7 +81,7 @@ module.exports = {
              {
                test: /\.(glsl|frag|vert)$/,
                exclude: /node_modules/,
-               loader: 'raw!glslify'
+               loader: 'raw'
              }
 		],
 	},

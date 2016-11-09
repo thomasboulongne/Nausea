@@ -17,6 +17,9 @@ THREE.PointerLockControls = function ( camera, position, lookat ) {
 	yawObject.position.x = position.x;
 	yawObject.add( pitchObject );
 
+	yawObject.rotation.y = -1.574;
+	pitchObject.rotation.x = -0.12;
+
 	let PI_2 = Math.PI / 2;
 
 	let onMouseMove = function ( event ) {
