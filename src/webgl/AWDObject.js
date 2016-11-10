@@ -1,4 +1,5 @@
 import 'three/examples/js/loaders/AWDLoader';
+import NumberUtils from './utils/number-utils';
 
 class AWDObject {
 
@@ -30,9 +31,37 @@ class AWDObject {
 				}
 				this.mesh.position.set(options.x, options.y, options.z);
 				this.mesh.children[0].material.color = new THREE.Color( options.color );
+				this.mesh.children[0].material.transparent = true;
 
 				resolve('success');
 			}.bind(this) );
+		});
+	}
+
+	addToGUI(gui, name) {
+		let folder = gui.addFolder(name);
+
+		folder.add(this.mesh.position, 'x', -50, 50).name('posx');
+		folder.add(this.mesh.position, 'y', -10, 10).name('posy');
+		folder.add(this.mesh.position, 'z', -50, 50).name('posz');
+
+		let params = {
+			degx : 0,
+			degy : 0,
+			degz : 0
+		};
+
+		folder.add(params, 'degx', 0, 360).name('rotationx').onChange((degValue) => {
+			let angle = NumberUtils.toRadians(degValue);
+			this.mesh.rotation.x = angle;
+		});
+		folder.add(params, 'degy', 0, 360).name('rotationy').onChange((degValue) => {
+			let angle = NumberUtils.toRadians(degValue);
+			this.mesh.rotation.y = angle;
+		});
+		folder.add(params, 'degz', 0, 360).name('rotationz').onChange((degValue) => {
+			let angle = NumberUtils.toRadians(degValue);
+			this.mesh.rotation.z = angle;
 		});
 	}
 
