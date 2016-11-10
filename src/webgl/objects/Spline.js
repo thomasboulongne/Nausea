@@ -43,7 +43,7 @@ class Spline {
 		this.scene.add(this.line);
 		console.log(init)
 		console.info(this.camera.position)
-		//this.enabledSpline = true;
+		this.enabledSpline = true;
 		console.log(this.curve)
 	}
 
@@ -71,13 +71,9 @@ class Spline {
 			// this.camera.position.y = camPos.y + 1;
 			//console.log(camPos.z - this.scene.controls.getObject().position.z);
 
-			this.scene.controls.getObject().translateZ(camPos.z - this.scene.controls.getObject().position.z);
-			this.scene.controls.getObject().translateX(camPos.x - this.scene.controls.getObject().position.z);
-			this.scene.controls.getObject().translateY(camPos.y - this.scene.controls.getObject().position.z);
-
-			// this.scene.controls.getObject().position.z = camPos.z;
-			// this.scene.controls.getObject().position.x = camPos.x;
-			// this.scene.controls.getObject().position.y = camPos.y + 1;
+			this.scene.controls.getObject().position.z = camPos.z;
+			this.scene.controls.getObject().position.x = camPos.x;
+			this.scene.controls.getObject().position.y = camPos.y + 1;
 
 
 			console.log(camPos.x)
