@@ -45,7 +45,7 @@ class Scene {
 
 		this.setComposer();
 
-		//this.setAmbiantSound();
+		this.setAmbiantSound();
 
 		this.createObjects();
 
@@ -224,7 +224,7 @@ class Scene {
 		// 	this.fountain.mesh.set(0.2, 0.2, 0.2);
 		// 	if(Config.gui) this.fountain.addToGUI(this.gui, 'fountain');
 		// });
-		
+
 	}
 
 	addEventListeners() {
@@ -274,6 +274,8 @@ class Scene {
 
 		this.composer.toScreen();
 
+		if(this.animationManager) this.animationManager.update();
+
 	}
 
 	/**
@@ -297,10 +299,12 @@ class Scene {
 
 	onKeydown(ev) {
 		if(ev.keyCode === 73) {
-			//this.soundManager.play(this.soundExist);
+			this.soundManager.play(this.soundExist);
 			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
 		}
 		if(ev.keyCode === 32) this.animationManager.animateScene1();
+
+		if(ev.keyCode === 83) this.animationManager.animateScene1Spline(this);
 	}
 
 }

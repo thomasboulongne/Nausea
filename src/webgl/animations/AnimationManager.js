@@ -1,4 +1,5 @@
 import NumberUtils from '../utils/number-utils';
+import Spline from '../objects/Spline';
 
 class AnimationManager {
 
@@ -20,6 +21,9 @@ class AnimationManager {
 		console.log('init scene 1');
 		
 		this.timeline1 = new TimelineMax();
+		this.params = {
+			'time' : 0
+		};
 
 		this.statueMesh = statue.mesh.children[0];
 		this.statueMaterial = this.statueMesh.material;
@@ -57,6 +61,15 @@ class AnimationManager {
 			{'x': 0.6, y: '0.6', z: '0.6', ease: Expo.easeOut},
 			{'x': 1.2, y: '1.2', z: '1.2', ease: Expo.easeOut},
 		'2');
+	}
+
+	animateScene1Spline(scene) {
+		if(!(this.spline)) this.spline = new Spline(scene);
+		this.spline.enableSpline();
+	}
+
+	update() {
+		if(this.spline) this.spline.update();
 	}
 }
 
