@@ -191,7 +191,6 @@ class Scene {
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
-		this.domElement.addEventListener('click', this.toggleCamera.bind(this));
 	}
 
 	toggleCamera() {
@@ -218,7 +217,7 @@ class Scene {
 
 		if ( intersects.length > 0 ) {
 			// The raycast encouters an object
-			console.log('Casted object: ', intersects[0].object.name);
+			// console.log('Casted object: ', intersects[0].object.name);
 		} else {
 			this.INTERSECTED = null;
 		}
