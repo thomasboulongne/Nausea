@@ -21,7 +21,6 @@ class Scene {
 	 */
 	constructor(domElement) {
 		if(Config.gui) this.gui = new Dat.GUI;
-		console.log(this.gui);
 
 		this.domElement = domElement;
 
@@ -30,12 +29,12 @@ class Scene {
 
 		this.scene = new THREE.Scene();
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.15 );
-
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
+
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.15 );
 
 		this.setControls();
 
@@ -52,6 +51,8 @@ class Scene {
 		this.addEventListeners();
 
 		this.animationManager = new AnimationManager();
+
+		this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
 	}
 
 	/**
@@ -230,7 +231,6 @@ class Scene {
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
-		window.addEventListener('keydown', this.onKeydown.bind(this));
 	}
 
 	toggleCamera() {
@@ -257,7 +257,11 @@ class Scene {
 
 		if ( intersects.length > 0 ) {
 			// The raycast encouters an object
-			// console.log('Casted object: ', intersects[0].object.name);
+			let objName = intersects[0].object.name;
+			console.log('Casted object: ', intersects[0].object.name);
+			if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
+				this.animationManager.animateScene1();
+			}
 		} else {
 			this.INTERSECTED = null;
 		}
@@ -292,14 +296,6 @@ class Scene {
 
 		this.renderer.setSize(this.width, this.height);
 
-	}
-
-	onKeydown(ev) {
-		if(ev.keyCode === 73) {
-			//this.soundManager.play(this.soundExist);
-			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
-		}
-		if(ev.keyCode === 32) this.animationManager.animateScene1();
 	}
 
 }

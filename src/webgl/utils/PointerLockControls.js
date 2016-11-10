@@ -39,12 +39,6 @@ THREE.PointerLockControls = function ( camera, position, lookat ) {
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 	};
 
-	this.dispose = function() {
-
-		document.removeEventListener( 'mousemove', onMouseMove, false );
-
-	};
-
 	document.addEventListener( 'mousemove', throttle(onMouseMove,50), false );
 
 	this.enabled = false;
