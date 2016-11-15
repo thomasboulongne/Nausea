@@ -82,12 +82,13 @@ class Scene {
 
 		this.center = new THREE.Vector3( );
 
-		this.controls = new THREE.PointerLockControls(this.camera, {
+		let controlsPosition = {
 			z: 0,
 			y: 1,
 			x: 0
-		}, this.center
-		);
+		};
+
+		this.controls = new THREE.PointerLockControls( this.camera, controlsPosition, this.center, 0.002 );
 		this.add( this.controls.getObject() );
 	}
 
