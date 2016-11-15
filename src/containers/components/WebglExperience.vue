@@ -6,7 +6,7 @@
 
 <script>
 	
-import Scene from '../../webgl/Scene';
+import Scene from '../../webgl/ExperienceScene';
 
 export default {
 

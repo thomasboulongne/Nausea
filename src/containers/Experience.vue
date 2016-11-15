@@ -3,13 +3,13 @@
 		<h1>
 			Nausea
 		</h1>
-		<webgl-home></webgl-home>
+		<webgl-experience></webgl-experience>
 	</div>
 </template>
 
 <script>
 	
-import WebglHomeComponent from './components/WebglHome';
+import WebglExperienceComponent from './components/WebglExperience';
 
 export default {
 
@@ -23,7 +23,7 @@ export default {
 	},
 
 	components: {
-		'webgl-home': WebglHomeComponent
+		'webgl-experience': WebglExperienceComponent
 	}
 }
 

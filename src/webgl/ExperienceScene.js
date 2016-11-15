@@ -14,7 +14,7 @@ import AnimationManager from './animations/AnimationManager';
 
 import Lights from './Lights';
 
-class Scene {
+class ExperienceScene {
 
 	/**
 	 * @constructor
@@ -295,4 +295,4 @@ class Scene {
 
 }
 
-export default Scene;
+export default ExperienceScene;
