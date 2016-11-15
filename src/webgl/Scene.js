@@ -21,7 +21,6 @@ class Scene {
 	 */
 	constructor(domElement) {
 		if(Config.gui) this.gui = new Dat.GUI;
-		console.log(this.gui);
 
 		this.domElement = domElement;
 
@@ -30,12 +29,12 @@ class Scene {
 
 		this.scene = new THREE.Scene();
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.15 );
-
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
+
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.15 );
 
 		this.setControls();
 
@@ -52,6 +51,7 @@ class Scene {
 		this.addEventListeners();
 
 		this.animationManager = new AnimationManager();
+
 	}
 
 	/**
@@ -129,23 +129,15 @@ class Scene {
 
 	createObjects() {
 		this.objects = [];
-		this.field = new Field();
-		this.field.load()
-		.then(() => {
-			this.add(this.field.mesh);
-		});
 
+		this.field = new Field();
+		
 		this.bench = new AWDObject('bench',{
 			'name': 'bench',
 			'x': 0,
 			'y': 0,
 			'z': 0,
 			'color': 0xcacaca
-		});
-		this.bench.load()
-		.then(() => {
-			this.objects.push(this.bench.mesh);
-			this.add(this.bench.mesh);
 		});
 
 		this.treeBig = new AWDObject('tree-big',{
@@ -155,12 +147,6 @@ class Scene {
 			'z': 8.5,
 			'color': 0xcacaca
 		});
-		this.treeBig.load()
-		.then(() => {
-			this.objects.push(this.treeBig.mesh);
-			this.add(this.treeBig.mesh);
-			if(Config.gui) this.treeBig.addToGUI(this.gui, 'bigTree');
-		});
 
 		this.treeLittle = new AWDObject('tree-little',{
 			'name': 'treeLittle',
@@ -168,12 +154,6 @@ class Scene {
 			'y': 0,
 			'z': 8,
 			'color': 0xcacaca
-		});
-		this.treeLittle.load()
-		.then(() => {
-			this.objects.push(this.treeLittle.mesh);
-			this.add(this.treeLittle.mesh);
-			if(Config.gui) this.treeLittle.addToGUI(this.gui, 'littleTree');
 		});
 
 		this.statue = new AWDObject('statue001',{
@@ -183,12 +163,6 @@ class Scene {
 			'z': 5,
 			'color': 0xcacaca
 		});
-		this.statue.load()
-		.then(() => {
-			this.objects.push(this.statue.mesh);
-			this.add(this.statue.mesh);
-			if(Config.gui) this.statue.addToGUI(this.gui, 'statue');
-		});
 
 		this.rock = new AWDObject('rock',{
 			'name': 'rock',
@@ -197,6 +171,42 @@ class Scene {
 			'z': 8,
 			'color': 0xcacaca
 		});
+
+		this.field.load()
+		.then(() => {
+			this.add(this.field.mesh);
+		});
+
+		this.bench.load()
+		.then(() => {
+			this.objects.push(this.bench.mesh);
+			this.add(this.bench.mesh);
+		});
+
+		Promise.all([
+			this.treeBig.load(),
+			this.treeLittle.load(),
+			this.statue.load()
+		])
+		.then(() => {
+			this.objects.push(this.treeBig.mesh);
+			this.add(this.treeBig.mesh);
+
+			this.objects.push(this.statue.mesh);
+			this.add(this.statue.mesh);
+
+			this.objects.push(this.treeLittle.mesh);
+			this.add(this.treeLittle.mesh);
+
+			if(Config.gui) {
+				this.treeBig.addToGUI(this.gui, 'bigTree');
+				this.treeLittle.addToGUI(this.gui, 'littleTree');
+				this.statue.addToGUI(this.gui, 'statue');
+			}
+
+			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
+		});
+
 		this.rock.load()
 		.then(() => {
 			this.objects.push(this.rock.mesh);
@@ -209,28 +219,12 @@ class Scene {
 		.then(() => {
 			this.add(this.particles.mesh);
 		});
-
-		// this.fountain = new AWDObject('fountain001',{
-		// 	'name': 'fountain',
-		// 	'x': 3,
-		// 	'y': 0,
-		// 	'z': 0,
-		// 	'color': 0xcacaca
-		// });
-		// this.fountain.load()
-		// .then(() => {
-		// 	this.objects.push(this.fountain.mesh);
-		// 	this.add(this.fountain.mesh);
-		// 	this.fountain.mesh.set(0.2, 0.2, 0.2);
-		// 	if(Config.gui) this.fountain.addToGUI(this.gui, 'fountain');
-		// });
 		
 	}
 
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
-		window.addEventListener('keydown', this.onKeydown.bind(this));
 	}
 
 	toggleCamera() {
@@ -257,7 +251,11 @@ class Scene {
 
 		if ( intersects.length > 0 ) {
 			// The raycast encouters an object
-			// console.log('Casted object: ', intersects[0].object.name);
+			let objName = intersects[0].object.name;
+			console.log('Casted object: ', intersects[0].object.name);
+			if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
+				this.animationManager.animateScene1();
+			}
 		} else {
 			this.INTERSECTED = null;
 		}
@@ -292,14 +290,6 @@ class Scene {
 
 		this.renderer.setSize(this.width, this.height);
 
-	}
-
-	onKeydown(ev) {
-		if(ev.keyCode === 73) {
-			//this.soundManager.play(this.soundExist);
-			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
-		}
-		if(ev.keyCode === 32) this.animationManager.animateScene1();
 	}
 
 }
