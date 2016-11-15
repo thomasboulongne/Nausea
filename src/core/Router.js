@@ -14,19 +14,10 @@ class Router extends VueRouter {
 		];
 
 		super({
-			hashbang: false,
-			pushState: true,
-			history: true,
-			abstract: false,
-			saveScrollPosition: false,
-			transitionOnLoad: false,
+			mode: 'history',
+			base: '/',
 			routes: routes
 		});
-
-
-		this.path = '/';
-		this.firstRoute = true;
-		this.routeTimeout = null;
 
 	}
 }
