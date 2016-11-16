@@ -22,6 +22,12 @@ export default {
 	mounted() {
 	},
 
+	methods: {
+		'redirectToExperience': function(){
+			this.$router.push('experience');
+		} 
+	},
+
 	components: {
 		'webgl-home': WebglHomeComponent
 	}

@@ -215,7 +215,7 @@ class ExperienceScene {
 			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
 		});
 
-		this.particles = new Particles();
+		this.particles = new Particles('particleNoborder', 500);
 		this.particles.load()
 		.then(() => {
 			this.add(this.particles.mesh);

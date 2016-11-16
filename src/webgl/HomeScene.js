@@ -193,7 +193,7 @@ class HomeScene {
 			this.add(this.rock.mesh);
 		});
 
-		this.particles = new Particles();
+		this.particles = new Particles('particleWhite', 500, { x: 10});
 		this.particles.load()
 		.then(() => {
 			this.add(this.particles.mesh);
