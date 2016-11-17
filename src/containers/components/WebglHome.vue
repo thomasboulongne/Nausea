@@ -32,5 +32,6 @@ export default {
 		position: absolute;
 		top: 0;
 		left: 0;
+		cursor: url('/assets2d/cursor.png'), auto;
 	}
 </style>

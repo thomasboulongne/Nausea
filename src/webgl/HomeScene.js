@@ -11,6 +11,8 @@ import SoundManager from './sound/SoundManager';
 
 import Lights from './Lights';
 
+import { throttle } from 'lodash';
+
 class HomeScene {
 
 	/**
@@ -212,13 +214,22 @@ class HomeScene {
 	}
 
 	updateCameraPosition(event) {
-		this.mousePosition.x = event.clientX;
-		this.mousePosition.y = event.clientY;
-		this.percentX = ( this.mousePosition.x - this.halfWidth ) * 100 / this.halfWidth;
-		this.percentY = ( this.mousePosition.y - this.halfHeight ) * 100 / this.halfHeight;
+		throttle(() => {
 
-		this.camera.position.z = this.cameraPosition.z + this.percentX * .01;
-		this.camera.position.y = this.cameraPosition.y + this.percentY * .004;
+			this.mousePosition.x = event.clientX;
+			this.mousePosition.y = event.clientY;
+			this.percentX = ( this.mousePosition.x - this.halfWidth ) * 100 / this.halfWidth;
+			this.percentY = ( this.mousePosition.y - this.halfHeight ) * 100 / this.halfHeight;
+
+			TweenLite.to(this.camera.position, 1, {
+				z: this.cameraPosition.z + this.percentX * .006,
+				y: this.cameraPosition.y + this.percentY * .002,
+				ease: Expo.easeOut
+			});
+			// this.camera.position.z = ;
+			// this.camera.position.;
+
+		}, 100)(event);
 	}
 
 	/**
