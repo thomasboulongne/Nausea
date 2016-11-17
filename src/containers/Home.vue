@@ -3,6 +3,7 @@
 		<h1>
 			Nausea
 		</h1>
+		<home-loading></home-loading>
 		<webgl-home></webgl-home>
 	</div>
 </template>
@@ -10,6 +11,7 @@
 <script>
 	
 import WebglHomeComponent from './components/WebglHome';
+import HomeLoading from './components/HomeLoading';
 
 export default {
 
@@ -29,7 +31,8 @@ export default {
 	},
 
 	components: {
-		'webgl-home': WebglHomeComponent
+		'webgl-home': WebglHomeComponent,
+		'home-loading': HomeLoading
 	}
 }
 
