@@ -4,6 +4,7 @@ import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 import './utils/PointerLockControls';
 
 import Field from './objects/Field';
+import HomeTitle from './objects/HomeTitle';
 import Particles from './objects/Particles';
 import AWDObject from './AWDObject';
 
@@ -168,6 +169,9 @@ class HomeScene {
 		.then(() => {
 			this.add(this.field.mesh);
 		});
+
+		this.title = new HomeTitle();
+		this.add(this.title.mesh);
 
 		this.bench.load()
 		.then(() => {
