@@ -1,5 +1,6 @@
 import 'three/examples/js/loaders/AWDLoader';
 import NumberUtils from './utils/number-utils';
+import LoadingManager from './utils/LoadingManager';
 
 class AWDObject {
 
@@ -13,7 +14,7 @@ class AWDObject {
 
 	load() {
 
-		let loader = new THREE.AWDLoader();
+		let loader = new THREE.AWDLoader( LoadingManager );
 
 		const options = {
 			x : this.options.x ? this.options.x : 0,

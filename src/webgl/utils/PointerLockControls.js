@@ -4,7 +4,7 @@ import throttle from 'lodash/throttle';
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.PointerLockControls = function ( camera, position, lookat ) {
+THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 
 	let scope = this;
 
@@ -30,19 +30,13 @@ THREE.PointerLockControls = function ( camera, position, lookat ) {
 		let movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		let movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		new TweenMax.to(yawObject.rotation, .9, {y: '-=' + (movementX * 0.001), ease: Expo.easeOut});
-		new TweenMax.to(pitchObject.rotation, .9, {x: '-=' + (movementY * 0.001), ease: Expo.easeOut});
+		new TweenMax.to(yawObject.rotation, .9, {y: '-=' + (movementX * fluidity), ease: Expo.easeOut});
+		new TweenMax.to(pitchObject.rotation, .9, {x: '-=' + (movementY * fluidity), ease: Expo.easeOut});
 
 		// yawObject.rotation.y -= movementX * 0.001;
 		// pitchObject.rotation.x -= movementY * 0.001;
 
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
-	};
-
-	this.dispose = function() {
-
-		document.removeEventListener( 'mousemove', onMouseMove, false );
-
 	};
 
 	document.addEventListener( 'mousemove', throttle(onMouseMove,50), false );

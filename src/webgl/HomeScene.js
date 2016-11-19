@@ -2,46 +2,63 @@ import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 
 import './utils/PointerLockControls';
-import Config from './config';
-import Dat from 'dat-gui';
 
 import Field from './objects/Field';
+import HomeTitle from './objects/HomeTitle';
 import Particles from './objects/Particles';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
-import AnimationManager from './animations/AnimationManager';
 
 import Lights from './Lights';
 
-class Scene {
+import { throttle } from 'lodash';
+
+class HomeScene {
 
 	/**
 	 * @constructor
 	 */
 	constructor(domElement) {
-		if(Config.gui) this.gui = new Dat.GUI;
-		console.log(this.gui);
 
 		this.domElement = domElement;
 
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 
-		this.scene = new THREE.Scene();
+		this.environmentColor = 0x999999;
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.15 );
+		this.halfWidth = this.width / 2;
+		this.halfHeight = this.height / 2;
+
+		this.scene = new THREE.Scene();
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
-		this.renderer.setClearColor(0xffffff);
+		this.renderer.setClearColor(this.environmentColor);
+
+		this.mousePosition = {
+			x: this.halfWidth,
+			y: this.halfHeight
+		};
+
+		this.center = new THREE.Vector3( );
+
+		this.cameraPosition = {
+			x: -4,
+			y: 0.3,
+			z: 0
+		};
+
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
 
-		this.setControls();
+		this.camera.position.set( this.cameraPosition.x, this.cameraPosition.y, this.cameraPosition.z );
+
+		this.camera.lookAt(this.center);
+
+		this.scene.fog = new THREE.FogExp2( this.environmentColor, 0.15 );
 
 		this.setLights();
-
-		this.setRaycast();
 
 		this.setComposer();
 
@@ -51,7 +68,6 @@ class Scene {
 
 		this.addEventListeners();
 
-		this.animationManager = new AnimationManager();
 	}
 
 	/**
@@ -78,34 +94,11 @@ class Scene {
 
 	}
 
-	setControls() {
-
-		this.center = new THREE.Vector3( );
-
-		this.controls = new THREE.PointerLockControls(this.camera, {
-			z: 0,
-			y: 1,
-			x: 0
-		}, this.center
-		);
-		this.add( this.controls.getObject() );
-	}
-
 	setLights() {
 		this.lights = new Lights();
 		for (let i = 0; i < this.lights.list.length; i++) {
 			this.add(this.lights.list[i]);
 		}
-	}
-
-	setRaycast() {
-
-		this.INTERSECTED;
-
-		this.raycaster = new THREE.Raycaster();
-
-		this.direction = new THREE.Vector3( 0, 0, -1 );
-		this.rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
 	}
 
 	setComposer() {
@@ -129,23 +122,15 @@ class Scene {
 
 	createObjects() {
 		this.objects = [];
-		this.field = new Field();
-		this.field.load()
-		.then(() => {
-			this.add(this.field.mesh);
-		});
 
+		this.field = new Field();
+		
 		this.bench = new AWDObject('bench',{
 			'name': 'bench',
 			'x': 0,
 			'y': 0,
 			'z': 0,
 			'color': 0xcacaca
-		});
-		this.bench.load()
-		.then(() => {
-			this.objects.push(this.bench.mesh);
-			this.add(this.bench.mesh);
 		});
 
 		this.treeBig = new AWDObject('tree-big',{
@@ -155,12 +140,6 @@ class Scene {
 			'z': 8.5,
 			'color': 0xcacaca
 		});
-		this.treeBig.load()
-		.then(() => {
-			this.objects.push(this.treeBig.mesh);
-			this.add(this.treeBig.mesh);
-			if(Config.gui) this.treeBig.addToGUI(this.gui, 'bigTree');
-		});
 
 		this.treeLittle = new AWDObject('tree-little',{
 			'name': 'treeLittle',
@@ -168,12 +147,6 @@ class Scene {
 			'y': 0,
 			'z': 8,
 			'color': 0xcacaca
-		});
-		this.treeLittle.load()
-		.then(() => {
-			this.objects.push(this.treeLittle.mesh);
-			this.add(this.treeLittle.mesh);
-			if(Config.gui) this.treeLittle.addToGUI(this.gui, 'littleTree');
 		});
 
 		this.statue = new AWDObject('statue001',{
@@ -183,12 +156,6 @@ class Scene {
 			'z': 5,
 			'color': 0xcacaca
 		});
-		this.statue.load()
-		.then(() => {
-			this.objects.push(this.statue.mesh);
-			this.add(this.statue.mesh);
-			if(Config.gui) this.statue.addToGUI(this.gui, 'statue');
-		});
 
 		this.rock = new AWDObject('rock',{
 			'name': 'rock',
@@ -197,44 +164,76 @@ class Scene {
 			'z': 8,
 			'color': 0xcacaca
 		});
+
+		this.field.load()
+		.then(() => {
+			this.add(this.field.mesh);
+		});
+
+		this.title = new HomeTitle();
+		this.add(this.title.mesh);
+
+		this.bench.load()
+		.then(() => {
+			this.objects.push(this.bench.mesh);
+			this.add(this.bench.mesh);
+		});
+
+		Promise.all([
+			this.treeBig.load(),
+			this.treeLittle.load(),
+			this.statue.load()
+		])
+		.then(() => {
+			this.add(this.treeBig.mesh);
+
+			this.add(this.statue.mesh);
+
+			this.add(this.treeLittle.mesh);
+
+		});
+
 		this.rock.load()
 		.then(() => {
 			this.objects.push(this.rock.mesh);
 			this.add(this.rock.mesh);
-			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
 		});
 
-		this.particles = new Particles();
+		this.particles = new Particles('particleWhite', 500, { x: 10});
 		this.particles.load()
 		.then(() => {
 			this.add(this.particles.mesh);
 		});
-
-		// this.fountain = new AWDObject('fountain001',{
-		// 	'name': 'fountain',
-		// 	'x': 3,
-		// 	'y': 0,
-		// 	'z': 0,
-		// 	'color': 0xcacaca
-		// });
-		// this.fountain.load()
-		// .then(() => {
-		// 	this.objects.push(this.fountain.mesh);
-		// 	this.add(this.fountain.mesh);
-		// 	this.fountain.mesh.set(0.2, 0.2, 0.2);
-		// 	if(Config.gui) this.fountain.addToGUI(this.gui, 'fountain');
-		// });
 		
 	}
 
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
+		window.addEventListener('mousemove', this.updateCameraPosition.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
-		window.addEventListener('keydown', this.onKeydown.bind(this));
 	}
 
 	toggleCamera() {
 		this.controls.enabled = !this.controls.enabled;
+	}
+
+	updateCameraPosition(event) {
+		throttle(() => {
+
+			this.mousePosition.x = event.clientX;
+			this.mousePosition.y = event.clientY;
+			this.percentX = ( this.mousePosition.x - this.halfWidth ) * 100 / this.halfWidth;
+			this.percentY = ( this.mousePosition.y - this.halfHeight ) * 100 / this.halfHeight;
+
+			TweenLite.to(this.camera.position, 1, {
+				z: this.cameraPosition.z + this.percentX * .006,
+				y: this.cameraPosition.y + this.percentY * .002,
+				ease: Expo.easeOut
+			});
+			// this.camera.position.z = ;
+			// this.camera.position.;
+
+		}, 100)(event);
 	}
 
 	/**
@@ -247,22 +246,9 @@ class Scene {
 		//Particles 
 		this.particles.update();
 
-		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
-
-		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
-		this.raycaster.ray.origin.copy( this.controls.getObject().position );
-
-		let intersects = this.raycaster.intersectObjects( this.objects, true );
-
-
-		if ( intersects.length > 0 ) {
-			// The raycast encouters an object
-			// console.log('Casted object: ', intersects[0].object.name);
-		} else {
-			this.INTERSECTED = null;
-		}
-
 		this.renderer.autoClearColor = true;
+
+		this.camera.lookAt( this.center );
 
 		this.composer.reset();
 		this.composer.render(this.scene, this.camera);
@@ -284,8 +270,8 @@ class Scene {
 	 */
 	onResize() {
 
-		this.width = window.innerWidth;
-		this.height = window.innerHeight;
+		this.halfWidth = this.width / 2;
+		this.halfHeight = this.height / 2;
 
 		this.camera.aspect = this.width / this.height;
 		this.camera.updateProjectionMatrix();
@@ -294,14 +280,6 @@ class Scene {
 
 	}
 
-	onKeydown(ev) {
-		if(ev.keyCode === 73) {
-			//this.soundManager.play(this.soundExist);
-			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
-		}
-		if(ev.keyCode === 32) this.animationManager.animateScene1();
-	}
-
 }
 
-export default Scene;
+export default HomeScene;
