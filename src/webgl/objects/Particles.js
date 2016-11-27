@@ -49,7 +49,7 @@ class Particles {
 					texture:    { type: "t", value: texture },
 					globalTime:	{ type: "f", value: 0.0 },
 					bass:		{ type: "f", value: 1.0 },
-					scale: 	{ type: "f", value: window.innerHeight * 0.02 },
+					scale: 	{ type: "f", value: window.innerHeight * 0.04 },
 
 				};
 
