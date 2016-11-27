@@ -1,5 +1,6 @@
 import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
+import VignettePass from '@superguigui/wagner/src/passes/vignette/VignettePass';
 
 import './utils/PointerLockControls';
 
@@ -22,7 +23,6 @@ class HomeScene {
 	 * @constructor
 	 */
 	constructor(domElement) {
-
 		this.domElement = domElement;
 
 		this.width = window.innerWidth;
@@ -121,6 +121,10 @@ class HomeScene {
 		this.passes = [
 			new NoisePass({
 				amount: .05
+			}),
+			new VignettePass({
+				boost: 1,
+				reduction: .3
 			})
 		];
 	}
@@ -287,7 +291,7 @@ class HomeScene {
 		let exitTime = .7;
 		let tl = new TimelineLite();
 		tl.to(this.camera.position, exitTime, {
-			x: -.4,
+			x: -.1,
 			y: 1,
 			ease: Power4.easeIn,
 			onComplete: ()=>{
@@ -297,7 +301,11 @@ class HomeScene {
 		.to(this.center, exitTime, {
 			y: 1,
 			ease: Power4.easeIn,
-		}, 0);
+		}, 0)
+		.to(this.passes[1].params, exitTime * .7, {
+			boost: 6,
+			ease: Power4.easeIn,
+		}, .3);
 	}
 
 	/**
