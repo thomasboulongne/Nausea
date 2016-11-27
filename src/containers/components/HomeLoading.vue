@@ -30,6 +30,7 @@ export default {
 				setTimeout(()=>{Emitter.emit('LOADING_COMPLETE');}, 1000);
 				TweenLite.to(this.$el, 1, {opacity: 1 - this.state, delay: 2, onComplete: ()=>{
 					TweenLite.set(this.$el, {display: 'none'});
+					Emitter.off('OBJ_LOADED', this.updateLoading);
 				}});
 			}
 		}

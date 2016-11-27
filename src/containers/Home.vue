@@ -12,6 +12,7 @@
 	
 import WebglHomeComponent from './components/WebglHome';
 import HomeLoading from './components/HomeLoading';
+import Emitter from '../core/Emitter';
 
 export default {
 
@@ -22,6 +23,7 @@ export default {
 	},
 
 	mounted() {
+		Emitter.on('GOTO_EXPERIENCE', this.redirectToExperience.bind(this));
 	},
 
 	methods: {

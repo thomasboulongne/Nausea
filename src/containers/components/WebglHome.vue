@@ -1,12 +1,13 @@
 <template>
 	<div :class="['webgl']">
-		<router-link to="/experience" id="goToExperience"></router-link>	
+		<a id="goToExperience" @click="expericenceClicked"></router-link>	
 	</div>
 </template>
 
 <script>
 	
 import Scene from '../../webgl/HomeScene';
+import Emitter from '../../core/Emitter';
 
 export default {
 
@@ -23,6 +24,9 @@ export default {
 	},
 
 	methods: {
+		expericenceClicked() {
+			Emitter.emit('EXPERIENCE_CLICKED');
+		}
 	}
 }
 

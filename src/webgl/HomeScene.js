@@ -231,6 +231,7 @@ class HomeScene {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		Emitter.on('LOADING_COMPLETE', this.enter.bind(this));
+		Emitter.on('EXPERIENCE_CLICKED', this.exit.bind(this));
 	}
 
 	toggleCamera() {
@@ -275,9 +276,28 @@ class HomeScene {
 			z: 0,
 			ease: Power2.easeOut,
 			onComplete: ()=>{
-				window.addEventListener('mousemove', this.updateCameraPosition.bind(this));
+				this.boundMouseMove = event => this.updateCameraPosition(event);
+				window.addEventListener('mousemove', this.boundMouseMove);
 			}
 		}, "-=0.5");
+	}
+
+	exit() {
+		window.removeEventListener('mousemove', this.boundMouseMove);
+		let exitTime = .7;
+		let tl = new TimelineLite();
+		tl.to(this.camera.position, exitTime, {
+			x: -.4,
+			y: 1,
+			ease: Power4.easeIn,
+			onComplete: ()=>{
+				Emitter.emit('GOTO_EXPERIENCE');
+			}
+		}, 0)
+		.to(this.center, exitTime, {
+			y: 1,
+			ease: Power4.easeIn,
+		}, 0);
 	}
 
 	/**
