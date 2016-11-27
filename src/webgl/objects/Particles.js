@@ -41,7 +41,7 @@ class Particles {
 	load() {
 
 		return new Promise(resolve => {
-			TextureLoader.load( './assets2d/' + this.particleTexture + '.png', function ( texture ) {
+			TextureLoader.load( './assets2d/' + this.particleTexture + '.png', texture => {
 
 				this.uniformsParticles = {
 
@@ -87,7 +87,7 @@ class Particles {
 
 				resolve('success');
 
-			}.bind(this) );
+			} );
 		});
 	}
 

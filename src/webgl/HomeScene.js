@@ -6,9 +6,11 @@ import './utils/PointerLockControls';
 import Field from './objects/Field';
 import HomeTitle from './objects/HomeTitle';
 import Particles from './objects/Particles';
+import Skybox from './objects/Skybox';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
+import Emitter from '../core/Emitter';
 
 import Lights from './Lights';
 
@@ -44,15 +46,21 @@ class HomeScene {
 
 		this.center = new THREE.Vector3( );
 
+		this.cameraPositionInitial = {
+			x: -6,
+			y: -.3,
+			z: 0
+		};
+
 		this.cameraPosition = {
 			x: -4,
-			y: 0.3,
+			y: .3,
 			z: 0
 		};
 
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
 
-		this.camera.position.set( this.cameraPosition.x, this.cameraPosition.y, this.cameraPosition.z );
+		this.camera.position.set( this.cameraPositionInitial.x, this.cameraPositionInitial.y, this.cameraPositionInitial.z );
 
 		this.camera.lookAt(this.center);
 
@@ -94,6 +102,9 @@ class HomeScene {
 
 	}
 
+	/**
+	 * Setup the scene lights
+	 */
 	setLights() {
 		this.lights = new Lights();
 		for (let i = 0; i < this.lights.list.length; i++) {
@@ -101,6 +112,9 @@ class HomeScene {
 		}
 	}
 
+	/**
+	 * Add the possprocess composer and the passes
+	 */
 	setComposer() {
 		this.composer = new Wagner.Composer(this.renderer);
 
@@ -111,6 +125,9 @@ class HomeScene {
 		];
 	}
 
+	/**
+	 * Create sound manager
+	 */
 	setAmbiantSound() {
 		this.soundManager = new SoundManager();
 
@@ -120,15 +137,25 @@ class HomeScene {
 		this.soundManager.play(this.soundAmbiant);
 	}
 
+	/**
+	 * Create and load the 3d objects
+	 */
 	createObjects() {
-		this.objects = [];
 
 		this.field = new Field();
 		
 		this.bench = new AWDObject('bench',{
 			'name': 'bench',
 			'x': 0,
-			'y': 0,
+			'y': .2,
+			'z': 0,
+			'color': 0xcacaca
+		});
+		
+		this.sartres = new AWDObject('sartres',{
+			'name': 'sartres',
+			'x': 0,
+			'y': .2,
 			'z': 0,
 			'color': 0xcacaca
 		});
@@ -165,58 +192,55 @@ class HomeScene {
 			'color': 0xcacaca
 		});
 
-		this.field.load()
-		.then(() => {
-			this.add(this.field.mesh);
-		});
-
 		this.title = new HomeTitle();
-		this.add(this.title.mesh);
 
-		this.bench.load()
-		.then(() => {
-			this.objects.push(this.bench.mesh);
-			this.add(this.bench.mesh);
-		});
+		this.particles = new Particles('particleWhite', 500, { x: 10});
+
+		this.skybox = new Skybox('assets2d/skybox.jpg');
 
 		Promise.all([
 			this.treeBig.load(),
 			this.treeLittle.load(),
-			this.statue.load()
+			this.statue.load(),
+			this.rock.load(),
+			this.field.load(),
+			this.bench.load(),
+			this.particles.load(),
+			this.sartres.load(),
+			this.skybox.load()
 		])
 		.then(() => {
 			this.add(this.treeBig.mesh);
-
+			this.add(this.title.mesh);
 			this.add(this.statue.mesh);
-
 			this.add(this.treeLittle.mesh);
-
-		});
-
-		this.rock.load()
-		.then(() => {
-			this.objects.push(this.rock.mesh);
-			this.add(this.rock.mesh);
-		});
-
-		this.particles = new Particles('particleWhite', 500, { x: 10});
-		this.particles.load()
-		.then(() => {
+			this.add(this.bench.mesh);
+			this.add(this.field.mesh);
+			this.add(this.sartres.mesh);
 			this.add(this.particles.mesh);
+			this.add(this.rock.mesh);
+			this.add(this.skybox.mesh);
 		});
 		
 	}
 
+	/**
+	 * Add all the listeners
+	 */
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
-		window.addEventListener('mousemove', this.updateCameraPosition.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
+		Emitter.on('LOADING_COMPLETE', this.enter.bind(this));
 	}
 
 	toggleCamera() {
 		this.controls.enabled = !this.controls.enabled;
 	}
 
+	/**
+	 * Handle the camera position based on mouseMove event
+	 * @param  {DOM Event} event Return of mouseMove event
+	 */
 	updateCameraPosition(event) {
 		throttle(() => {
 
@@ -226,14 +250,34 @@ class HomeScene {
 			this.percentY = ( this.mousePosition.y - this.halfHeight ) * 100 / this.halfHeight;
 
 			TweenLite.to(this.camera.position, 1, {
-				z: this.cameraPosition.z + this.percentX * .006,
 				y: this.cameraPosition.y + this.percentY * .002,
+				z: this.cameraPosition.z + this.percentX * .006,
 				ease: Expo.easeOut
 			});
-			// this.camera.position.z = ;
-			// this.camera.position.;
 
 		}, 100)(event);
+	}
+
+	/**
+	 * Triggered when all objects are loaded - Start entry camera move
+	 */
+	enter() {
+		let tl = new TimelineLite();
+		tl.to(this.camera.position, 2,  {
+			x: -5,
+			y: 0,
+			z: -.4,
+			ease: Power2.easeIn
+		})
+		.to(this.camera.position, 2, {
+			x: -4,
+			y: .3,
+			z: 0,
+			ease: Power2.easeOut,
+			onComplete: ()=>{
+				window.addEventListener('mousemove', this.updateCameraPosition.bind(this));
+			}
+		}, "-=0.5");
 	}
 
 	/**

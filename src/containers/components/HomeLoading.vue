@@ -27,6 +27,7 @@ export default {
 			this.state = loaded / total;
 			TweenLite.to(this.$refs.bar, 1, { width: this.state * 100 + '%'});
 			if (this.state == 1) {
+				setTimeout(()=>{Emitter.emit('LOADING_COMPLETE');}, 1000);
 				TweenLite.to(this.$el, 1, {opacity: 1 - this.state, delay: 2, onComplete: ()=>{
 					TweenLite.set(this.$el, {display: 'none'});
 				}});
