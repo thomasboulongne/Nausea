@@ -16,8 +16,6 @@ class AnimationManager {
 	 * @param {object} child - A THREE object
 	 */
 	initScene1(treeBig, statue, treeLittle) {
-
-		console.log('init scene 1');
 		
 		this.timeline1 = new TimelineMax();
 
@@ -29,8 +27,6 @@ class AnimationManager {
 
 		this.treeLittleMesh = treeLittle.mesh.children[0];
 		this.treeLittleMaterial = this.treeLittleMesh.material;
-
-		console.log(this.treeLittleMesh);
 
 		this.objectsMesh = [this.statueMesh, this.treeBigMesh, this.treeLittleMesh];
 		this.objectsMaterial = [this.statueMaterial, this.treeBigMaterial, this.treeLittleMaterial];
