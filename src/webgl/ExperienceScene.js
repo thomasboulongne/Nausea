@@ -44,7 +44,7 @@ class ExperienceScene {
 
 		this.setComposer();
 
-		//this.setAmbiantSound();
+		this.setAmbiantSound();
 
 		this.createObjects();
 
@@ -130,6 +130,7 @@ class ExperienceScene {
 
 	createObjects() {
 		this.objects = [];
+		this.raycastMeshes = [];
 
 		this.field = new Field();
 		
@@ -138,31 +139,35 @@ class ExperienceScene {
 			'x': 0,
 			'y': 0,
 			'z': 0,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': false
 		});
 
-		this.treeBig = new AWDObject('tree-big',{
+		this.treeBig = new AWDObject('chestnut_trunk',{
 			'name': 'treeBig',
 			'x': 4,
 			'y': 0,
-			'z': 8.5,
-			'color': 0xcacaca
+			'z': 6.2,
+			'color': 0xcacaca,
+			'materialize': true
 		});
 
 		this.treeLittle = new AWDObject('tree-little',{
 			'name': 'treeLittle',
-			'x': 6,
+			'x': 7.3,
 			'y': 0,
-			'z': 8,
-			'color': 0xcacaca
+			'z': 6.2,
+			'color': 0xcacaca,
+			'materialize': false
 		});
 
 		this.statue = new AWDObject('statue001',{
 			'name': 'statue',
 			'x': 5,
-			'y': 0,
+			'y': 2.5,
 			'z': 5,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': true
 		});
 
 		this.rock = new AWDObject('rock',{
@@ -170,39 +175,45 @@ class ExperienceScene {
 			'x': 3,
 			'y': 0,
 			'z': 8,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': false
 		});
 
-		this.field.load()
-		.then(() => {
-			this.add(this.field.mesh);
-		});
-
-		this.bench.load()
-		.then(() => {
-			this.objects.push(this.bench.mesh);
-			this.add(this.bench.mesh);
-		});
 
 		Promise.all([
+			this.field.load(),
+			this.bench.load(),
 			this.treeBig.load(),
 			this.treeLittle.load(),
-			this.statue.load()
+			this.statue.load(),
+			this.rock.load()
 		])
 		.then(() => {
-			this.objects.push(this.treeBig.mesh);
+			this.add(this.field.mesh);
+
+			this.objects.push(this.bench);
+			this.add(this.bench.mesh);
+
+			this.objects.push(this.treeBig);
+			this.raycastMeshes.push(this.treeBig.mesh);
 			this.add(this.treeBig.mesh);
 
-			this.objects.push(this.statue.mesh);
+			this.objects.push(this.statue);
+			this.raycastMeshes.push(this.statue.mesh);
 			this.add(this.statue.mesh);
 
-			this.objects.push(this.treeLittle.mesh);
+			this.objects.push(this.treeLittle);
+			this.raycastMeshes.push(this.treeLittle.mesh);
 			this.add(this.treeLittle.mesh);
+
+			this.objects.push(this.rock);
+			this.add(this.rock.mesh);
 
 			if(Config.gui) {
 				this.treeBig.addToGUI(this.gui, 'bigTree');
-				this.treeLittle.addToGUI(this.gui, 'littleTree');
 				this.statue.addToGUI(this.gui, 'statue');
+				this.treeLittle.addToGUI(this.gui, 'littleTree');
+				this.rock.addToGUI(this.gui, 'rock')
 			}
 
 			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
@@ -210,7 +221,8 @@ class ExperienceScene {
 
 		this.rock.load()
 		.then(() => {
-			this.objects.push(this.rock.mesh);
+			this.objects.push(this.rock);
+			this.raycastMeshes.push(this.rock.mesh);
 			this.add(this.rock.mesh);
 			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
 		});
@@ -239,6 +251,9 @@ class ExperienceScene {
 	 */
 	render() {
 
+		for(let i = 0; i < this.objects.length; i++) {
+			this.objects[i].update();
+		}
 		//Particles 
 		this.particles.update();
 
@@ -247,8 +262,7 @@ class ExperienceScene {
 		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
 		this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-		let intersects = this.raycaster.intersectObjects( this.objects, true );
-
+		let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
 		if ( intersects.length > 0 ) {
 			// The raycast encouters an object
@@ -293,6 +307,22 @@ class ExperienceScene {
 
 	}
 
+	onKeydown(ev) {
+		if(ev.keyCode === 73) {
+			this.soundManager.play(this.soundExist);
+			for(let i = 0; i < this.objects.length; i++) {
+				this.objects[i].initTimeline();
+			}
+			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
+		}
+		if(ev.keyCode === 32) {
+			for(let i = 0; i < this.objects.length; i++) {
+				this.objects[i].playTimeline();
+			}
+			this.animationManager.animateScene1();
+		}
+			
+	}
 }
 
 export default ExperienceScene;

@@ -19,14 +19,14 @@ class AnimationManager {
 		
 		this.timeline1 = new TimelineMax();
 
-		this.statueMesh = statue.mesh.children[0];
-		this.statueMaterial = this.statueMesh.material;
+		this.statueMesh = statue.mesh;
+		this.statueMaterial = statue.mesh.material;
 
-		this.treeBigMesh = treeBig.mesh.children[0];
-		this.treeBigMaterial = this.treeBigMesh.material;
+		this.treeBigMesh = treeBig.mesh;
+		this.treeBigMaterial = treeBig.mesh.material;
 
-		this.treeLittleMesh = treeLittle.mesh.children[0];
-		this.treeLittleMaterial = this.treeLittleMesh.material;
+		this.treeLittleMesh = treeLittle.mesh;
+		this.treeLittleMaterial = treeLittle.mesh.material;
 
 		this.objectsMesh = [this.statueMesh, this.treeBigMesh, this.treeLittleMesh];
 		this.objectsMaterial = [this.statueMaterial, this.treeBigMaterial, this.treeLittleMaterial];
@@ -35,6 +35,7 @@ class AnimationManager {
 	}
 
 	animateScene1() {
+
 		if(!this.animated) {
 			this.timeline1.to(this.treeBigMaterial, 6, {'opacity': 1, ease: Expo.easeOut}, '0 ');
 			this.timeline1.to(this.treeBigMesh.scale, 10, {'x': 1.2, 'y': 1.2, z:'1.2', ease: Expo.easeOut}, '0');
