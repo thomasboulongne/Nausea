@@ -15,7 +15,7 @@ import Emitter from '../core/Emitter';
 
 import Lights from './Lights';
 
-import { throttle } from 'lodash';
+import { throttle, debounce } from 'lodash';
 
 class HomeScene {
 
@@ -72,7 +72,9 @@ class HomeScene {
 
 		this.setRaycast();
 
-		//this.setAmbiantSound();
+		this.loadSounds();
+
+		this.setAmbiantSound();
 
 		this.createObjects();
 
@@ -147,16 +149,20 @@ class HomeScene {
 		};
 	}
 
+	loadSounds() {
+		this.sounds = {};
+		this.sounds['ambiant'] = SoundManager.load('ambiant.wav', {loop: true});
+		this.sounds['exist'] = SoundManager.load('exist.wav');
+		this.sounds['enter'] = SoundManager.load('Enter.mp3');
+		this.sounds['hover'] = SoundManager.load('Hover.mp3');
+		this.sounds['progression'] = SoundManager.load('ProgressBar.mp3');
+	}
+
 	/**
 	 * Create sound manager
 	 */
 	setAmbiantSound() {
-		this.soundManager = new SoundManager();
-
-		this.soundAmbiant = this.soundManager.load('ambiant.wav');
-		this.soundExist = this.soundManager.load('exist.wav');
-
-		this.soundManager.play(this.soundAmbiant);
+		SoundManager.play(this.sounds.ambiant);
 	}
 
 	/**
@@ -249,6 +255,17 @@ class HomeScene {
 		}, 100)(event);
 	}
 
+	onMouseEnter() {
+		this.sounds['hover'].stop();
+		this.sounds['hover'].play();
+	}
+
+	onMouseLeave() {
+		debounce(() => {
+			this.sounds['hover'].stop();
+		}, 200)();
+	}
+
 	onClick() {
 		if( this.INTERSECTED ) {
 			this.exit();
@@ -279,6 +296,8 @@ class HomeScene {
 	}
 
 	exit() {
+
+
 		window.removeEventListener('mousemove', this.boundMouseMove);
 		let exitTime = .7;
 		let tl = new TimelineLite();
@@ -320,9 +339,15 @@ class HomeScene {
 			let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
 			if ( intersects.length == 0 ) {
+				if( this.INTERSECTED ) {
+					this.onMouseLeave();
+				}
 				this.INTERSECTED = false;
 			}
 			else {
+				if( !this.INTERSECTED ) {
+					this.onMouseEnter();
+				}
 				this.INTERSECTED = true;
 			}
 		}
