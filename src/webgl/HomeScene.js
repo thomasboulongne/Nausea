@@ -47,13 +47,13 @@ class HomeScene {
 		this.center = new THREE.Vector3( );
 
 		this.cameraPositionInitial = {
-			x: -6,
+			x: -7,
 			y: -.3,
 			z: 0
 		};
 
 		this.cameraPosition = {
-			x: -4,
+			x: -5,
 			y: .3,
 			z: 0
 		};
@@ -64,7 +64,7 @@ class HomeScene {
 
 		this.camera.lookAt(this.center);
 
-		this.scene.fog = new THREE.FogExp2( this.environmentColor, 0.15 );
+		this.scene.fog = new THREE.FogExp2( this.environmentColor, .15 );
 
 		this.setLights();
 
@@ -124,7 +124,7 @@ class HomeScene {
 			}),
 			new VignettePass({
 				boost: 1,
-				reduction: .3
+				reduction: .4
 			})
 		];
 	}
@@ -200,7 +200,7 @@ class HomeScene {
 
 		this.particles = new Particles('particleWhite', 500, { x: 10});
 
-		this.skybox = new Skybox('assets2d/skybox.jpg');
+		this.skybox = new Skybox('assets2d/skybox02.jpg');
 
 		Promise.all([
 			this.treeBig.load(),
@@ -269,15 +269,15 @@ class HomeScene {
 	enter() {
 		let tl = new TimelineLite();
 		tl.to(this.camera.position, 2,  {
-			x: -5,
+			x: -5.5,
 			y: 0,
 			z: -.4,
 			ease: Power2.easeIn
 		})
 		.to(this.camera.position, 2, {
-			x: -4,
-			y: .3,
-			z: 0,
+			x: this.cameraPosition.x,
+			y: this.cameraPosition.y,
+			z: this.cameraPosition.z,
 			ease: Power2.easeOut,
 			onComplete: ()=>{
 				this.boundMouseMove = event => this.updateCameraPosition(event);
@@ -303,7 +303,7 @@ class HomeScene {
 			ease: Power4.easeIn,
 		}, 0)
 		.to(this.passes[1].params, exitTime * .7, {
-			boost: 6,
+			boost: 7,
 			ease: Power4.easeIn,
 		}, .3);
 	}

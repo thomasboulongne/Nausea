@@ -1,5 +1,5 @@
 <template>
-	<div :class="['webgl']" @click="enterExperience">
+	<div :class="['webgl', 'experience']" @click="enterExperience">
 		<div class="crosshair">+</div>
 	</div>
 </template>
@@ -20,6 +20,8 @@ export default {
 		this.scene = new Scene(this.$el);
 		this.canvas = this.scene.renderer.domElement;
 		this.$el.appendChild(this.canvas);
+
+		this.scene.addCanvasElement(this.canvas);
 
 		this.addEventListeners();
 	},
@@ -51,10 +53,14 @@ export default {
 </script>
 
 <style lang="sass">
-	canvas {
-		position: absolute;
-		top: 0;
-		left: 0;
+	.experience 
+	{
+		canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			opacity: 0;
+		}
 	}
 
 	.experienceOn {

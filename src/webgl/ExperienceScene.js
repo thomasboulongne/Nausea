@@ -232,6 +232,10 @@ class ExperienceScene {
 		this.controls.enabled = !this.controls.enabled;
 	}
 
+	addCanvasElement(domElt) {
+		this.canvasElement = domElt;
+	}
+
 	/**
 	 * @method
 	 * @name render
@@ -271,6 +275,10 @@ class ExperienceScene {
 		}
 
 		this.composer.toScreen();
+
+		if( this.canvasElement ) {
+			this.canvasElement.style.opacity = 1;
+		}
 
 	}
 
