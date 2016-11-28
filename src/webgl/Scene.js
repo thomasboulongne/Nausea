@@ -20,7 +20,6 @@ class Scene {
 	 */
 	constructor(domElement) {
 		if(Config.gui) this.gui = new Dat.GUI;
-		console.log(this.gui);
 
 		this.domElement = domElement;
 
@@ -143,34 +142,34 @@ class Scene {
 		});
 		this.bench.load()
 		.then(() => {
-			this.objects.push(this.bench.mesh);
+			this.objects.push(this.bench);
 			this.add(this.bench.mesh);
 		});
 
-		this.treeBig = new AWDObject('tree-big',{
+		this.treeBig = new AWDObject('chestnut_trunk',{
 			'name': 'treeBig',
 			'x': 4,
 			'y': 0,
-			'z': 8.5,
+			'z': 6.2,
 			'color': 0xcacaca
 		});
 		this.treeBig.load()
 		.then(() => {
-			this.objects.push(this.treeBig.mesh);
+			this.objects.push(this.treeBig);
 			this.add(this.treeBig.mesh);
 			if(Config.gui) this.treeBig.addToGUI(this.gui, 'bigTree');
 		});
 
 		this.treeLittle = new AWDObject('tree-little',{
 			'name': 'treeLittle',
-			'x': 6,
+			'x': 7.3,
 			'y': 0,
-			'z': 8,
+			'z': 6.2,
 			'color': 0xcacaca
 		});
 		this.treeLittle.load()
 		.then(() => {
-			this.objects.push(this.treeLittle.mesh);
+			this.objects.push(this.treeLittle);
 			this.add(this.treeLittle.mesh);
 			if(Config.gui) this.treeLittle.addToGUI(this.gui, 'littleTree');
 		});
@@ -178,13 +177,13 @@ class Scene {
 		this.statue = new AWDObject('statue001',{
 			'name': 'statue',
 			'x': 5,
-			'y': 0,
+			'y': 2.5,
 			'z': 5,
 			'color': 0xcacaca
 		});
 		this.statue.load()
 		.then(() => {
-			this.objects.push(this.statue.mesh);
+			this.objects.push(this.statue);
 			this.add(this.statue.mesh);
 			if(Config.gui) this.statue.addToGUI(this.gui, 'statue');
 		});
@@ -198,7 +197,7 @@ class Scene {
 		});
 		this.rock.load()
 		.then(() => {
-			this.objects.push(this.rock.mesh);
+			this.objects.push(this.rock);
 			this.add(this.rock.mesh);
 			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
 		});
@@ -237,20 +236,24 @@ class Scene {
 	 */
 	render() {
 
+		for(let i = 0; i < this.objects.length; i++) {
+			this.objects[i].update();
+		}
+
 		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
 
-		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
-		this.raycaster.ray.origin.copy( this.controls.getObject().position );
+		// this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
+		// this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-		let intersects = this.raycaster.intersectObjects( this.objects, true );
+		// let intersects = this.raycaster.intersectObjects( this.objects, true );
 
 
-		if ( intersects.length > 0 ) {
-			// The raycast encouters an object
-			console.log('Casted object: ', intersects[0].object.name);
-		} else {
-			this.INTERSECTED = null;
-		}
+		// if ( intersects.length > 0 ) {
+		// 	// The raycast encouters an object
+		// 	console.log('Casted object: ', intersects[0].object.name);
+		// } else {
+		// 	this.INTERSECTED = null;
+		// }
 
 		this.renderer.autoClearColor = true;
 
@@ -287,9 +290,18 @@ class Scene {
 	onKeydown(ev) {
 		if(ev.keyCode === 73) {
 			//this.soundManager.play(this.soundExist);
-			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
+			for(let i = 0; i < this.objects.length; i++) {
+				this.objects[i].initTimeline();
+			}
+			//this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
 		}
-		if(ev.keyCode === 32) this.animationManager.animateScene1();
+		if(ev.keyCode === 32) {
+			for(let i = 0; i < this.objects.length; i++) {
+				this.objects[i].playTimeline();
+			}
+			//this.animationManager.animateScene1();
+		}
+			
 	}
 
 }
