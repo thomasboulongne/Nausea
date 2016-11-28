@@ -1,6 +1,5 @@
 <template>
 	<div :class="['webgl']">
-		<a id="goToExperience" @click="expericenceClicked"></router-link>	
 	</div>
 </template>
 
@@ -24,9 +23,6 @@ export default {
 	},
 
 	methods: {
-		expericenceClicked() {
-			Emitter.emit('EXPERIENCE_CLICKED');
-		}
 	}
 }
 
@@ -38,16 +34,5 @@ export default {
 		top: 0;
 		left: 0;
 		cursor: url('/assets2d/cursor.png'), auto;
-	}
-
-	a#goToExperience {
-		position: absolute;
-		top: 47%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		display: inline-block;
-		width: 19vw;
-		height: 12vh;
-		z-index: 1;
 	}
 </style>

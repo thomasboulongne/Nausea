@@ -70,6 +70,8 @@ class HomeScene {
 
 		this.setComposer();
 
+		this.setRaycast();
+
 		//this.setAmbiantSound();
 
 		this.createObjects();
@@ -129,6 +131,22 @@ class HomeScene {
 		];
 	}
 
+	setRaycast() {
+
+		this.INTERSECTED = false;
+
+		this.raycastMeshes = [];
+
+		this.raycaster = new THREE.Raycaster();
+
+		this.startRaycast = false;
+
+		this.mouseRaycast = {
+			x: this.mousePosition.x,
+			y: this.mousePosition.y
+		};
+	}
+
 	/**
 	 * Create sound manager
 	 */
@@ -164,38 +182,6 @@ class HomeScene {
 			'color': 0xcacaca
 		});
 
-		this.treeBig = new AWDObject('tree-big',{
-			'name': 'treeBig',
-			'x': 4,
-			'y': 0,
-			'z': 8.5,
-			'color': 0xcacaca
-		});
-
-		this.treeLittle = new AWDObject('tree-little',{
-			'name': 'treeLittle',
-			'x': 6,
-			'y': 0,
-			'z': 8,
-			'color': 0xcacaca
-		});
-
-		this.statue = new AWDObject('statue001',{
-			'name': 'statue',
-			'x': 5,
-			'y': 0,
-			'z': 5,
-			'color': 0xcacaca
-		});
-
-		this.rock = new AWDObject('rock',{
-			'name': 'rock',
-			'x': 3,
-			'y': 0,
-			'z': 8,
-			'color': 0xcacaca
-		});
-
 		this.title = new HomeTitle();
 
 		this.particles = new Particles('particleWhite', 500, { x: 10});
@@ -203,10 +189,6 @@ class HomeScene {
 		this.skybox = new Skybox('assets2d/skybox02.jpg');
 
 		Promise.all([
-			this.treeBig.load(),
-			this.treeLittle.load(),
-			this.statue.load(),
-			this.rock.load(),
 			this.field.load(),
 			this.bench.load(),
 			this.particles.load(),
@@ -214,16 +196,16 @@ class HomeScene {
 			this.skybox.load()
 		])
 		.then(() => {
-			this.add(this.treeBig.mesh);
 			this.add(this.title.mesh);
-			this.add(this.statue.mesh);
-			this.add(this.treeLittle.mesh);
 			this.add(this.bench.mesh);
 			this.add(this.field.mesh);
 			this.add(this.sartres.mesh);
 			this.add(this.particles.mesh);
-			this.add(this.rock.mesh);
 			this.add(this.skybox.mesh);
+
+			this.raycastMeshes.push( this.bench.mesh );
+			this.raycastMeshes.push( this.sartres.mesh );
+			this.startRaycast = true;
 		});
 		
 	}
@@ -233,6 +215,7 @@ class HomeScene {
 	 */
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
+		this.domElement.addEventListener('click', this.onClick.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		Emitter.on('LOADING_COMPLETE', this.enter.bind(this));
 		Emitter.on('EXPERIENCE_CLICKED', this.exit.bind(this));
@@ -249,6 +232,9 @@ class HomeScene {
 	updateCameraPosition(event) {
 		throttle(() => {
 
+			this.mouseRaycast.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			this.mouseRaycast.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
 			this.mousePosition.x = event.clientX;
 			this.mousePosition.y = event.clientY;
 			this.percentX = ( this.mousePosition.x - this.halfWidth ) * 100 / this.halfWidth;
@@ -261,6 +247,12 @@ class HomeScene {
 			});
 
 		}, 100)(event);
+	}
+
+	onClick() {
+		if( this.INTERSECTED ) {
+			this.exit();
+		}
 	}
 
 	/**
@@ -321,6 +313,19 @@ class HomeScene {
 		this.renderer.autoClearColor = true;
 
 		this.camera.lookAt( this.center );
+
+		if( this.startRaycast ) {
+			this.raycaster.setFromCamera( this.mouseRaycast, this.camera );
+
+			let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
+
+			if ( intersects.length == 0 ) {
+				this.INTERSECTED = false;
+			}
+			else {
+				this.INTERSECTED = true;
+			}
+		}
 
 		this.composer.reset();
 		this.composer.render(this.scene, this.camera);
