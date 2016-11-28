@@ -3,6 +3,7 @@ import NumberUtils from './utils/number-utils';
 import 'three/examples/js/modifiers/TessellateModifier';
 import 'three/examples/js/modifiers/ExplodeModifier';
 import VertexShader from './shaders/objects/shader.vert';
+import LoadingManager from './utils/LoadingManager';
 
 class AWDObject {
 
@@ -16,7 +17,7 @@ class AWDObject {
 
 	load() {
 
-		let loader = new THREE.AWDLoader();
+		let loader = new THREE.AWDLoader( LoadingManager );
 
 		const options = {
 			x : this.options.x ? this.options.x : 0,

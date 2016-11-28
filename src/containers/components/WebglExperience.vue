@@ -1,12 +1,12 @@
 <template>
-	<div class="webgl">
+	<div :class="['webgl']" @click="enterExperience">
 		<div class="crosshair">+</div>
 	</div>
 </template>
 
 <script>
 	
-import Scene from '../../webgl/Scene';
+import Scene from '../../webgl/ExperienceScene';
 
 export default {
 
@@ -17,9 +17,34 @@ export default {
 	},
 
 	mounted() {
-		const root = this.$el;
-		this.scene = new Scene(root);
-		root.appendChild(this.scene.renderer.domElement);
+		this.scene = new Scene(this.$el);
+		this.canvas = this.scene.renderer.domElement;
+		this.$el.appendChild(this.canvas);
+
+		this.addEventListeners();
+	},
+
+	methods: {
+		enterExperience: function() {
+			this.scene.toggleCamera();
+
+			this.canvas.requestPointerLock = this.canvas.requestPointerLock || this.canvas.mozRequestPointerLock;
+
+			this.canvas.requestPointerLock();
+		},
+		exitExperience: function() {
+			this.scene.toggleCamera();
+		},
+		pointerLockChange: function() {
+			if(document.pointerLockElement === this.canvas ||	document.mozPointerLockElement === this.canvas) {
+			}
+			else {
+				this.exitExperience();
+			}
+		},
+		addEventListeners: function() {
+			document.addEventListener('pointerlockchange', this.pointerLockChange, false);
+		}
 	}
 }
 
@@ -30,6 +55,10 @@ export default {
 		position: absolute;
 		top: 0;
 		left: 0;
+	}
+
+	.experienceOn {
+		cursor: none;
 	}
 
 	.crosshair {
