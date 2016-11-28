@@ -44,7 +44,9 @@ class Spline {
 		console.log(init)
 		console.info(this.camera.position)
 		this.enabledSpline = true;
-		console.log(this.curve)
+		console.log(this.curve);
+
+
 	}
 
 	disableSpline() {
@@ -61,6 +63,8 @@ class Spline {
 	update() {
 		if(this.enabledSpline) {
 
+			let prevCamPos = this.curve.getPoint(this.count);
+
 			this.count += this.amount;
 
 			let camPos = this.curve.getPoint(this.count);
@@ -75,10 +79,14 @@ class Spline {
 			this.scene.controls.getObject().position.x = camPos.x;
 			this.scene.controls.getObject().position.y = camPos.y + 1;
 
+			this.scene.controls.getObject().translateZ(camPos.z - prevCamPos.z);
+			this.scene.controls.getObject().translateX(camPos.x - prevCamPos.x);
+			this.scene.controls.getObject().translateY(camPos.y - prevCamPos.y);
 
-			console.log(camPos.x)
 
-			console.log(this.scene.controls.getObject().translateX(camPos.x));
+			console.log(this.scene.controls.getObject())
+
+			//console.log(this.scene.controls.getObject().translateX(camPos.x));
 
 			// this.camera.rotation.x = camRot.x;
 			// this.camera.rotation.y = camRot.y;
