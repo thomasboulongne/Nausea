@@ -15,7 +15,7 @@ import Emitter from '../core/Emitter';
 
 import Lights from './Lights';
 
-import { throttle, debounce } from 'lodash';
+import { throttle } from 'lodash';
 
 class HomeScene {
 
@@ -192,14 +192,18 @@ class HomeScene {
 
 		this.particles = new Particles('particleWhite', 500, { x: 10});
 
-		this.skybox = new Skybox('assets2d/skybox02.jpg');
+		this.skybox = new Skybox('assets2d/skybox/');
+
+		this.skybox.load()
+		.then( texture => {
+			this.scene.background = texture;
+		});
 
 		Promise.all([
 			this.field.load(),
 			this.bench.load(),
 			this.particles.load(),
-			this.sartres.load(),
-			this.skybox.load()
+			this.sartres.load()
 		])
 		.then(() => {
 			this.add(this.title.mesh);
@@ -207,7 +211,6 @@ class HomeScene {
 			this.add(this.field.mesh);
 			this.add(this.sartres.mesh);
 			this.add(this.particles.mesh);
-			this.add(this.skybox.mesh);
 
 			this.raycastMeshes.push( this.bench.mesh );
 			this.raycastMeshes.push( this.sartres.mesh );
@@ -256,14 +259,13 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
+		console.log('hover', this.sounds['hover']);
 		this.sounds['hover'].stop();
 		this.sounds['hover'].play();
 	}
 
 	onMouseLeave() {
-		debounce(() => {
-			this.sounds['hover'].stop();
-		}, 200)();
+		this.sounds['hover'].fade(1,0,.3);
 	}
 
 	onClick() {
@@ -345,6 +347,7 @@ class HomeScene {
 				this.INTERSECTED = false;
 			}
 			else {
+				console.log('yo raycast');
 				if( !this.INTERSECTED ) {
 					this.onMouseEnter();
 				}

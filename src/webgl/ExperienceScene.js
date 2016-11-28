@@ -7,6 +7,7 @@ import Dat from 'dat-gui';
 
 import Field from './objects/Field';
 import Particles from './objects/Particles';
+import Skybox from './objects/Skybox';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
@@ -88,7 +89,7 @@ class ExperienceScene {
 			x: 0
 		};
 
-		this.controls = new THREE.PointerLockControls( this.camera, controlsPosition, this.center, 0.002 );
+		this.controls = new THREE.PointerLockControls( this.camera, controlsPosition, this.center, 0.01 );
 		this.add( this.controls.getObject() );
 	}
 
@@ -219,6 +220,13 @@ class ExperienceScene {
 		this.particles.load()
 		.then(() => {
 			this.add(this.particles.mesh);
+		});
+
+		let skybox = new Skybox('assets2d/skybox/');
+
+		skybox.load()
+		.then( texture => {
+			this.scene.background = texture;
 		});
 		
 	}
