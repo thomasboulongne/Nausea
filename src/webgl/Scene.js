@@ -43,7 +43,7 @@ class Scene {
 
 		this.setComposer();
 
-		//this.setAmbiantSound();
+		this.setAmbiantSound();
 
 		this.createObjects();
 
@@ -127,6 +127,7 @@ class Scene {
 
 	createObjects() {
 		this.objects = [];
+		this.raycastMeshes = [];
 		this.field = new Field();
 		this.field.load()
 		.then(() => {
@@ -138,7 +139,8 @@ class Scene {
 			'x': 0,
 			'y': 0,
 			'z': 0,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': false
 		});
 		this.bench.load()
 		.then(() => {
@@ -151,11 +153,13 @@ class Scene {
 			'x': 4,
 			'y': 0,
 			'z': 6.2,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': true
 		});
 		this.treeBig.load()
 		.then(() => {
 			this.objects.push(this.treeBig);
+			this.raycastMeshes.push(this.treeBig.mesh);
 			this.add(this.treeBig.mesh);
 			if(Config.gui) this.treeBig.addToGUI(this.gui, 'bigTree');
 		});
@@ -165,11 +169,13 @@ class Scene {
 			'x': 7.3,
 			'y': 0,
 			'z': 6.2,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': false
 		});
 		this.treeLittle.load()
 		.then(() => {
 			this.objects.push(this.treeLittle);
+			this.raycastMeshes.push(this.treeLittle.mesh);
 			this.add(this.treeLittle.mesh);
 			if(Config.gui) this.treeLittle.addToGUI(this.gui, 'littleTree');
 		});
@@ -179,11 +185,13 @@ class Scene {
 			'x': 5,
 			'y': 2.5,
 			'z': 5,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': true
 		});
 		this.statue.load()
 		.then(() => {
 			this.objects.push(this.statue);
+			this.raycastMeshes.push(this.statue.mesh);
 			this.add(this.statue.mesh);
 			if(Config.gui) this.statue.addToGUI(this.gui, 'statue');
 		});
@@ -193,11 +201,13 @@ class Scene {
 			'x': 3,
 			'y': 0,
 			'z': 8,
-			'color': 0xcacaca
+			'color': 0xcacaca,
+			'materialize': false
 		});
 		this.rock.load()
 		.then(() => {
 			this.objects.push(this.rock);
+			this.raycastMeshes.push(this.rock.mesh);
 			this.add(this.rock.mesh);
 			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
 		});
@@ -242,18 +252,18 @@ class Scene {
 
 		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
 
-		// this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
-		// this.raycaster.ray.origin.copy( this.controls.getObject().position );
+		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
+		this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-		// let intersects = this.raycaster.intersectObjects( this.objects, true );
+		let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
 
-		// if ( intersects.length > 0 ) {
-		// 	// The raycast encouters an object
-		// 	console.log('Casted object: ', intersects[0].object.name);
-		// } else {
-		// 	this.INTERSECTED = null;
-		// }
+		if ( intersects.length > 0 ) {
+			// The raycast encouters an object
+			console.log('Casted object: ', intersects[0].object.name);
+		} else {
+			this.INTERSECTED = null;
+		}
 
 		this.renderer.autoClearColor = true;
 
@@ -289,17 +299,17 @@ class Scene {
 
 	onKeydown(ev) {
 		if(ev.keyCode === 73) {
-			//this.soundManager.play(this.soundExist);
+			this.soundManager.play(this.soundExist);
 			for(let i = 0; i < this.objects.length; i++) {
 				this.objects[i].initTimeline();
 			}
-			//this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
+			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
 		}
 		if(ev.keyCode === 32) {
 			for(let i = 0; i < this.objects.length; i++) {
 				this.objects[i].playTimeline();
 			}
-			//this.animationManager.animateScene1();
+			this.animationManager.animateScene1();
 		}
 			
 	}

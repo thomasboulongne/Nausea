@@ -28,24 +28,38 @@ class AWDObject {
 		return new Promise(resolve => {
 			loader.load( './assets3d/' + this.name + '.awd', function ( mesh ) {
 				this.mesh = mesh;
-				this.mesh.name = this.name;
+				
 				for (let i = 0; i < this.mesh.children.length; i++) {
 					this.mesh.children[i].name = this.name;
 				}
-				
-				// this.mesh.children[0].material.color = new THREE.Color( options.color );
-				// this.mesh.children[0].material.transparent = true;
 
 				this.geometry = this.mesh.children[0].geometry;
-				this.geometryObj = new THREE.Geometry().fromBufferGeometry( this.geometry );
+				
+				if( this.options.materialize ) {
+					
+					this.geometryObj = new THREE.Geometry().fromBufferGeometry( this.geometry );
 
-				this.modifyGeometry();
+					this.modifyGeometry();
 
-				this.createRandomAttributes();
+					this.createRandomAttributes();
 
-				this.createMaterial();
+					this.createMaterial();
+				}
+				else {
+					// this.mesh.children[0].material.color = new THREE.Color( options.color );
+					// this.mesh.children[0].material.transparent = true;
 
+					this.material = new THREE.MeshPhongMaterial({
+						color: this.options.color,
+						lights: true,
+						fog: true,
+						transparent: true
+					});
+				}
+				
 				this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+				this.mesh.name = this.name;
 
 				this.mesh.position.set(options.x, options.y, options.z);
 
@@ -67,7 +81,8 @@ class AWDObject {
 			fragmentShader: phongShader.fragmentShader,
 			uniforms: uniforms,
 			lights:true,
-			fog: true
+			fog: true,
+			transparent: true
 		});
 	}
 
@@ -170,8 +185,12 @@ class AWDObject {
 	 * @description Triggered on every TweenMax tick
 	 */
 	update() {
-		if(this.material && this.animate)
+		
+		if(this.material && this.options.materialize && this.animate) {
+
+			//this.mesh.rotation.y += .001;
 			this.material.uniforms.time.value = this.tweenTime.time;
+		}
 	}
 
 }
