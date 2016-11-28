@@ -131,11 +131,6 @@ class ExperienceScene {
 	createObjects() {
 		this.objects = [];
 		this.raycastMeshes = [];
-		this.field = new Field();
-		this.field.load()
-		.then(() => {
-			this.add(this.field.mesh);
-		});
 
 		this.field = new Field();
 		
@@ -147,11 +142,6 @@ class ExperienceScene {
 			'color': 0xcacaca,
 			'materialize': false
 		});
-		this.bench.load()
-		.then(() => {
-			this.objects.push(this.bench);
-			this.add(this.bench.mesh);
-		});
 
 		this.treeBig = new AWDObject('chestnut_trunk',{
 			'name': 'treeBig',
@@ -160,13 +150,6 @@ class ExperienceScene {
 			'z': 6.2,
 			'color': 0xcacaca,
 			'materialize': true
-		});
-		this.treeBig.load()
-		.then(() => {
-			this.objects.push(this.treeBig);
-			this.raycastMeshes.push(this.treeBig.mesh);
-			this.add(this.treeBig.mesh);
-			if(Config.gui) this.treeBig.addToGUI(this.gui, 'bigTree');
 		});
 
 		this.treeLittle = new AWDObject('tree-little',{
@@ -177,13 +160,6 @@ class ExperienceScene {
 			'color': 0xcacaca,
 			'materialize': false
 		});
-		this.treeLittle.load()
-		.then(() => {
-			this.objects.push(this.treeLittle);
-			this.raycastMeshes.push(this.treeLittle.mesh);
-			this.add(this.treeLittle.mesh);
-			if(Config.gui) this.treeLittle.addToGUI(this.gui, 'littleTree');
-		});
 
 		this.statue = new AWDObject('statue001',{
 			'name': 'statue',
@@ -192,13 +168,6 @@ class ExperienceScene {
 			'z': 5,
 			'color': 0xcacaca,
 			'materialize': true
-		});
-		this.statue.load()
-		.then(() => {
-			this.objects.push(this.statue);
-			this.raycastMeshes.push(this.statue.mesh);
-			this.add(this.statue.mesh);
-			if(Config.gui) this.statue.addToGUI(this.gui, 'statue');
 		});
 
 		this.rock = new AWDObject('rock',{
@@ -210,36 +179,41 @@ class ExperienceScene {
 			'materialize': false
 		});
 
-		this.field.load()
-		.then(() => {
-			this.add(this.field.mesh);
-		});
-
-		this.bench.load()
-		.then(() => {
-			this.objects.push(this.bench.mesh);
-			this.add(this.bench.mesh);
-		});
 
 		Promise.all([
+			this.field.load(),
+			this.bench.load(),
 			this.treeBig.load(),
 			this.treeLittle.load(),
-			this.statue.load()
+			this.statue.load(),
+			this.rock.load()
 		])
 		.then(() => {
-			this.objects.push(this.treeBig.mesh);
+			this.add(this.field.mesh);
+
+			this.objects.push(this.bench);
+			this.add(this.bench.mesh);
+
+			this.objects.push(this.treeBig);
+			this.raycastMeshes.push(this.treeBig.mesh);
 			this.add(this.treeBig.mesh);
 
-			this.objects.push(this.statue.mesh);
+			this.objects.push(this.statue);
+			this.raycastMeshes.push(this.statue.mesh);
 			this.add(this.statue.mesh);
 
-			this.objects.push(this.treeLittle.mesh);
+			this.objects.push(this.treeLittle);
+			this.raycastMeshes.push(this.treeLittle.mesh);
 			this.add(this.treeLittle.mesh);
+
+			this.objects.push(this.rock);
+			this.add(this.rock.mesh);
 
 			if(Config.gui) {
 				this.treeBig.addToGUI(this.gui, 'bigTree');
-				this.treeLittle.addToGUI(this.gui, 'littleTree');
 				this.statue.addToGUI(this.gui, 'statue');
+				this.treeLittle.addToGUI(this.gui, 'littleTree');
+				this.rock.addToGUI(this.gui, 'rock')
 			}
 
 			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
