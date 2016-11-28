@@ -259,13 +259,13 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		console.log('hover', this.sounds['hover']);
+		this.sounds['hover'].volume(1);
 		this.sounds['hover'].stop();
 		this.sounds['hover'].play();
 	}
 
 	onMouseLeave() {
-		this.sounds['hover'].fade(1,0,.3);
+		this.sounds['hover'].fade(1,0,1000);
 	}
 
 	onClick() {
@@ -298,8 +298,7 @@ class HomeScene {
 	}
 
 	exit() {
-
-
+		this.sounds['enter'].play();
 		window.removeEventListener('mousemove', this.boundMouseMove);
 		let exitTime = .7;
 		let tl = new TimelineLite();
@@ -347,9 +346,10 @@ class HomeScene {
 				this.INTERSECTED = false;
 			}
 			else {
-				console.log('yo raycast');
 				if( !this.INTERSECTED ) {
-					this.onMouseEnter();
+					if(!this.sounds['hover'].playing()) {
+						this.onMouseEnter();
+					}
 				}
 				this.INTERSECTED = true;
 			}
