@@ -1,18 +1,23 @@
 import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
+import VignettePass from '@superguigui/wagner/src/passes/vignette/VignettePass';
 
 import './utils/PointerLockControls';
+
+import HomeCursor from './misc/HomeCursor';
 
 import Field from './objects/Field';
 import HomeTitle from './objects/HomeTitle';
 import Particles from './objects/Particles';
+import Skybox from './objects/Skybox';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
+import Emitter from '../core/Emitter';
 
 import Lights from './Lights';
 
-import { throttle } from 'lodash';
+import { debounce, throttle } from 'lodash';
 
 class HomeScene {
 
@@ -20,13 +25,14 @@ class HomeScene {
 	 * @constructor
 	 */
 	constructor(domElement) {
-
 		this.domElement = domElement;
+
+		this.cursor = new HomeCursor(this.domElement);
 
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 
-		this.environmentColor = 0x999999;
+		this.environmentColor = 0xffffff;
 
 		this.halfWidth = this.width / 2;
 		this.halfHeight = this.height / 2;
@@ -44,30 +50,50 @@ class HomeScene {
 
 		this.center = new THREE.Vector3( );
 
+		this.cameraPositionInitial = {
+			x: -7,
+			y: -.3,
+			z: 0
+		};
+
 		this.cameraPosition = {
-			x: -4,
-			y: 0.3,
+			x: -5,
+			y: .3,
 			z: 0
 		};
 
 		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
 
-		this.camera.position.set( this.cameraPosition.x, this.cameraPosition.y, this.cameraPosition.z );
+		this.camera.position.set( this.cameraPositionInitial.x, this.cameraPositionInitial.y, this.cameraPositionInitial.z );
 
 		this.camera.lookAt(this.center);
 
-		this.scene.fog = new THREE.FogExp2( this.environmentColor, 0.15 );
+		this.scene.fog = new THREE.FogExp2( this.environmentColor, .15 );
 
 		this.setLights();
 
 		this.setComposer();
 
-		//this.setAmbiantSound();
+		this.setRaycast();
+
+		this.setSounds();
 
 		this.createObjects();
 
 		this.addEventListeners();
 
+		this.throttledMouseEnter = throttle(this.onMouseEnter.bind(this), 800);
+
+		this.debouncedMouseLeave = debounce(this.onMouseLeave.bind(this), 500);
+
+	}
+
+	destructor() {
+		this.removeEventListeners();
+		for (let i = 0; i < this.sounds.length; i++) {
+			this.sounds[i].unload();
+		}
+		this.scene = null;
 	}
 
 	/**
@@ -94,6 +120,9 @@ class HomeScene {
 
 	}
 
+	/**
+	 * Setup the scene lights
+	 */
 	setLights() {
 		this.lights = new Lights();
 		for (let i = 0; i < this.lights.list.length; i++) {
@@ -101,124 +130,158 @@ class HomeScene {
 		}
 	}
 
+	/**
+	 * Add the possprocess composer and the passes
+	 */
 	setComposer() {
 		this.composer = new Wagner.Composer(this.renderer);
 
 		this.passes = [
 			new NoisePass({
 				amount: .05
+			}),
+			new VignettePass({
+				boost: 1,
+				reduction: .4
 			})
 		];
 	}
 
-	setAmbiantSound() {
-		this.soundManager = new SoundManager();
+	setRaycast() {
 
-		this.soundAmbiant = this.soundManager.load('ambiant.wav');
-		this.soundExist = this.soundManager.load('exist.wav');
+		this.INTERSECTED = false;
 
-		this.soundManager.play(this.soundAmbiant);
+		this.raycastMeshes = [];
+
+		this.raycaster = new THREE.Raycaster();
+
+		this.startRaycast = false;
+
+		this.mouseRaycast = {
+			x: this.mousePosition.x,
+			y: this.mousePosition.y
+		};
 	}
 
+	setSounds() {
+		this.enableHoverSound = true;
+
+		this.loadSounds();
+
+		this.setAmbiantSound();
+	}
+
+	loadSounds() {
+		this.sounds = {};
+		this.sounds['ambiant'] = SoundManager.load('ambiant.wav', {loop: true});
+		this.sounds['exist'] = SoundManager.load('exist.wav');
+		this.sounds['enter'] = SoundManager.load('Enter.mp3');
+		this.sounds['hover'] = SoundManager.load('Hover.mp3');
+		this.sounds['progression'] = SoundManager.load('ProgressBar.mp3');
+	}
+
+	/**
+	 * Create sound manager
+	 */
+	setAmbiantSound() {
+		SoundManager.play(this.sounds.ambiant);
+	}
+
+	/**
+	 * Create and load the 3d objects
+	 */
 	createObjects() {
-		this.objects = [];
 
 		this.field = new Field();
 		
 		this.bench = new AWDObject('bench',{
 			'name': 'bench',
 			'x': 0,
-			'y': 0,
+			'y': .2,
+			'z': 0,
+			'color': 0xcacaca
+		});
+		
+		this.sartres = new AWDObject('sartres',{
+			'name': 'sartres',
+			'x': 0,
+			'y': .2,
 			'z': 0,
 			'color': 0xcacaca
 		});
 
-		this.treeBig = new AWDObject('tree-big',{
-			'name': 'treeBig',
-			'x': 4,
-			'y': 0,
-			'z': 8.5,
-			'color': 0xcacaca
-		});
-
-		this.treeLittle = new AWDObject('tree-little',{
-			'name': 'treeLittle',
-			'x': 6,
-			'y': 0,
-			'z': 8,
-			'color': 0xcacaca
-		});
-
-		this.statue = new AWDObject('statue001',{
-			'name': 'statue',
-			'x': 5,
-			'y': 0,
-			'z': 5,
-			'color': 0xcacaca
-		});
-
-		this.rock = new AWDObject('rock',{
-			'name': 'rock',
-			'x': 3,
-			'y': 0,
-			'z': 8,
-			'color': 0xcacaca
-		});
-
-		this.field.load()
-		.then(() => {
-			this.add(this.field.mesh);
-		});
-
 		this.title = new HomeTitle();
-		this.add(this.title.mesh);
 
-		this.bench.load()
-		.then(() => {
-			this.objects.push(this.bench.mesh);
-			this.add(this.bench.mesh);
+		this.particles = new Particles('particleWhite', 500, { x: 10});
+
+		this.skybox = new Skybox('assets2d/skybox/');
+
+		this.skybox.load()
+		.then( texture => {
+			this.scene.background = texture;
 		});
 
 		Promise.all([
-			this.treeBig.load(),
-			this.treeLittle.load(),
-			this.statue.load()
+			this.field.load(),
+			this.bench.load(),
+			this.particles.load(),
+			this.sartres.load()
 		])
 		.then(() => {
-			this.add(this.treeBig.mesh);
-
-			this.add(this.statue.mesh);
-
-			this.add(this.treeLittle.mesh);
-
-		});
-
-		this.rock.load()
-		.then(() => {
-			this.objects.push(this.rock.mesh);
-			this.add(this.rock.mesh);
-		});
-
-		this.particles = new Particles('particleWhite', 500, { x: 10});
-		this.particles.load()
-		.then(() => {
+			this.add(this.title.mesh);
+			this.add(this.bench.mesh);
+			this.add(this.field.mesh);
+			this.add(this.sartres.mesh);
 			this.add(this.particles.mesh);
+
+			this.raycastMeshes.push( this.bench.mesh );
+			this.raycastMeshes.push( this.sartres.mesh );
+			this.startRaycast = true;
 		});
 		
 	}
 
+	/**
+	 * Add all the listeners
+	 */
 	addEventListeners() {
-		window.addEventListener('resize', this.onResize.bind(this));
-		window.addEventListener('mousemove', this.updateCameraPosition.bind(this));
-		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
+		this.bindResize = this.onResize.bind(this);
+		window.addEventListener('resize', this.bindResize);
+		this.bindClick = this.onClick.bind(this);
+		this.domElement.addEventListener('click', this.bindClick);
+		this.bindRender = this.render.bind(this);
+		TweenMax.ticker.addEventListener('tick', this.bindRender);
+		this.bindEnter = this.enter.bind(this);
+		Emitter.on('LOADING_COMPLETE', this.bindEnter);
+		this.bindExit = this.exit.bind(this);
+		Emitter.on('EXPERIENCE_CLICKED', this.bindExit);
+	}
+
+	/**
+	 * remove all the listeners
+	 */
+	removeEventListeners() {
+		window.removeEventListener('resize', this.bindResize);
+		this.domElement.removeEventListener('click', this.bindClick);
+		TweenMax.ticker.removeEventListener('tick', this.bindRender);
+		Emitter.off('LOADING_COMPLETE', this.bindEnter);
+		Emitter.off('EXPERIENCE_CLICKED', this.bindExit);
+		window.removeEventListener('mousemove', this.boundMouseMove);
 	}
 
 	toggleCamera() {
 		this.controls.enabled = !this.controls.enabled;
 	}
 
+	/**
+	 * Handle the camera position based on mouseMove event
+	 * @param  {DOM Event} event Return of mouseMove event
+	 */
 	updateCameraPosition(event) {
 		throttle(() => {
+
+			this.mouseRaycast.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			this.mouseRaycast.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 			this.mousePosition.x = event.clientX;
 			this.mousePosition.y = event.clientY;
@@ -226,14 +289,82 @@ class HomeScene {
 			this.percentY = ( this.mousePosition.y - this.halfHeight ) * 100 / this.halfHeight;
 
 			TweenLite.to(this.camera.position, 1, {
-				z: this.cameraPosition.z + this.percentX * .006,
 				y: this.cameraPosition.y + this.percentY * .002,
+				z: this.cameraPosition.z + this.percentX * .006,
 				ease: Expo.easeOut
 			});
-			// this.camera.position.z = ;
-			// this.camera.position.;
 
 		}, 100)(event);
+	}
+
+	onMouseEnter() {
+		if(this.enableHoverSound && !this.sounds['hover'].playing() & !this.INTERSECTED ) {
+			this.sounds['hover'].volume(1);
+			this.sounds['hover'].stop();
+			this.sounds['hover'].play();
+		}
+
+		this.cursor.onMouseEnter();
+	}
+
+	onMouseLeave() {
+		if(this.enableHoverSound && this.sounds['hover'].playing()) {
+			this.sounds['hover'].fade(1,0,1000);
+		}
+
+		this.cursor.onMouseLeave();
+	}
+
+	onClick() {
+		if( this.INTERSECTED ) {
+			this.exit();
+		}
+	}
+
+	/**
+	 * Triggered when all objects are loaded - Start entry camera move
+	 */
+	enter() {
+		let tl = new TimelineLite();
+		tl.to(this.camera.position, 2,  {
+			x: -5.5,
+			y: 0,
+			z: -.4,
+			ease: Power2.easeIn
+		})
+		.to(this.camera.position, 2, {
+			x: this.cameraPosition.x,
+			y: this.cameraPosition.y,
+			z: this.cameraPosition.z,
+			ease: Power2.easeOut,
+			onComplete: ()=>{
+				this.boundMouseMove = event => this.updateCameraPosition(event);
+				window.addEventListener('mousemove', this.boundMouseMove);
+				this.enableHoverSound = true;
+			}
+		}, "-=0.5");
+	}
+
+	exit() {
+		this.sounds['enter'].play();
+		let exitTime = .7;
+		let tl = new TimelineLite();
+		tl.to(this.camera.position, exitTime, {
+			x: -.1,
+			y: 1,
+			ease: Power4.easeIn,
+			onComplete: ()=>{
+				Emitter.emit('GOTO_EXPERIENCE');
+			}
+		}, 0)
+		.to(this.center, exitTime, {
+			y: 1,
+			ease: Power4.easeIn,
+		}, 0)
+		.to(this.passes[1].params, exitTime * .7, {
+			boost: 7,
+			ease: Power4.easeIn,
+		}, .3);
 	}
 
 	/**
@@ -249,6 +380,21 @@ class HomeScene {
 		this.renderer.autoClearColor = true;
 
 		this.camera.lookAt( this.center );
+
+		if( this.startRaycast ) {
+			this.raycaster.setFromCamera( this.mouseRaycast, this.camera );
+
+			let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
+
+			if ( intersects.length == 0 ) {
+				this.INTERSECTED = false;
+			}
+			else {
+				this.debouncedMouseLeave();
+				this.throttledMouseEnter();
+				this.INTERSECTED = true;
+			}
+		}
 
 		this.composer.reset();
 		this.composer.render(this.scene, this.camera);

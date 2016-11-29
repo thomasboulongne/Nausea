@@ -17,7 +17,7 @@ class HomeTitle {
 		this.mesh = new THREE.Mesh( plane, material );
 
 		this.mesh.rotation.y = toRadians(90);
-		this.mesh.position.y = 1.5;
+		this.mesh.position.y = 2;
 	}
 
 
