@@ -22,6 +22,10 @@ export default {
 		this.$el.appendChild(this.canvas);
 	},
 
+	beforeDestroy() {
+		this.scene.destructor();
+	},
+
 	methods: {
 	}
 }

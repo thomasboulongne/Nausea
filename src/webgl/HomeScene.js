@@ -82,6 +82,12 @@ class HomeScene {
 
 	}
 
+	destructor() {
+		console.log('HomeScene destruction');
+		this.removeEventListeners();
+		this.scene = null;
+	}
+
 	/**
 	 * @method
 	 * @name add
@@ -223,11 +229,28 @@ class HomeScene {
 	 * Add all the listeners
 	 */
 	addEventListeners() {
-		window.addEventListener('resize', this.onResize.bind(this));
-		this.domElement.addEventListener('click', this.onClick.bind(this));
-		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
-		Emitter.on('LOADING_COMPLETE', this.enter.bind(this));
-		Emitter.on('EXPERIENCE_CLICKED', this.exit.bind(this));
+		this.bindResize = this.onResize.bind(this);
+		window.addEventListener('resize', this.bindResize);
+		this.bindClick = this.onClick.bind(this);
+		this.domElement.addEventListener('click', this.bindClick);
+		this.bindRender = this.render.bind(this);
+		TweenMax.ticker.addEventListener('tick', this.bindRender);
+		this.bindEnter = this.enter.bind(this);
+		Emitter.on('LOADING_COMPLETE', this.bindEnter);
+		this.bindExit = this.exit.bind(this);
+		Emitter.on('EXPERIENCE_CLICKED', this.bindExit);
+	}
+
+	/**
+	 * remove all the listeners
+	 */
+	removeEventListeners() {
+		window.removeEventListener('resize', this.bindResize);
+		this.domElement.removeEventListener('click', this.bindClick);
+		TweenMax.ticker.removeEventListener('tick', this.bindRender);
+		Emitter.off('LOADING_COMPLETE', this.bindEnter);
+		Emitter.off('EXPERIENCE_CLICKED', this.bindExit);
+		window.removeEventListener('mousemove', this.boundMouseMove);
 	}
 
 	toggleCamera() {
