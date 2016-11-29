@@ -1,6 +1,5 @@
 <template>
 	<div :class="['webgl', 'experience']" @click="enterExperience">
-		<div class="crosshair">+</div>
 	</div>
 </template>
 
@@ -65,14 +64,5 @@ export default {
 
 	.experienceOn {
 		cursor: none;
-	}
-
-	.crosshair {
-		position: fixed;
-		color: black;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		z-index: 1;
 	}
 </style>
