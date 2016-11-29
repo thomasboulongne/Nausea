@@ -1,3 +1,5 @@
+//import NumberUtils from '../utils/number-utils';
+
 class Field {
 
 	/**
@@ -29,13 +31,14 @@ class Field {
 				geometry.computeVertexNormals();
 				this.mesh = new THREE.Mesh( geometry, material );
 
-				this.mesh.position.y = -5;
+				this.mesh.position.y = -4;
 
 				this.mesh.rotation.x = - Math.PI / 2;
+				//this.mesh.rotation.z = NumberUtils.toRadians( 180 );
 
 				//set height of vertices
 				for ( let i = 0; i<this.mesh.geometry.vertices.length; i++ ) {
-					this.mesh.geometry.vertices[i].z = data[i] * 10;
+					this.mesh.geometry.vertices[i].z = data[i] * 8;
 				}
 
 				this.mesh.name = 'field';
@@ -43,7 +46,7 @@ class Field {
 			};
 
 			// load img source
-			img.src = 'assets2d/heightMap.png';
+			img.src = 'assets2d/heightMap07.png';
 		});
 
 	}
