@@ -121,12 +121,10 @@ class ExperienceScene {
 	}
 
 	setAmbiantSound() {
-		this.soundManager = new SoundManager();
+		this.soundAmbiant = SoundManager.load('ambiant.wav');
+		this.soundExist = SoundManager.load('exist.wav');
 
-		this.soundAmbiant = this.soundManager.load('ambiant.wav');
-		this.soundExist = this.soundManager.load('exist.wav');
-
-		this.soundManager.play(this.soundAmbiant);
+		SoundManager.play(this.soundAmbiant);
 	}
 
 	createObjects() {
