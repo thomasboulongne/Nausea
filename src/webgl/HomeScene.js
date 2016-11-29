@@ -4,6 +4,8 @@ import VignettePass from '@superguigui/wagner/src/passes/vignette/VignettePass';
 
 import './utils/PointerLockControls';
 
+import HomeCursor from './misc/HomeCursor';
+
 import Field from './objects/Field';
 import HomeTitle from './objects/HomeTitle';
 import Particles from './objects/Particles';
@@ -15,7 +17,7 @@ import Emitter from '../core/Emitter';
 
 import Lights from './Lights';
 
-import { throttle } from 'lodash';
+import { debounce, throttle } from 'lodash';
 
 class HomeScene {
 
@@ -25,10 +27,12 @@ class HomeScene {
 	constructor(domElement) {
 		this.domElement = domElement;
 
+		this.cursor = new HomeCursor(this.domElement);
+
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 
-		this.environmentColor = 0x999999;
+		this.environmentColor = 0xffffff;
 
 		this.halfWidth = this.width / 2;
 		this.halfHeight = this.height / 2;
@@ -72,19 +76,23 @@ class HomeScene {
 
 		this.setRaycast();
 
-		this.loadSounds();
-
-		this.setAmbiantSound();
+		this.setSounds();
 
 		this.createObjects();
 
 		this.addEventListeners();
 
+		this.throttledMouseEnter = throttle(this.onMouseEnter.bind(this), 800);
+
+		this.debouncedMouseLeave = debounce(this.onMouseLeave.bind(this), 500);
+
 	}
 
 	destructor() {
-		console.log('HomeScene destruction');
 		this.removeEventListeners();
+		for (let i = 0; i < this.sounds.length; i++) {
+			this.sounds[i].unload();
+		}
 		this.scene = null;
 	}
 
@@ -153,6 +161,14 @@ class HomeScene {
 			x: this.mousePosition.x,
 			y: this.mousePosition.y
 		};
+	}
+
+	setSounds() {
+		this.enableHoverSound = true;
+
+		this.loadSounds();
+
+		this.setAmbiantSound();
 	}
 
 	loadSounds() {
@@ -282,13 +298,21 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		this.sounds['hover'].volume(1);
-		this.sounds['hover'].stop();
-		this.sounds['hover'].play();
+		if(this.enableHoverSound && !this.sounds['hover'].playing() & !this.INTERSECTED ) {
+			this.sounds['hover'].volume(1);
+			this.sounds['hover'].stop();
+			this.sounds['hover'].play();
+		}
+
+		this.cursor.onMouseEnter();
 	}
 
 	onMouseLeave() {
-		this.sounds['hover'].fade(1,0,1000);
+		if(this.enableHoverSound && this.sounds['hover'].playing()) {
+			this.sounds['hover'].fade(1,0,1000);
+		}
+
+		this.cursor.onMouseLeave();
 	}
 
 	onClick() {
@@ -316,13 +340,13 @@ class HomeScene {
 			onComplete: ()=>{
 				this.boundMouseMove = event => this.updateCameraPosition(event);
 				window.addEventListener('mousemove', this.boundMouseMove);
+				this.enableHoverSound = true;
 			}
 		}, "-=0.5");
 	}
 
 	exit() {
 		this.sounds['enter'].play();
-		window.removeEventListener('mousemove', this.boundMouseMove);
 		let exitTime = .7;
 		let tl = new TimelineLite();
 		tl.to(this.camera.position, exitTime, {
@@ -363,17 +387,11 @@ class HomeScene {
 			let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
 			if ( intersects.length == 0 ) {
-				if( this.INTERSECTED ) {
-					this.onMouseLeave();
-				}
 				this.INTERSECTED = false;
 			}
 			else {
-				if( !this.INTERSECTED ) {
-					if(!this.sounds['hover'].playing()) {
-						this.onMouseEnter();
-					}
-				}
+				this.debouncedMouseLeave();
+				this.throttledMouseEnter();
 				this.INTERSECTED = true;
 			}
 		}
