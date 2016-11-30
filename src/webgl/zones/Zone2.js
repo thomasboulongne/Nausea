@@ -19,19 +19,19 @@ class Zone2 {
 		this.stand = {
 			'name' : 'stand',
 			'object' : stand,
-			'x' : 5,
+			'x' : -10.3,
 			'y' : 0,
-			'z' : 5,
+			'z' : -0.4,
 			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 0,
+			'roty' : 326,
 			'rotz' : 0
 		};
 
 		this.streetLamp1 = {
 			'name' : 'streetLamp1',
 			'object' : streetLamps[0],
-			'x' : 7,
+			'x' : -13.6,
 			'y' : 0,
 			'z' : 7,
 			'scale' : 1,
@@ -43,9 +43,9 @@ class Zone2 {
 		this.streetLamp2 = {
 			'name' : 'streetLamp2',
 			'object' : streetLamps[1],
-			'x' : 7,
+			'x' : -13.6,
 			'y' : 0,
-			'z' : 7,
+			'z' : -4.8,
 			'scale' : 1,
 			'rotx' : 0,
 			'roty' : 0,
@@ -55,7 +55,7 @@ class Zone2 {
 		this.streetLamp3 = {
 			'name' : 'streetLamp3',
 			'object' : streetLamps[2],
-			'x' : 7,
+			'x' : -11.4,
 			'y' : 0,
 			'z' : 7,
 			'scale' : 1,
@@ -67,7 +67,7 @@ class Zone2 {
 		this.streetLamp4 = {
 			'name' : 'streetLamp4',
 			'object' : streetLamps[3],
-			'x' : 7,
+			'x' : -15.8,
 			'y' : 0,
 			'z' : 7,
 			'scale' : 1,
@@ -79,9 +79,9 @@ class Zone2 {
 		this.shrub1 = {
 			'name' : 'shrub1',
 			'object' : shrubs[0],
-			'x' : 6,
+			'x' : -14.7,
 			'y' : 0,
-			'z' : 6,
+			'z' : 4,
 			'scale' : 1,
 			'rotx' : 0,
 			'roty' : 0,
@@ -91,10 +91,10 @@ class Zone2 {
 		this.shrub2 = {
 			'name' : 'shrub2',
 			'object' : shrubs[1],
-			'x' : 6,
+			'x' : -14.7,
 			'y' : 0,
-			'z' : 6,
-			'scale' : 1,
+			'z' : -5.9,
+			'scale' : 0.7,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
