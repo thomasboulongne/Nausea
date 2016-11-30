@@ -7,13 +7,16 @@ class Zone3 {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(statue, shrubs, scene) {
+	constructor(scene) {
 		this.scene = scene;
 
 		//properties to count how many objects to clone
 		this.nbShrubs = 3;
 
 		this.objects = [];
+	}
+
+	init(statue, shrubs) {
 
 		this.statue = {
 			'name' : 'statue',

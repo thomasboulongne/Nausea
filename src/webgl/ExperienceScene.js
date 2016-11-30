@@ -153,6 +153,7 @@ class ExperienceScene {
 	createObjects() {
 		//this.objects = [];
 		this.chestnuts = [];
+		this.statues = [];
 		this.benches = [];
 		this.minerals = [];
 		this.shrubs = [];
@@ -218,26 +219,50 @@ class ExperienceScene {
 		.then(() => {
 			this.add(this.field.mesh);
 
+			this.zone1 = new Zone1(this.scene);
+			this.zone2 = new Zone2(this.scene);
+			this.zone3 = new Zone3(this.scene);
+
+			this.zones = [this.zone1, this.zone2, this.zone3];
+
+			this.statues.push(this.statue);
 			this.chestnuts.push(this.chestnut);
 
-			for(let i = 0; i < 2; i++) {
+			let totalBenches = 0,
+				totalMinerals = 0,
+				totalShrubs = 0,
+				totalStreetLamps = 0;
+
+			for(let i = 0; i < this.zones.length; i++) {
+				console.log(this.zones[i]);
+				if(this.zones[i].nbBenches)
+					totalBenches += this.zones[i].nbBenches;
+				if(this.zones[i].nbMinerals)
+					totalMinerals += this.zones[i].nbMinerals;
+				if(this.zones[i].nbShrubs)
+					totalShrubs += this.zones[i].nbShrubs;
+				if(this.zones[i].nbStreetLamps)
+					totalStreetLamps += this.zones[i].nbStreetLamps;
+			}
+
+			for(let i = 0; i < totalBenches; i++) {
 				let bench = Object.assign({}, this.bench);
 				this.benches.push(bench);
 			}
 
-			for( let i = 0; i < 3; i++ ) {
+			for( let i = 0; i < totalMinerals; i++ ) {
 				let mineral = Object.assign({}, this.mineral);
 				mineral.mesh = mineral.mesh.clone();
 				this.minerals.push(mineral);
 			}
 
-			for( let i = 0; i < 5; i++ ) {
+			for( let i = 0; i < totalShrubs; i++ ) {
 				let shrub = Object.assign({}, this.shrub);
 				shrub.mesh = shrub.mesh.clone();
 				this.shrubs.push(shrub);
 			}
 
-			for( let i = 0; i < 4; i++ ) {
+			for( let i = 0; i < totalStreetLamps; i++ ) {
 				let streetLamp = Object.assign({}, this.streetLamp);
 				streetLamp.mesh = streetLamp.mesh.clone();
 				this.streetLamps.push(streetLamp);
@@ -259,18 +284,18 @@ class ExperienceScene {
 			// this.objects.push(this.rock);
 			// this.add(this.rock.mesh);
 
-			this.zone1 = new Zone1(this.chestnuts, this.benches, this.minerals, this.scene);
+			this.zone1.init(this.chestnuts, this.benches, this.minerals);
 			this.zone1.addScene();
 
-			this.zone2 = new Zone2(this.stand, this.streetLamps, this.shrubs, this.scene);
+			this.zone2.init(this.stand, this.streetLamps, this.shrubs);
 			this.zone2.addScene();
 
-			this.zone3 = new Zone3(this.statue, this.shrubs, this.scene);
+			this.zone3.init(this.statue, this.shrubs);
 			this.zone3.addScene();
 
 			if(Config.gui) {
 				this.zone2.addToGUI(this.gui);
-				this.zone3.addToGUI(this.gui)
+				this.zone3.addToGUI(this.gui);
 			}
 
 			//this.animationManager.initScene1([this.treeBig, this.statue, this.shrub]);

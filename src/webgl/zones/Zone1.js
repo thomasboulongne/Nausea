@@ -7,7 +7,7 @@ class Zone1 {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(chestnuts, benches, minerals, scene) {
+	constructor(scene) {
 		this.scene = scene;
 
 		//properties to count how many objects to clone
@@ -16,7 +16,10 @@ class Zone1 {
 		this.nbMinerals = 3;
 
 		this.objects = [];
+	}
 
+	init(chestnuts, benches, minerals) {
+		
 		this.chestnut = {
 			'name' : 'chestnut',
 			'object' : chestnuts[0],
@@ -83,6 +86,7 @@ class Zone1 {
 		minerals.splice(0,3);
 
 		this.objects.push(this.chestnut, this.bench, this.mineral1, this.mineral2, this.mineral3);
+
 	}
 
 	addToGUI(gui) {

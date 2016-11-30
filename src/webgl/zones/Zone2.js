@@ -7,7 +7,7 @@ class Zone2 {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(stand, streetLamps, shrubs, scene) {
+	constructor(scene) {
 		this.scene = scene;
 
 		//properties to count how many objects to clone
@@ -15,6 +15,9 @@ class Zone2 {
 		this.nbShrubs = 2;
 
 		this.objects = [];
+	}
+
+	init(stand, streetLamps, shrubs) {
 
 		this.stand = {
 			'name' : 'stand',
