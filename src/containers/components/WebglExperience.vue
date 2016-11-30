@@ -28,10 +28,6 @@ export default {
 	methods: {
 		enterExperience: function() {
 			this.scene.toggleCamera();
-
-			this.canvas.requestPointerLock = this.canvas.requestPointerLock || this.canvas.mozRequestPointerLock;
-
-			this.canvas.requestPointerLock();
 		},
 		exitExperience: function() {
 			this.scene.toggleCamera();
