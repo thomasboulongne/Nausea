@@ -1,6 +1,6 @@
 import NumberUtils from '../utils/number-utils';
 
-class Zone1 {
+class Zone4 {
 
 	/**
 	 * @constructor
@@ -11,82 +11,127 @@ class Zone1 {
 		this.scene = scene;
 
 		//properties to count how many objects to clone
-		this.nbChestnuts = 1;
-		this.nbBenches = 1;
-		this.nbMinerals = 3;
+		this.nbBenches = 4;
+		this.nbStreetLamps = 4;
 
 		this.objects = [];
 	}
 
-	init(chestnuts, benches, minerals) {
-		
-		this.chestnut = {
-			'name' : 'chestnut',
-			'object' : chestnuts[0],
-			'x' : 0,
-			'y' : 0,
-			'z' : 11.8,
-			'scale' : 1,
-			'rotx' : 0,
-			'roty' : 139,
-			'rotz' : 0
-		};
+	init(fountain, benches, streetLamps) {
 
-		this.bench = {
-			'name' : 'bench',
-			'object' : benches[0],
-			'x' : -1.7,
-			'y' : 0,
-			'z' : 9.6,
-			'scale' : 1,
-			'rotx' : 0,
-			'roty' : 143,
-			'rotz' : 0
-		};
-
-		this.mineral1 = {
-			'name' : 'mineral1',
-			'object' : minerals[0],
-			'x' : 2.5,
-			'y' : 0,
-			'z' : 8,
-			'scale' : 1.4,
-			'rotx' : 0,
-			'roty' : 238,
-			'rotz' : 0
-		};
-
-		this.mineral2 = {
-			'name' : 'mineral2',
-			'object' : minerals[1],
-			'x' : 2,
-			'y' : 0,
-			'z' : 9.6,
-			'scale' : 0.5,
-			'rotx' : 322,
-			'roty' : 75,
-			'rotz' : 258
-		};
-
-		this.mineral3 = {
-			'name' : 'mineral3',
-			'object' : minerals[2],
-			'x' : 1.6,
+		this.fountain = {
+			'name' : 'fountain',
+			'object' : fountain,
+			'x' : 10,
 			'y' : 0,
 			'z' : 6.2,
-			'scale' : 0.5,
+			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 175,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.bench1 = {
+			'name' : 'bench1-z4',
+			'object' : benches[0],
+			'x' : 12,
+			'y' : 0,
+			'z' : 3,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.bench2 = {
+			'name' : 'bench2-z4',
+			'object' : benches[1],
+			'x' : 12,
+			'y' : 0,
+			'z' : 4,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.bench3 = {
+			'name' : 'bench3-z4',
+			'object' : benches[2],
+			'x' : 12,
+			'y' : 0,
+			'z' : 5,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.bench4 = {
+			'name' : 'bench4-z4',
+			'object' : benches[3],
+			'x' : 12,
+			'y' : 0,
+			'z' : 6,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.streetLamp1 = {
+			'name' : 'streetLamp1-z4',
+			'object' : streetLamps[0],
+			'x' : 10,
+			'y' : 0,
+			'z' : 10,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.streetLamp2 = {
+			'name' : 'streetLamp2-z4',
+			'object' : streetLamps[1],
+			'x' : 10,
+			'y' : 0,
+			'z' : 3,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.streetLamp3 = {
+			'name' : 'streetLamp3-z4',
+			'object' : streetLamps[2],
+			'x' : 14,
+			'y' : 0,
+			'z' : 6,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
+			'rotz' : 0
+		};
+
+		this.streetLamp4 = {
+			'name' : 'streetLamp4-z4',
+			'object' : streetLamps[3],
+			'x' : 6,
+			'y' : 0,
+			'z' : 8.5,
+			'scale' : 1,
+			'rotx' : 0,
+			'roty' : 0,
 			'rotz' : 0
 		};
 
 		//Splice experience arrays
-		chestnuts.splice(0, this.nbChestnuts);
-		benches.splice(0, this.nbBenches);
-		minerals.splice(0, this.nbMinerals);
+		benches.splice(0,this.nbBenches);
+		streetLamps.splice(0, this.nbStreetLamps)
 
-		this.objects.push(this.chestnut, this.bench, this.mineral1, this.mineral2, this.mineral3);
-
+		this.objects.push(this.fountain, this.bench1, this.bench2, this.bench3, this.bench4, this.streetLamp1, this.streetLamp2, this.streetLamp3, this.streetLamp4);
 	}
 
 	addToGUI(gui) {
@@ -146,4 +191,4 @@ class Zone1 {
 
 }
 
-export default Zone1;
+export default Zone4;

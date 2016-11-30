@@ -105,8 +105,8 @@ class Zone2 {
 
 
 		//Splice experience arrays
-		shrubs.splice(0,2);
-		streetLamps.splice(0,3);
+		shrubs.splice(0, this.nbShrubs);
+		streetLamps.splice(0, this.nbStreetLamps);
 
 		this.objects.push(this.stand, this.shrub1, this.shrub2, this.streetLamp1, this.streetLamp2, this.streetLamp3, this.streetLamp4);
 	}

@@ -67,7 +67,7 @@ class Zone3 {
 		};
 
 		//Splice experience arrays
-		shrubs.splice(0,2);
+		shrubs.splice(0, this.nbShrubs);
 
 		this.objects.push(this.statue, this.shrub1, this.shrub2, this.shrub3);
 	}

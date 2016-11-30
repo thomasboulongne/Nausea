@@ -17,6 +17,7 @@ import Lights from './Lights';
 import Zone1 from './zones/Zone1';
 import Zone2 from './zones/Zone2';
 import Zone3 from './zones/Zone3';
+import Zone4 from './zones/Zone4';
 
 import NumberUtils from './utils/number-utils';
 
@@ -199,6 +200,12 @@ class ExperienceScene {
 			'materialize': false
 		});
 
+		this.fountain = new AWDObject('fountain',{
+			'name': 'fountain',
+			'color': 0xcacaca,
+			'materialize': false
+		});
+
 		this.mineral = new AWDObject('rock',{
 			'name': 'mineral',
 			'color': 0xcacaca,
@@ -214,6 +221,7 @@ class ExperienceScene {
 			this.stand.load(),
 			this.streetLamp.load(),
 			this.statue.load(),
+			this.fountain.load(),
 			this.mineral.load()
 		])
 		.then(() => {
@@ -222,8 +230,9 @@ class ExperienceScene {
 			this.zone1 = new Zone1(this.scene);
 			this.zone2 = new Zone2(this.scene);
 			this.zone3 = new Zone3(this.scene);
+			this.zone4 = new Zone4(this.scene);
 
-			this.zones = [this.zone1, this.zone2, this.zone3];
+			this.zones = [this.zone1, this.zone2, this.zone3, this.zone4];
 
 			this.statues.push(this.statue);
 			this.chestnuts.push(this.chestnut);
@@ -247,6 +256,7 @@ class ExperienceScene {
 
 			for(let i = 0; i < totalBenches; i++) {
 				let bench = Object.assign({}, this.bench);
+				bench.mesh = bench.mesh.clone();
 				this.benches.push(bench);
 			}
 
@@ -293,9 +303,13 @@ class ExperienceScene {
 			this.zone3.init(this.statue, this.shrubs);
 			this.zone3.addScene();
 
+			this.zone4.init(this.fountain, this.benches, this.streetLamps);
+			this.zone4.addScene();
+
 			if(Config.gui) {
 				this.zone2.addToGUI(this.gui);
 				this.zone3.addToGUI(this.gui);
+				this.zone4.addToGUI(this.gui);
 			}
 
 			//this.animationManager.initScene1([this.treeBig, this.statue, this.shrub]);
