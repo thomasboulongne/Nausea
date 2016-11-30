@@ -1,6 +1,7 @@
  const Config = {
 
  	'gui' : true,
+ 	'controls' : false
 
 };
 

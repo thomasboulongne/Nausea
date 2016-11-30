@@ -27,7 +27,7 @@ class ExperienceScene {
 	 * @constructor
 	 */
 	constructor(domElement) {
-		if(Config.gui) this.gui = new Dat.GUI;
+		if(Config.gui) this.gui = new Dat.GUI({ load: JSON });
 
 		this.domElement = domElement;
 
@@ -182,7 +182,7 @@ class ExperienceScene {
 			'materialize': false
 		});
 
-		this.stand = new AWDObject('stand',{
+		this.stand = new AWDObject('kiosque',{
 			'name': 'stand',
 			'color': 0xcacaca,
 			'materialize': false
@@ -235,15 +235,14 @@ class ExperienceScene {
 			this.zones = [this.zone1, this.zone2, this.zone3, this.zone4];
 
 			this.statues.push(this.statue);
-			this.chestnuts.push(this.chestnut);
 
 			let totalBenches = 0,
+				totalChestnuts = 0,
 				totalMinerals = 0,
 				totalShrubs = 0,
 				totalStreetLamps = 0;
 
 			for(let i = 0; i < this.zones.length; i++) {
-				console.log(this.zones[i]);
 				if(this.zones[i].nbBenches)
 					totalBenches += this.zones[i].nbBenches;
 				if(this.zones[i].nbMinerals)
@@ -252,6 +251,14 @@ class ExperienceScene {
 					totalShrubs += this.zones[i].nbShrubs;
 				if(this.zones[i].nbStreetLamps)
 					totalStreetLamps += this.zones[i].nbStreetLamps;
+				if(this.zones[i].nbChestnuts)
+					totalChestnuts += this.zones[i].nbChestnuts;
+			}
+
+			for(let i = 0; i < totalChestnuts; i++) {
+				let chestnut = Object.assign({}, this.chestnut);
+				chestnut.mesh = chestnut.mesh.clone();
+				this.chestnuts.push(chestnut);
 			}
 
 			for(let i = 0; i < totalBenches; i++) {
@@ -297,16 +304,17 @@ class ExperienceScene {
 			this.zone1.init(this.chestnuts, this.benches, this.minerals);
 			this.zone1.addScene();
 
-			this.zone2.init(this.stand, this.streetLamps, this.shrubs);
+			this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
 			this.zone2.addScene();
 
-			this.zone3.init(this.statue, this.shrubs);
+			this.zone3.init(this.statue, this.chestnuts, this.shrubs);
 			this.zone3.addScene();
 
 			this.zone4.init(this.fountain, this.benches, this.streetLamps);
 			this.zone4.addScene();
 
 			if(Config.gui) {
+				this.zone1.addToGUI(this.gui);
 				this.zone2.addToGUI(this.gui);
 				this.zone3.addToGUI(this.gui);
 				this.zone4.addToGUI(this.gui);

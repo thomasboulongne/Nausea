@@ -46,7 +46,7 @@ class Field {
 			};
 
 			// load img source
-			img.src = 'assets2d/heightMap07.png';
+			img.src = 'assets2d/heightMap08.png';
 		});
 
 	}

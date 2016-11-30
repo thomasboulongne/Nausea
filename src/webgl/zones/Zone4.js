@@ -1,6 +1,6 @@
-import NumberUtils from '../utils/number-utils';
+import Zone from './Zone';
 
-class Zone4 {
+class Zone4 extends Zone{
 
 	/**
 	 * @constructor
@@ -8,13 +8,11 @@ class Zone4 {
 	 * param scene : experience scene
 	 */
 	constructor(scene) {
-		this.scene = scene;
+		super(scene);
 
 		//properties to count how many objects to clone
 		this.nbBenches = 4;
 		this.nbStreetLamps = 4;
-
-		this.objects = [];
 	}
 
 	init(fountain, benches, streetLamps) {
@@ -129,57 +127,26 @@ class Zone4 {
 
 		//Splice experience arrays
 		benches.splice(0,this.nbBenches);
-		streetLamps.splice(0, this.nbStreetLamps)
+		streetLamps.splice(0, this.nbStreetLamps);
 
 		this.objects.push(this.fountain, this.bench1, this.bench2, this.bench3, this.bench4, this.streetLamp1, this.streetLamp2, this.streetLamp3, this.streetLamp4);
+
+		super.init();
+	}
+
+	setMeshNames () {
+		super.setMeshNames();
 	}
 
 	addToGUI(gui) {
-
-		for(let i = 0; i < this.objects.length; i++) {
-			let folder = gui.addFolder(this.objects[i].name);
-			console.log(this.objects[i])
-
-			folder.add(this.objects[i].object.mesh.position, 'x', -50, 50).name('posx');
-			folder.add(this.objects[i].object.mesh.position, 'y', -10, 10).name('posy');
-			folder.add(this.objects[i].object.mesh.position, 'z', -50, 50).name('posz');
-
-			folder.add(this.objects[i].object.mesh.scale, 'x', 0, 2).name('scale').onChange((scale) => {
-				this.objects[i].object.mesh.scale.x = this.objects[i].object.mesh.scale.y = this.objects[i].object.mesh.scale.z = scale;
-			});
-
-			let params = {
-				degx : 0,
-				degy : 0,
-				degz : 0
-			};
-
-			folder.add(params, 'degx', 0, 360).name('rotationx').onChange((degValue) => {
-				let angle = NumberUtils.toRadians(degValue);
-				this.objects[i].object.mesh.rotation.x = angle;
-			});
-			folder.add(params, 'degy', 0, 360).name('rotationy').onChange((degValue) => {
-				let angle = NumberUtils.toRadians(degValue);
-				this.objects[i].object.mesh.rotation.y = angle;
-			});
-			folder.add(params, 'degz', 0, 360).name('rotationz').onChange((degValue) => {
-				let angle = NumberUtils.toRadians(degValue);
-				this.objects[i].object.mesh.rotation.z = angle;
-			});
-		}
+		super.addToGUI(gui);
 	}
 
 	/**
 	 * @addScene
 	 */
 	addScene() {
-		for ( let i = 0; i < this.objects.length; i++) {
-			this.scene.add(this.objects[i].object.mesh);
-			this.objects[i].object.mesh.position.set(this.objects[i].x, this.objects[i].y, this.objects[i].z);
-			this.objects[i].object.mesh.rotation.set(NumberUtils.toRadians(this.objects[i].rotx), NumberUtils.toRadians(this.objects[i].roty), NumberUtils.toRadians(this.objects[i].rotz));
-			this.objects[i].object.mesh.scale.set(this.objects[i].scale, this.objects[i].scale, this.objects[i].scale);
-
-		}
+		super.addScene();
 	}
 
 	/**
