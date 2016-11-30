@@ -232,12 +232,12 @@ class ExperienceScene {
 			this.add(this.particles.mesh);
 		});
 
-		let skybox = new Skybox('assets2d/skybox/');
+		this.skybox = new Skybox('assets2d/skybox/');
 
-		skybox.load()
-		.then( texture => {
-			this.scene.background = texture;
-		});
+		// skybox.load()
+		// .then( texture => {
+		// 	this.scene.background = texture;
+		// });
 		
 	}
 
