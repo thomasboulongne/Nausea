@@ -16,6 +16,7 @@ import Lights from './Lights';
 
 import Zone1 from './zones/Zone1';
 import Zone2 from './zones/Zone2';
+import Zone3 from './zones/Zone3';
 
 import NumberUtils from './utils/number-utils';
 
@@ -230,7 +231,7 @@ class ExperienceScene {
 				this.minerals.push(mineral);
 			}
 
-			for( let i = 0; i < 2; i++ ) {
+			for( let i = 0; i < 5; i++ ) {
 				let shrub = Object.assign({}, this.shrub);
 				shrub.mesh = shrub.mesh.clone();
 				this.shrubs.push(shrub);
@@ -264,8 +265,12 @@ class ExperienceScene {
 			this.zone2 = new Zone2(this.stand, this.streetLamps, this.shrubs, this.scene);
 			this.zone2.addScene();
 
+			this.zone3 = new Zone3(this.statue, this.shrubs, this.scene);
+			this.zone3.addScene();
+
 			if(Config.gui) {
-				this.zone2.addToGUI(this.gui)
+				this.zone2.addToGUI(this.gui);
+				this.zone3.addToGUI(this.gui)
 			}
 
 			//this.animationManager.initScene1([this.treeBig, this.statue, this.shrub]);
