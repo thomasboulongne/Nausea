@@ -212,7 +212,7 @@ class ExperienceScene {
 				this.treeBig.addToGUI(this.gui, 'bigTree');
 				this.statue.addToGUI(this.gui, 'statue');
 				this.treeLittle.addToGUI(this.gui, 'littleTree');
-				this.rock.addToGUI(this.gui, 'rock')
+				this.rock.addToGUI(this.gui, 'rock');
 			}
 
 			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
