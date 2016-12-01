@@ -20,34 +20,34 @@ class Zone3 extends Zone {
 		this.statue = {
 			'name' : 'statue',
 			'object' : statue,
-			'x' : 11,
+			'x' : 6,
 			'y' : 0,
-			'z' : -1.5,
-			'scale' : 1,
+			'z' : -2.5,
+			'scale' : 1.1,
 			'rotx' : 0,
-			'roty' : 32,
+			'roty' : 71,
 			'rotz' : 0
 		};
 
 		this.chestnut = {
 			'name' : 'chestnut1-z3',
 			'object' : chestnuts[0],
-			'x' : 13,
+			'x' : 14,
 			'y' : 0,
-			'z' : -1.5,
-			'scale' : 1,
+			'z' : -7.5,
+			'scale' : 0.8,
 			'rotx' : 0,
-			'roty' : 139,
+			'roty' : 175,
 			'rotz' : 0
 		};
 
 		this.shrub1 = {
 			'name' : 'shrub1-z3',
 			'object' : shrubs[0],
-			'x' : 14,
+			'x' : 10,
 			'y' : 0,
-			'z' : 0.7,
-			'scale' : 1,
+			'z' : -1.47,
+			'scale' : 0.9,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -56,10 +56,10 @@ class Zone3 extends Zone {
 		this.shrub2 = {
 			'name' : 'shrub2-z3',
 			'object' : shrubs[1],
-			'x' : 15,
+			'x' : 13,
 			'y' : 0,
-			'z' : -3.7,
-			'scale' : 1,
+			'z' : -4,
+			'scale' : 1.2,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -68,10 +68,10 @@ class Zone3 extends Zone {
 		this.shrub3 = {
 			'name' : 'shrub3-z3',
 			'object' : shrubs[2],
-			'x' : 13,
+			'x' : 14,
 			'y' : 0,
-			'z' : -1.5,
-			'scale' : 0.5,
+			'z' : -3,
+			'scale' : 0.71,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0

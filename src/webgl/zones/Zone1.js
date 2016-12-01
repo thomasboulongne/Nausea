@@ -21,9 +21,10 @@ class Zone1 extends Zone {
 		this.chestnut = {
 			'name' : 'chestnut1-z1',
 			'object' : chestnuts[0],
+			'rotate' : true,
 			'x' : 0,
 			'y' : 0,
-			'z' : 11.8,
+			'z' : 12,
 			'scale' : 1,
 			'rotx' : 0,
 			'roty' : 139,
@@ -33,18 +34,20 @@ class Zone1 extends Zone {
 		this.bench = {
 			'name' : 'bench',
 			'object' : benches[0],
-			'x' : -1.7,
-			'y' : 0,
-			'z' : 9.6,
+			'rotate' : false,
+			'x' : -3,
+			'y' : 0.15,
+			'z' : 10.9,
 			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 143,
+			'roty' : 130,
 			'rotz' : 0
 		};
 
 		this.mineral1 = {
 			'name' : 'mineral1',
 			'object' : minerals[0],
+			'rotate' : false,
 			'x' : 2.5,
 			'y' : 0,
 			'z' : 8,
@@ -57,6 +60,7 @@ class Zone1 extends Zone {
 		this.mineral2 = {
 			'name' : 'mineral2',
 			'object' : minerals[1],
+			'rotate' : false,
 			'x' : 2,
 			'y' : 0,
 			'z' : 9.6,
@@ -69,6 +73,7 @@ class Zone1 extends Zone {
 		this.mineral3 = {
 			'name' : 'mineral3',
 			'object' : minerals[2],
+			'rotate' : false,
 			'x' : 1.6,
 			'y' : 0,
 			'z' : 6.2,
@@ -85,7 +90,12 @@ class Zone1 extends Zone {
 
 		this.objects.push(this.chestnut, this.bench, this.mineral1, this.mineral2, this.mineral3);
 
+		console.log(this.objects)
+
 		super.init();
+
+		this.initAnim();
+		this.playAnim();
 
 	}
 
@@ -104,11 +114,31 @@ class Zone1 extends Zone {
 		super.addScene();
 	}
 
+	initAnim() {
+		super.initAnim(); 
+
+	}
+
+	playAnim() {
+		super.playAnim(); 
+	}
+
 	/**
 	 * @update
 	 */
 	update() {
+		//permanant rotation
+		for(let i = 0; i < this.objects.length; i++) {
+			if(this.objects[i].object.options.materialize && this.objects[i].rotate) {
+				//this.objects[i].object.mesh.rotation.y += 0.01;
+			}
+		}
 
+		if(this.animate) {
+			for(let i = 0; i < this.objects.length; i++) {
+				this.objects[i].object.material.uniforms.time.value = this.tweenTime.time;
+			}
+		}
 	}
 
 }

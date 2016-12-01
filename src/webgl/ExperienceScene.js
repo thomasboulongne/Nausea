@@ -10,7 +10,7 @@ import Field from './objects/Field';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
-import AnimationManager from './animations/AnimationManager';
+//import AnimationManager from './animations/AnimationManager';
 
 import Lights from './Lights';
 
@@ -27,7 +27,7 @@ class ExperienceScene {
 	 * @constructor
 	 */
 	constructor(domElement) {
-		if(Config.gui) this.gui = new Dat.GUI({ load: JSON });
+		if(Config.gui) this.gui = new Dat.GUI();
 
 		this.domElement = domElement;
 
@@ -41,7 +41,8 @@ class ExperienceScene {
 		this.renderer.setClearColor(0xffffff);
 		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .1, 10000 );
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.1 );
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.08 );
+		if(Config.gui) this.gui.add(this.scene.fog, 'density', 0, 0.2).name('fog');
 
 		this.setControls();
 
@@ -57,7 +58,7 @@ class ExperienceScene {
 
 		this.addEventListeners();
 
-		this.animationManager = new AnimationManager();
+		//this.animationManager = new AnimationManager();
 
 	}
 
@@ -113,6 +114,11 @@ class ExperienceScene {
 				let angle = NumberUtils.toRadians(degValue);
 				this.camera.rotation.y = angle;
 			});
+
+			folder.add(params, 'degx', 0, 360).name('rotationx').onChange((degValue) => {
+				let angle = NumberUtils.toRadians(degValue);
+				this.camera.rotation.x = angle;
+			});
 			//folder.add(this.objects[i].object.mesh.position, 'x', -50, 50).name('posx');
 		}
 	}
@@ -167,13 +173,13 @@ class ExperienceScene {
 		this.bench = new AWDObject('bench',{
 			'name': 'bench',
 			'color': 0xcacaca,
-			'materialize': false
+			'materialize': true
 		});
 
 		this.chestnut = new AWDObject('chestnut',{
 			'name': 'chestnut',
-			'color': 0xcacaca,
-			'materialize': false
+			'color': 0xe02302,
+			'materialize': true
 		});
 
 		this.shrub = new AWDObject('shrub',{
@@ -182,10 +188,10 @@ class ExperienceScene {
 			'materialize': false
 		});
 
-		this.stand = new AWDObject('kiosque',{
+		this.stand = new AWDObject('stand',{
 			'name': 'stand',
 			'color': 0xcacaca,
-			'materialize': false
+			'materialize': true
 		});
 
 		this.streetLamp = new AWDObject('street_lamp',{
@@ -197,19 +203,19 @@ class ExperienceScene {
 		this.statue = new AWDObject('statue',{
 			'name': 'statue',
 			'color': 0xcacaca,
-			'materialize': false
+			'materialize': true
 		});
 
 		this.fountain = new AWDObject('fountain',{
 			'name': 'fountain',
 			'color': 0xcacaca,
-			'materialize': false
+			'materialize': true
 		});
 
 		this.mineral = new AWDObject('rock',{
 			'name': 'mineral',
 			'color': 0xcacaca,
-			'materialize': false
+			'materialize': true
 		});
 
 
@@ -256,22 +262,51 @@ class ExperienceScene {
 			}
 
 			for(let i = 0; i < totalChestnuts; i++) {
-				let chestnut = Object.assign({}, this.chestnut);
-				chestnut.mesh = chestnut.mesh.clone();
+				let name = 'chestnut-' + i;
+				let chestnut = new AWDObject(name);
+				chestnut.geometry = this.chestnut.geometry;
+				chestnut.options = this.chestnut.options;
+				chestnut.createMesh();
+				console.log(this.chestnut)
+				console.info(chestnut)
 				this.chestnuts.push(chestnut);
 			}
 
 			for(let i = 0; i < totalBenches; i++) {
-				let bench = Object.assign({}, this.bench);
-				bench.mesh = bench.mesh.clone();
+				let name = 'bench-' + i;
+				let bench = new AWDObject(name);
+				bench.geometry = this.bench.geometry;
+				bench.options = this.bench.options;
+				bench.createMesh();
 				this.benches.push(bench);
 			}
 
 			for( let i = 0; i < totalMinerals; i++ ) {
-				let mineral = Object.assign({}, this.mineral);
-				mineral.mesh = mineral.mesh.clone();
+				let name = 'mineral-' + i;
+				let mineral = new AWDObject(name);
+				mineral.geometry = this.mineral.geometry;
+				mineral.options = this.mineral.options;
+				mineral.createMesh();
 				this.minerals.push(mineral);
 			}
+
+			// for(let i = 0; i < totalChestnuts; i++) {
+			// 	let chestnut = Object.assign({}, this.chestnut);
+			// 	chestnut.mesh = chestnut.mesh.clone();
+			// 	this.chestnuts.push(chestnut);
+			// }
+
+			// for(let i = 0; i < totalBenches; i++) {
+			// 	let bench = Object.assign({}, this.bench);
+			// 	bench.mesh = bench.mesh.clone();
+			// 	this.benches.push(bench);
+			// }
+
+			// for( let i = 0; i < totalMinerals; i++ ) {
+			// 	let mineral = Object.assign({}, this.mineral);
+			// 	mineral.mesh = mineral.mesh.clone();
+			// 	this.minerals.push(mineral);
+			// }
 
 			for( let i = 0; i < totalShrubs; i++ ) {
 				let shrub = Object.assign({}, this.shrub);
@@ -313,12 +348,17 @@ class ExperienceScene {
 			this.zone4.init(this.fountain, this.benches, this.streetLamps);
 			this.zone4.addScene();
 
+			//this.createLeaves();
+
 			if(Config.gui) {
 				this.zone1.addToGUI(this.gui);
 				this.zone2.addToGUI(this.gui);
 				this.zone3.addToGUI(this.gui);
 				this.zone4.addToGUI(this.gui);
 			}
+
+			this.zone1.initAnim();
+			this.zone1.playAnim();
 
 			//this.animationManager.initScene1([this.treeBig, this.statue, this.shrub]);
 		});
@@ -330,6 +370,34 @@ class ExperienceScene {
 		// });
 		
 	}
+
+	// createLeaves() {
+	// 	let numberLeaves = 4;
+
+	// 	let texture = new THREE.TextureLoader().load( "assets2d/leaves.png" );
+	// 	// texture.wrapS = THREE.RepeatWrapping;
+	// 	// texture.wrapT = THREE.RepeatWrapping;
+	// 	//texture.repeat.set( 4, 4 );
+
+	// 	let geometry = new THREE.PlaneGeometry( 15, 15, 1);
+	// 	let material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, map: texture, transparent: true} );
+	// 	let plane = new THREE.Mesh( geometry, material );
+	// 	this.scene.add( plane );
+	// 	plane.position.z = 11;
+	// 	plane.position.y = 7;
+	// 	console.log(plane);
+
+	// 	this.leaf = new THREE.Object3D();
+
+	// 	for(let i = 0; i < numberLeaves; i++) {
+	// 		let leaf = plane.clone();
+	// 		leaf.rotation.y = i * 45;
+
+	// 		this.scene.add(leaf);
+	// 		this.leaf.children.push(leaf);
+	// 	}
+
+	// }
 
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
@@ -352,6 +420,7 @@ class ExperienceScene {
 		// }
 		//Particles 
 		//this.particles.update();
+		if(this.zone1) this.zone1.update();
 
 		if(Config.controls) {
 			this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
@@ -366,7 +435,7 @@ class ExperienceScene {
 				let objName = intersects[0].object.name;
 				console.log('Casted object: ', intersects[0].object.name);
 				if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
-					this.animationManager.animateScene1();
+					//this.animationManager.animateScene1();
 				}
 			} else {
 				this.INTERSECTED = null;

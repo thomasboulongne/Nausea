@@ -20,8 +20,8 @@ class Zone4 extends Zone{
 		this.fountain = {
 			'name' : 'fountain',
 			'object' : fountain,
-			'x' : 10,
-			'y' : 0,
+			'x' : 17,
+			'y' : 0.25,
 			'z' : 6.2,
 			'scale' : 1,
 			'rotx' : 0,
@@ -32,24 +32,24 @@ class Zone4 extends Zone{
 		this.bench1 = {
 			'name' : 'bench1-z4',
 			'object' : benches[0],
-			'x' : 12,
+			'x' : 14,
 			'y' : 0,
-			'z' : 3,
+			'z' : 1.8,
 			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 0,
+			'roty' : 278,
 			'rotz' : 0
 		};
 
 		this.bench2 = {
 			'name' : 'bench2-z4',
 			'object' : benches[1],
-			'x' : 12,
+			'x' : 13,
 			'y' : 0,
-			'z' : 4,
+			'z' : 4.8,
 			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 0,
+			'roty' : 345,
 			'rotz' : 0
 		};
 
@@ -58,29 +58,29 @@ class Zone4 extends Zone{
 			'object' : benches[2],
 			'x' : 12,
 			'y' : 0,
-			'z' : 5,
+			'z' : 7.3,
 			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 0,
+			'roty' : 44,
 			'rotz' : 0
 		};
 
 		this.bench4 = {
 			'name' : 'bench4-z4',
 			'object' : benches[3],
-			'x' : 12,
+			'x' : 22,
 			'y' : 0,
-			'z' : 6,
+			'z' : 3.5,
 			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 0,
+			'roty' : 234,
 			'rotz' : 0
 		};
 
 		this.streetLamp1 = {
 			'name' : 'streetLamp1-z4',
 			'object' : streetLamps[0],
-			'x' : 10,
+			'x' : 17,
 			'y' : 0,
 			'z' : 10,
 			'scale' : 1,
@@ -92,7 +92,7 @@ class Zone4 extends Zone{
 		this.streetLamp2 = {
 			'name' : 'streetLamp2-z4',
 			'object' : streetLamps[1],
-			'x' : 10,
+			'x' : 13,
 			'y' : 0,
 			'z' : 3,
 			'scale' : 1,
@@ -104,9 +104,9 @@ class Zone4 extends Zone{
 		this.streetLamp3 = {
 			'name' : 'streetLamp3-z4',
 			'object' : streetLamps[2],
-			'x' : 14,
+			'x' : 12,
 			'y' : 0,
-			'z' : 6,
+			'z' : 6.2,
 			'scale' : 1,
 			'rotx' : 0,
 			'roty' : 0,
@@ -116,9 +116,9 @@ class Zone4 extends Zone{
 		this.streetLamp4 = {
 			'name' : 'streetLamp4-z4',
 			'object' : streetLamps[3],
-			'x' : 6,
+			'x' : 20.6,
 			'y' : 0,
-			'z' : 8.5,
+			'z' : 1.8,
 			'scale' : 1,
 			'rotx' : 0,
 			'roty' : 0,

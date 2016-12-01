@@ -1,3 +1,5 @@
+import SoundManager from '../sound/SoundManager';
+
 import NumberUtils from '../utils/number-utils';
 
 class Zone {
@@ -10,17 +12,44 @@ class Zone {
 	constructor(scene) {
 		this.scene = scene;
 
+		this.animated = false;
+
 		this.objects = [];
 	}
 
 	init() {
 		this.setMeshNames();
+		this.soundMaterialize = SoundManager.load('materialize.mp3');
 	}
 
 	setMeshNames () {
 		for( let i = 0;  i < this.objects.length; i++ ) {
 			this.objects[i].object.mesh.name = this.objects[i].name;
 		}
+	}
+
+	initTimeline () {
+		this.animate = true;
+		this.tweenTime = { time : 0};
+		this.timeline = new TimelineMax();
+		this.timeline.to(this.tweenTime, 16, {time: 2, ease: Expo.easeOut, onComplete: () => {
+			this.animate = false;
+		}});
+		this.timeline.pause();
+	}
+
+	playTimeline () {
+		this.timeline.play();
+	}
+
+	initAnim () {
+		this.initTimeline();
+	}
+
+	playAnim () {
+		this.playTimeline();
+
+		SoundManager.play(this.soundMaterialize);
 	}
 
 	addToGUI(gui) {

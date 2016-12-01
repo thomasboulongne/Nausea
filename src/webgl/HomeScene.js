@@ -133,38 +133,6 @@ class HomeScene {
 			'color': 0xcacaca
 		});
 
-		this.treeBig = new AWDObject('tree-big',{
-			'name': 'treeBig',
-			'x': 4,
-			'y': 0,
-			'z': 8.5,
-			'color': 0xcacaca
-		});
-
-		this.treeLittle = new AWDObject('tree-little',{
-			'name': 'treeLittle',
-			'x': 6,
-			'y': 0,
-			'z': 8,
-			'color': 0xcacaca
-		});
-
-		this.statue = new AWDObject('statue001',{
-			'name': 'statue',
-			'x': 5,
-			'y': 0,
-			'z': 5,
-			'color': 0xcacaca
-		});
-
-		this.rock = new AWDObject('rock',{
-			'name': 'rock',
-			'x': 3,
-			'y': 0,
-			'z': 8,
-			'color': 0xcacaca
-		});
-
 		this.field.load()
 		.then(() => {
 			this.add(this.field.mesh);
@@ -180,25 +148,12 @@ class HomeScene {
 		});
 
 		Promise.all([
-			this.treeBig.load(),
-			this.treeLittle.load(),
-			this.statue.load()
+			
 		])
 		.then(() => {
-			this.add(this.treeBig.mesh);
-
-			this.add(this.statue.mesh);
-
-			this.add(this.treeLittle.mesh);
+			
 
 		});
-
-		this.rock.load()
-		.then(() => {
-			this.objects.push(this.rock.mesh);
-			this.add(this.rock.mesh);
-		});
-
 		this.particles = new Particles('particleWhite', 500, { x: 10});
 		this.particles.load()
 		.then(() => {

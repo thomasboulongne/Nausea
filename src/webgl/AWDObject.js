@@ -18,8 +18,9 @@ class AWDObject {
 
 		let loader = new THREE.AWDLoader( LoadingManager );
 
-		const options = {
-			color : this.options.color ? this.options.color : "0xcacaca"
+		this.options = {
+			color : this.options.color ? this.options.color : "0xcacaca",
+			materialize : this.options.materialize ? this.options.materialize : false
 		};
 
 		return new Promise(resolve => {
@@ -32,37 +33,40 @@ class AWDObject {
 
 				this.geometry = this.mesh.children[0].geometry;
 				
-				if( this.options.materialize ) {
-					
-					this.geometryObj = new THREE.Geometry().fromBufferGeometry( this.geometry );
-
-					this.modifyGeometry();
-
-					this.createRandomAttributes();
-
-					this.createMaterial();
-				}
-				else {
-					// this.mesh.children[0].material.color = new THREE.Color( options.color );
-					// this.mesh.children[0].material.transparent = true;
-
-					this.material = new THREE.MeshPhongMaterial({
-						color: this.options.color,
-						lights: true,
-						fog: true,
-						transparent: true
-					});
-				}
-				
-				this.mesh = new THREE.Mesh(this.geometry, this.material);
-
-				this.mesh.name = this.name;
-
-				this.mesh.color = new THREE.Color( options.color );
-
 				resolve('success');
 			}.bind(this) );
 		});
+	}
+
+	createMesh() {
+		if( this.options.materialize ) {
+					
+			this.geometryObj = new THREE.Geometry().fromBufferGeometry( this.geometry );
+
+			this.modifyGeometry();
+
+			this.createRandomAttributes();
+
+			this.createMaterial();
+		}
+		else {
+			// this.mesh.children[0].material.color = new THREE.Color( options.color );
+			// this.mesh.children[0].material.transparent = true;
+
+			this.material = new THREE.MeshPhongMaterial({
+				color: this.options.color,
+				lights: true,
+				fog: true,
+				transparent: true
+			});
+		}
+		
+		this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+		this.mesh.name = this.name;
+
+		this.mesh.color = new THREE.Color( this.options.color );
+
 	}
 
 	createMaterial()
@@ -81,6 +85,13 @@ class AWDObject {
 			fog: true,
 			transparent: true
 		});
+
+		console.log(this.material.uniforms)
+		this.material.uniforms.emissive.value = new THREE.Color( this.options.color );
+		console.log(this.material.uniforms)
+
+		this.material.type = 'MeshPhongMaterial';
+		
 	}
 
 	createRandomAttributes() {
@@ -149,18 +160,6 @@ class AWDObject {
 		this.timeline.play();
 	}
 
-	/**
-	 * @method
-	 * @name update
-	 * @description Triggered on every TweenMax tick
-	 */
-	update() {
-		if(this.material && this.options.materialize && this.animate) {
-
-			//this.mesh.rotation.y += .001;
-			this.material.uniforms.time.value = this.tweenTime.time;
-		}
-	}
 
 }
 
