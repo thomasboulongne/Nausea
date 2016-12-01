@@ -5,16 +5,22 @@ class HomeCursor {
 	constructor(domElt) {
 		this.domElt = domElt;
 
-		this.smCircle = document.createElement('div');
+		this.circlesNb = 2;
 
-		this.smCircle.classList.add('HomeCursor-circle');
+		this.circles = [];
 
-		this.lgCircle = document.createElement('div');
+		for (let i = 0; i < this.circlesNb; i++) {
+			let elt = document.createElement('div');
+			elt.classList.add('HomeCursor-circle');
+			this.domElt.appendChild(elt);
+			elt.cur_size = 5 + ((i+2) * 10);
+			elt.cur_offsetInit = elt.cur_size / -2;
+			elt.cur_offset = elt.cur_offsetInit;
+			elt.cur_elasticity = 1.4 - .2 * i;
+			elt.cur_spreadFactor = i * 6;
+			this.circles.push(elt);
+		}
 
-		this.lgCircle.classList.add('HomeCursor-circle');
-
-		this.domElt.appendChild(this.smCircle);
-		this.domElt.appendChild(this.lgCircle);
 		
 		this.startSpread = false;
 
@@ -24,11 +30,16 @@ class HomeCursor {
 	}
 
 	setupStyle() {
-		this.sm = 25;
-		this.lg = 350;
 
-		TweenLite.set(this.smCircle, {width: this.sm, height: this.sm});
-		TweenLite.set(this.lgCircle, {width: this.sm, height: this.sm, display: 'none'});
+		for (let i = 0; i < this.circles.length; i++) {
+			TweenLite.set(this.circles[i], {
+				width: this.circles[i].cur_size,
+				height: this.circles[i].cur_size,
+				x: this.circles[i].cur_offset,
+				y: this.circles[i].cur_offset 
+			});
+		}
+
 	}
 
 	addEventListeners() {
@@ -37,14 +48,29 @@ class HomeCursor {
 	}
 
 	onMouseMove(event) {
-		TweenLite.to(this.smCircle, 1.2, {left: event.clientX - this.sm/2, top: event.clientY - this.sm/2, ease: Elastic.easeOut.config(1.5, 1)});
-		TweenLite.to(this.lgCircle, 1.2, {left: event.clientX - this.sm/2, top: event.clientY - this.sm/2, ease: Elastic.easeOut.config(1.3, 1)});
+		for (let i = 0; i < this.circles.length; i++) {
+			TweenLite.to(this.circles[i], 1.2, {
+				left: event.clientX,
+				top: event.clientY,
+				ease: Elastic.easeOut.config(this.circles[i].cur_elasticity, 1)
+			});
+		}
 	}
 
 	onMouseEnter() {
-		if( !this.startSpread && this.lgCircle.style.display == 'none' ) {
+		if( !this.startSpread) {
 			this.startSpread = true;
-			TweenLite.fromTo(this.lgCircle, 1, {width: this.sm, height: this.sm, x: 0, y: 0}, {display: 'block', width: this.lg, height: this.lg, x: -this.lg/2 + 'px', y: -this.lg/2 + 'px', ease: Power4.easeIn, onComplete: ()=>{this.startSpread = false; this.spreaded = true;}});			
+			let circle = this.circles[1];
+			let offset = circle.cur_offsetInit * circle.cur_spreadFactor;
+			TweenLite.to(circle, 1, {
+				width: circle.cur_size * circle.cur_spreadFactor,
+				height: circle.cur_size * circle.cur_spreadFactor,
+				cur_offset: circle.cur_offsetInit * circle.cur_spreadFactor,
+				x: offset,
+				y: offset,
+				ease: Power4.easeIn,
+				onComplete: ()=>{this.startSpread = false; this.spreaded = true;}
+			});
 		}
 	}
 
@@ -52,8 +78,14 @@ class HomeCursor {
 		this.startSpread = false;
 		this.spreaded = false;
 		let tl = new TimelineLite();
-		tl.to(this.lgCircle, .5, {width: this.sm, height: this.sm, x: 0, y: 0, ease: Power4.easeOut})
-		.set(this.lgCircle, {display: 'none'});
+		let circle = this.circles[1];
+		tl.to(circle, .5, {width: circle.cur_size,
+			height: circle.cur_size,
+			cur_offset: circle.cur_offsetInit,
+			x: circle.cur_offsetInit,
+			y: circle.cur_offsetInit,
+			ease: Power4.easeOut
+		});
 	}
 
 }

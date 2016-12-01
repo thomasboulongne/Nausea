@@ -1,5 +1,6 @@
 import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
+import VignettePass from '@superguigui/wagner/src/passes/vignette/VignettePass';
 
 import './utils/PointerLockControls';
 import Config from './config';
@@ -116,8 +117,16 @@ class ExperienceScene {
 		this.passes = [
 			new NoisePass({
 				amount: .05
+			}),
+			new VignettePass({
+				boost: 1,
+				reduction: .4
 			})
 		];
+
+		let gui = new Dat.GUI();
+		gui.add(this.passes[1].params, 'reduction', 0, 2);
+		gui.add(this.passes[1].params, 'boost', 0, 5);
 	}
 
 	setAmbiantSound() {
@@ -226,7 +235,7 @@ class ExperienceScene {
 			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
 		});
 
-		this.particles = new Particles('particleNoborder', 500);
+		this.particles = new Particles('particule05', 500);
 		this.particles.load()
 		.then(() => {
 			this.add(this.particles.mesh);
@@ -234,10 +243,10 @@ class ExperienceScene {
 
 		this.skybox = new Skybox('assets2d/skybox/');
 
-		// skybox.load()
-		// .then( texture => {
-		// 	this.scene.background = texture;
-		// });
+		this.skybox.load()
+		.then( texture => {
+			this.scene.background = texture;
+		});
 		
 	}
 

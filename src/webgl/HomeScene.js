@@ -32,7 +32,7 @@ class HomeScene {
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 
-		this.environmentColor = 0xffffff;
+		this.environmentColor = 0x555555;
 
 		this.halfWidth = this.width / 2;
 		this.halfHeight = this.height / 2;
@@ -48,21 +48,21 @@ class HomeScene {
 			y: this.halfHeight
 		};
 
-		this.center = new THREE.Vector3( );
+		this.center = new THREE.Vector3( 0, 1, 0 );
 
 		this.cameraPositionInitial = {
-			x: -7,
+			x: -10,
 			y: -.3,
 			z: 0
 		};
 
 		this.cameraPosition = {
-			x: -5,
-			y: .3,
+			x: -6,
+			y: 1,
 			z: 0
 		};
 
-		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
+		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .1, 1000 );
 
 		this.camera.position.set( this.cameraPositionInitial.x, this.cameraPositionInitial.y, this.cameraPositionInitial.z );
 
@@ -214,7 +214,7 @@ class HomeScene {
 
 		this.particles = new Particles('particleWhite', 500, { x: 10});
 
-		this.skybox = new Skybox('assets2d/skybox/');
+		this.skybox = new Skybox('assets2d/homeSkybox/');
 
 		this.skybox.load()
 		.then( texture => {
@@ -394,6 +394,10 @@ class HomeScene {
 				this.throttledMouseEnter();
 				this.INTERSECTED = true;
 			}
+		}
+
+		if(!this.INTERSECTED) {
+			this.cursor.onMouseLeave();
 		}
 
 		this.composer.reset();
