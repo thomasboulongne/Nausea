@@ -11,28 +11,34 @@ class HomeCursor {
 
 		this.circlesNb = 4;
 
+		this.circleSize = 25;
+		this.circleMargin = 10;
+
+		this.spreadFactor = 10;
+
 		this.circles = [];
+
+		let offset = (this.circleSize + this.circleMargin) / -2;
 
 		for (let i = 0; i < this.circlesNb; i++) {
 			let elt = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-			elt.cursor_size = 25;
-			elt.cursor_margin = 10;
-			elt.cursor_offset = (elt.cursor_size + elt.cursor_margin) / -2;
+			elt.cursor_offset = 
 
 			TweenLite.set(elt, {
-				x: elt.cursor_offset,
-				y: elt.cursor_offset,
-				height: elt.cursor_size + elt.cursor_margin,
-				width: elt.cursor_size + elt.cursor_margin,
-				display: 'none'
+				x: offset,
+				y: offset,
+				height: this.circleSize + this.circleSize,
+				width: this.circleSize + this.circleSize,
+				display: 'none',
+				opacity: 0
 			});
 
 			elt.classList.add('HomeCursor-circle');
 
-			let cx = (elt.cursor_size + elt.cursor_margin) / 2;
+			let cx = -offset;
 
-			elt.innerHTML = '<circle cx="' + cx + '" cy="' + cx + '" r="' + elt.cursor_size / 2 + '" style="fill: none;stroke:' + this.color + ';"/></circle>';
+			elt.innerHTML = '<circle cx="' + cx + '" cy="' + cx + '" r="' + this.circleSize / 2 + '" style="fill: none;stroke:' + this.color + ';"/></circle>';
 
 			this.domElt.appendChild(elt);
 
@@ -57,12 +63,18 @@ class HomeCursor {
 	setupStyle() {
 
 		TweenLite.set(this.circles[0], {
-			display: 'block'
+			display: 'block',
+			opacity: 1,
+			filter: 'drop-shadow(0px 0px 3px white)'
 		});
 
-		let progress = this.circles[2];
+		let progress = this.circles[3];
 
-		progress.pathLength_spread = progress.cursor_size * progress.cursor_spreadFactor * Math.PI;
+		progress.pathLength_spread = this.circleSize * this.spreadFactor * Math.PI;
+
+		TweenLite.set(progress, {
+			filter: 'drop-shadow(0px 0px 7px white)'
+		});
 
 		TweenLite.set(progress.circle, {
 			attr: {
@@ -75,6 +87,76 @@ class HomeCursor {
 	}
 
 	setupTweens() {
+
+		this.enterTl = new TimelineLite();
+
+		let middle = this.circles[1];
+		let large = this.circles[2];
+		let progress = this.circles[3];
+
+		let lgSVGSize = this.circleSize * this.spreadFactor + this.circleMargin;
+		let lgSize = this.circleSize * this.spreadFactor;
+		let lgOffset = (lgSize + this.circleMargin) / -2;
+
+		let mdSVGSize = lgSVGSize / 2;
+		let mdSize = lgSize / 2;
+		let mdOffset = lgOffset / 2;
+
+		this.enterTl.to(large, .7, {
+			x: lgOffset,
+			y: lgOffset,
+			width: lgSVGSize,
+			height: lgSVGSize,
+			display: 'block',
+			ease: Expo.easeOut,
+			opacity: 1
+		}, 0).to(large.circle, .7, {
+			attr: {
+				cx: -lgOffset,
+				cy: -lgOffset,
+				r: lgSize/2
+			},
+			ease: Expo.easeOut
+		}, 0).to(progress, .7, {
+			x: lgOffset,
+			y: lgOffset,
+			width: lgSVGSize,
+			height: lgSVGSize,
+			display: 'block',
+			ease: Expo.easeOut,
+			opacity: 1
+		}, 0).to(progress.circle, .7, {
+			attr: {
+				cx: -lgOffset,
+				cy: -lgOffset,
+				r: lgSize/2
+			},
+			ease: Expo.easeOut
+		}, 0).to(middle, 1.1, {
+			x: mdOffset,
+			y: mdOffset,
+			width: mdSVGSize,
+			height: mdSVGSize,
+			display: 'block',
+			ease: Expo.easeInOut,
+			opacity: .2
+		}, 0).to(middle.circle, 1.1, {
+			attr: {
+				cx: -mdOffset,
+				cy: -mdOffset,
+				r: mdSize/2
+			},
+			ease: Expo.easeInOut
+		}, 0);
+
+		this.enterTl.to(progress.circle,2, {
+			attr: {
+				'stroke-dashoffset': 0
+			},
+			ease: Expo.easeInOut
+		}, '-=0.5');
+
+		this.enterTl.pause();
 	}
 
 	addEventListeners() {
@@ -93,10 +175,12 @@ class HomeCursor {
 	}
 
 	onMouseEnter() {
+		console.log('cursor enter');
+		this.enterTl.timeScale(1).play();
 	}
 
 	onMouseLeave() {
-		// this.mouseEnterTL.resume();
+		this.enterTl.timeScale(3).reverse();
 	}
 
 }
