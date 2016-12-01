@@ -298,7 +298,7 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		if(this.enableHoverSound && !this.sounds['hover'].playing() & !this.INTERSECTED ) {
+		if(this.endStartAnimation && this.enableHoverSound && !this.sounds['hover'].playing() & !this.INTERSECTED ) {
 			this.sounds['hover'].volume(1);
 			this.sounds['hover'].stop();
 			this.sounds['hover'].play();
@@ -311,7 +311,6 @@ class HomeScene {
 		if(this.enableHoverSound && this.sounds['hover'].playing()) {
 			this.sounds['hover'].fade(1,0,1000);
 		}
-
 		this.cursor.onMouseLeave();
 	}
 
@@ -340,7 +339,7 @@ class HomeScene {
 			onComplete: ()=>{
 				this.boundMouseMove = event => this.updateCameraPosition(event);
 				window.addEventListener('mousemove', this.boundMouseMove);
-				this.enableHoverSound = true;
+				this.endStartAnimation = true;
 			}
 		}, "-=0.5");
 	}
@@ -390,6 +389,7 @@ class HomeScene {
 				this.INTERSECTED = false;
 			}
 			else {
+				this.enableHoverSound = true;
 				this.debouncedMouseLeave();
 				this.throttledMouseEnter();
 				this.INTERSECTED = true;
@@ -397,6 +397,7 @@ class HomeScene {
 		}
 
 		if(!this.INTERSECTED) {
+			this.enableHoverSound = false;
 			this.cursor.onMouseLeave();
 		}
 

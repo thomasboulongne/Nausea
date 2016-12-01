@@ -2,44 +2,79 @@ import './HomeCursor.scss';
 
 class HomeCursor {
 	
-	constructor(domElt) {
+	constructor(domElt, options) {
 		this.domElt = domElt;
 
-		this.circlesNb = 2;
+		this.options = options ? options : {};
+
+		this.color = this.options.color ? this.options.color : '#FFFFFF';
+
+		this.circlesNb = 4;
 
 		this.circles = [];
 
 		for (let i = 0; i < this.circlesNb; i++) {
-			let elt = document.createElement('div');
+			let elt = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+			elt.cursor_size = 25;
+			elt.cursor_margin = 10;
+			elt.cursor_offset = (elt.cursor_size + elt.cursor_margin) / -2;
+
+			TweenLite.set(elt, {
+				x: elt.cursor_offset,
+				y: elt.cursor_offset,
+				height: elt.cursor_size + elt.cursor_margin,
+				width: elt.cursor_size + elt.cursor_margin,
+				display: 'none'
+			});
+
 			elt.classList.add('HomeCursor-circle');
+
+			let cx = (elt.cursor_size + elt.cursor_margin) / 2;
+
+			elt.innerHTML = '<circle cx="' + cx + '" cy="' + cx + '" r="' + elt.cursor_size / 2 + '" style="fill: none;stroke:' + this.color + ';"/></circle>';
+
 			this.domElt.appendChild(elt);
-			elt.cur_size = 5 + ((i+2) * 10);
-			elt.cur_offsetInit = elt.cur_size / -2;
-			elt.cur_offset = elt.cur_offsetInit;
-			elt.cur_elasticity = 1.4 - .2 * i;
-			elt.cur_spreadFactor = i * 6;
+
+			elt.circle = elt.childNodes[0];
+			TweenLite.set(elt.circle, {
+				attr: {
+					'stroke-width': 1
+				}
+			});
+
 			this.circles.push(elt);
 		}
 
-		
-		this.startSpread = false;
-
 		this.setupStyle();
 
+		this.setupTweens();
+
 		this.addEventListeners();
+
 	}
 
 	setupStyle() {
 
-		for (let i = 0; i < this.circles.length; i++) {
-			TweenLite.set(this.circles[i], {
-				width: this.circles[i].cur_size,
-				height: this.circles[i].cur_size,
-				x: this.circles[i].cur_offset,
-				y: this.circles[i].cur_offset 
-			});
-		}
+		TweenLite.set(this.circles[0], {
+			display: 'block'
+		});
 
+		let progress = this.circles[2];
+
+		progress.pathLength_spread = progress.cursor_size * progress.cursor_spreadFactor * Math.PI;
+
+		TweenLite.set(progress.circle, {
+			attr: {
+				'stroke-dasharray': progress.pathLength_spread,
+				'stroke-dashoffset': progress.pathLength_spread,
+				'stroke-width': 3
+			}
+		});
+
+	}
+
+	setupTweens() {
 	}
 
 	addEventListeners() {
@@ -52,40 +87,16 @@ class HomeCursor {
 			TweenLite.to(this.circles[i], 1.2, {
 				left: event.clientX,
 				top: event.clientY,
-				ease: Elastic.easeOut.config(this.circles[i].cur_elasticity, 1)
+				ease: Elastic.easeOut.config(1.5, 1)
 			});
 		}
 	}
 
 	onMouseEnter() {
-		if( !this.startSpread) {
-			this.startSpread = true;
-			let circle = this.circles[1];
-			let offset = circle.cur_offsetInit * circle.cur_spreadFactor;
-			TweenLite.to(circle, 1, {
-				width: circle.cur_size * circle.cur_spreadFactor,
-				height: circle.cur_size * circle.cur_spreadFactor,
-				cur_offset: circle.cur_offsetInit * circle.cur_spreadFactor,
-				x: offset,
-				y: offset,
-				ease: Power4.easeIn,
-				onComplete: ()=>{this.startSpread = false; this.spreaded = true;}
-			});
-		}
 	}
 
 	onMouseLeave() {
-		this.startSpread = false;
-		this.spreaded = false;
-		let tl = new TimelineLite();
-		let circle = this.circles[1];
-		tl.to(circle, .5, {width: circle.cur_size,
-			height: circle.cur_size,
-			cur_offset: circle.cur_offsetInit,
-			x: circle.cur_offsetInit,
-			y: circle.cur_offsetInit,
-			ease: Power4.easeOut
-		});
+		// this.mouseEnterTL.resume();
 	}
 
 }
