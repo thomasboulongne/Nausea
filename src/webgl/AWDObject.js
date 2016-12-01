@@ -50,8 +50,6 @@ class AWDObject {
 			this.createMaterial();
 		}
 		else {
-			// this.mesh.children[0].material.color = new THREE.Color( options.color );
-			// this.mesh.children[0].material.transparent = true;
 
 			this.material = new THREE.MeshPhongMaterial({
 				color: this.options.color,
@@ -65,8 +63,6 @@ class AWDObject {
 
 		this.mesh.name = this.name;
 
-		this.mesh.color = new THREE.Color( this.options.color );
-
 	}
 
 	createMaterial()
@@ -74,7 +70,9 @@ class AWDObject {
 		let phongShader = THREE.ShaderLib.phong;
 		let uniforms = THREE.UniformsUtils.clone(phongShader.uniforms);
 
+		uniforms.type = 'MeshPhongMaterial';
 		uniforms.time = { type: 'f', value: 0 };
+		uniforms.diffuse.value = new THREE.Color( this.options.color );
 
 		// Create our vertex/fragment shaders
 		this.material = new THREE.ShaderMaterial({
@@ -85,12 +83,6 @@ class AWDObject {
 			fog: true,
 			transparent: true
 		});
-
-		console.log(this.material.uniforms)
-		this.material.uniforms.emissive.value = new THREE.Color( this.options.color );
-		console.log(this.material.uniforms)
-
-		this.material.type = 'MeshPhongMaterial';
 		
 	}
 
@@ -102,7 +94,7 @@ class AWDObject {
 		let random = Math.random();
 		let randomDelai = Math.random();
 		for(let v = 0, j = 0; v < this.geometry.attributes.position.count; v++) {
-			values.push(random * 5);
+			values.push(random * 20);
 			delais.push(randomDelai);
 			j++;
 			if(j > 2)
@@ -145,21 +137,6 @@ class AWDObject {
 
 		this.geometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 3 ) );
 	}
-
-	initTimeline () {
-		this.animate = true;
-		this.tweenTime = { time : 0};
-		this.timeline = new TimelineMax();
-		this.timeline.to(this.tweenTime, 20, {time: 2, ease: Expo.easeOut, onComplete: () => {
-			this.animate = false;
-		}});
-		this.timeline.pause();
-	}
-
-	playTimeline () {
-		this.timeline.play();
-	}
-
 
 }
 

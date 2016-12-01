@@ -90,8 +90,6 @@ class Zone1 extends Zone {
 
 		this.objects.push(this.chestnut, this.bench, this.mineral1, this.mineral2, this.mineral3);
 
-		console.log(this.objects)
-
 		super.init();
 
 		this.initAnim();

@@ -2,7 +2,7 @@
 
  	'gui' : true,
  	'controls' : false,
- 	'materialize' : true
+ 	'materialize' : false
 
 };
 

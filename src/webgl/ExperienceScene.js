@@ -178,7 +178,7 @@ class ExperienceScene {
 
 		this.chestnut = new AWDObject('chestnut',{
 			'name': 'chestnut',
-			'color': 0xe02302,
+			'color': 0xcacaca,
 			'materialize': true
 		});
 
@@ -267,8 +267,6 @@ class ExperienceScene {
 				chestnut.geometry = this.chestnut.geometry;
 				chestnut.options = this.chestnut.options;
 				chestnut.createMesh();
-				console.log(this.chestnut)
-				console.info(chestnut)
 				this.chestnuts.push(chestnut);
 			}
 
@@ -309,16 +307,26 @@ class ExperienceScene {
 			// }
 
 			for( let i = 0; i < totalShrubs; i++ ) {
-				let shrub = Object.assign({}, this.shrub);
-				shrub.mesh = shrub.mesh.clone();
+				let name = 'shrub-' + i;
+				let shrub = new AWDObject(name);
+				shrub.geometry = this.shrub.geometry;
+				shrub.options = this.shrub.options;
+				shrub.createMesh();
 				this.shrubs.push(shrub);
 			}
 
 			for( let i = 0; i < totalStreetLamps; i++ ) {
-				let streetLamp = Object.assign({}, this.streetLamp);
-				streetLamp.mesh = streetLamp.mesh.clone();
+				let name = 'streetLamp-' + i;
+				let streetLamp = new AWDObject(name);
+				streetLamp.geometry = this.streetLamp.geometry;
+				streetLamp.options = this.streetLamp.options;
+				streetLamp.createMesh();
 				this.streetLamps.push(streetLamp);
 			}
+
+			this.statue.createMesh();
+			this.fountain.createMesh();
+			this.stand.createMesh();
 
 
 			// this.objects.push(this.treeBig);
