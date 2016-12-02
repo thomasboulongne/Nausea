@@ -1,5 +1,4 @@
 import 'three/examples/js/loaders/AWDLoader';
-import NumberUtils from './utils/number-utils';
 import 'three/examples/js/modifiers/TessellateModifier';
 import 'three/examples/js/modifiers/ExplodeModifier';
 import VertexShader from './shaders/objects/shader.vert';
@@ -19,11 +18,9 @@ class AWDObject {
 
 		let loader = new THREE.AWDLoader( LoadingManager );
 
-		const options = {
-			x : this.options.x ? this.options.x : 0,
-			y : this.options.y ? this.options.y : 0,
-			z : this.options.z ? this.options.z : 0,
-			color : this.options.color ? this.options.color : "0xcacaca"
+		this.options = {
+			color : this.options.color ? this.options.color : "0xcacaca",
+			materialize : this.options.materialize ? this.options.materialize : false
 		};
 
 		return new Promise(resolve => {
@@ -36,45 +33,47 @@ class AWDObject {
 
 				this.geometry = this.mesh.children[0].geometry;
 				
-				if( this.options.materialize ) {
-					
-					this.geometryObj = new THREE.Geometry().fromBufferGeometry( this.geometry );
-
-					this.modifyGeometry();
-
-					this.createRandomAttributes();
-
-					this.createMaterial();
-				}
-				else {
-					// this.mesh.children[0].material.color = new THREE.Color( options.color );
-					// this.mesh.children[0].material.transparent = true;
-
-					this.material = new THREE.MeshPhongMaterial({
-						color: this.options.color,
-						lights: true,
-						fog: true,
-						transparent: true
-					});
-				}
-				
-				this.mesh = new THREE.Mesh(this.geometry, this.material);
-
-				this.mesh.name = this.name;
-
-				this.mesh.position.set(options.x, options.y, options.z);
-
 				resolve('success');
 			}.bind(this) );
 		});
 	}
 
-	createMaterial()
-	{
+	createMesh() {
+
+		if( this.options.materialize ) {
+					
+			this.geometryObj = new THREE.Geometry().fromBufferGeometry( this.geometry );
+
+			this.modifyGeometry();
+
+			this.createRandomAttributes();
+
+			this.createMaterial();
+		}
+		else {
+
+			this.material = new THREE.MeshPhongMaterial({
+				color: this.options.color,
+				lights: true,
+				fog: true,
+				transparent: true
+			});
+		}
+		
+		this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+		this.mesh.name = this.name;
+
+	}
+
+	createMaterial() {
+
 		let phongShader = THREE.ShaderLib.phong;
 		let uniforms = THREE.UniformsUtils.clone(phongShader.uniforms);
 
+		uniforms.type = 'MeshPhongMaterial';
 		uniforms.time = { type: 'f', value: 0 };
+		uniforms.diffuse.value = new THREE.Color( this.options.color );
 
 		// Create our vertex/fragment shaders
 		this.material = new THREE.ShaderMaterial({
@@ -85,6 +84,7 @@ class AWDObject {
 			fog: true,
 			transparent: true
 		});
+		
 	}
 
 	createRandomAttributes() {
@@ -94,8 +94,9 @@ class AWDObject {
 
 		let random = Math.random();
 		let randomDelai = Math.random();
+		
 		for(let v = 0, j = 0; v < this.geometry.attributes.position.count; v++) {
-			values.push(random * 15);
+			values.push(random * 20);
 			delais.push(randomDelai);
 			j++;
 			if(j > 2)
@@ -137,61 +138,6 @@ class AWDObject {
 		}
 
 		this.geometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 3 ) );
-	}
-
-	initTimeline () {
-		this.animate = true;
-		this.tweenTime = { time : 0};
-		this.timeline = new TimelineMax();
-		this.timeline.to(this.tweenTime, 20, {time: 2, ease: Expo.easeOut, onComplete: () => {
-			this.animate = false;
-		}});
-		this.timeline.pause();
-	}
-
-	playTimeline () {
-		this.timeline.play();
-	}
-
-	addToGUI(gui, name) {
-		let folder = gui.addFolder(name);
-
-		folder.add(this.mesh.position, 'x', -50, 50).name('posx');
-		folder.add(this.mesh.position, 'y', -10, 10).name('posy');
-		folder.add(this.mesh.position, 'z', -50, 50).name('posz');
-
-		let params = {
-			degx : 0,
-			degy : 0,
-			degz : 0
-		};
-
-		folder.add(params, 'degx', 0, 360).name('rotationx').onChange((degValue) => {
-			let angle = NumberUtils.toRadians(degValue);
-			this.mesh.rotation.x = angle;
-		});
-		folder.add(params, 'degy', 0, 360).name('rotationy').onChange((degValue) => {
-			let angle = NumberUtils.toRadians(degValue);
-			this.mesh.rotation.y = angle;
-		});
-		folder.add(params, 'degz', 0, 360).name('rotationz').onChange((degValue) => {
-			let angle = NumberUtils.toRadians(degValue);
-			this.mesh.rotation.z = angle;
-		});
-	}
-
-	/**
-	 * @method
-	 * @name update
-	 * @description Triggered on every TweenMax tick
-	 */
-	update() {
-		
-		if(this.material && this.options.materialize && this.animate) {
-
-			//this.mesh.rotation.y += .001;
-			this.material.uniforms.time.value = this.tweenTime.time;
-		}
 	}
 
 }

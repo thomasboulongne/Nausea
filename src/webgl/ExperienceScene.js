@@ -12,11 +12,17 @@ import Skybox from './objects/Skybox';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
-import AnimationManager from './animations/AnimationManager';
 
 import Lights from './Lights';
 
 import WebglCursor from './misc/WebglCursor';
+
+import Zone1 from './zones/Zone1';
+import Zone2 from './zones/Zone2';
+import Zone3 from './zones/Zone3';
+import Zone4 from './zones/Zone4';
+
+//import NumberUtils from './utils/number-utils';
 
 class ExperienceScene {
 
@@ -24,7 +30,7 @@ class ExperienceScene {
 	 * @constructor
 	 */
 	constructor(domElement) {
-		if(Config.gui) this.gui = new Dat.GUI;
+		if(Config.gui) this.gui = new Dat.GUI();
 
 		this.domElement = domElement;
 
@@ -38,9 +44,11 @@ class ExperienceScene {
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
-		this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, .1, 1000 );
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.15 );
+		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .1, 10000 );
+
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.08 );
+		if(Config.gui) this.gui.add(this.scene.fog, 'density', 0, 0.2).name('fog');
 
 		this.setControls();
 
@@ -55,9 +63,6 @@ class ExperienceScene {
 		this.createObjects();
 
 		this.addEventListeners();
-
-		this.animationManager = new AnimationManager();
-
 	}
 
 	/**
@@ -141,102 +146,177 @@ class ExperienceScene {
 	}
 
 	createObjects() {
-		this.objects = [];
+		this.chestnuts = [];
+		this.statues = [];
+		this.benches = [];
+		this.minerals = [];
+		this.shrubs = [];
+		this.streetLamps = [];
+
 		this.raycastMeshes = [];
 
 		this.field = new Field();
 		
 		this.bench = new AWDObject('bench',{
 			'name': 'bench',
-			'x': 0,
-			'y': 0,
-			'z': 0,
-			'color': 0xcacaca,
-			'materialize': false
-		});
-
-		this.treeBig = new AWDObject('chestnut_trunk',{
-			'name': 'treeBig',
-			'x': 4,
-			'y': 0,
-			'z': 6.2,
 			'color': 0xcacaca,
 			'materialize': true
 		});
 
-		this.treeLittle = new AWDObject('tree-little',{
-			'name': 'treeLittle',
-			'x': 7.3,
-			'y': 0,
-			'z': 6.2,
+		this.chestnut = new AWDObject('chestnut',{
+			'name': 'chestnut',
+			'color': 0xcacaca,
+			'materialize': true
+		});
+
+		this.shrub = new AWDObject('shrub',{
+			'name': 'shrub',
 			'color': 0xcacaca,
 			'materialize': false
 		});
 
-		this.statue = new AWDObject('statue001',{
+		this.stand = new AWDObject('stand',{
+			'name': 'stand',
+			'color': 0xcacaca,
+			'materialize': true
+		});
+
+		this.streetLamp = new AWDObject('street_lamp',{
+			'name': 'streetLamp',
+			'color': 0xcacaca,
+			'materialize': false
+		});
+
+		this.statue = new AWDObject('statue',{
 			'name': 'statue',
-			'x': 5,
-			'y': 2.5,
-			'z': 5,
 			'color': 0xcacaca,
 			'materialize': true
 		});
 
-		this.rock = new AWDObject('rock',{
-			'name': 'rock',
-			'x': 3,
-			'y': 0,
-			'z': 8,
+		this.fountain = new AWDObject('fountain',{
+			'name': 'fountain',
 			'color': 0xcacaca,
-			'materialize': false
+			'materialize': true
+		});
+
+		this.mineral = new AWDObject('rock',{
+			'name': 'mineral',
+			'color': 0xcacaca,
+			'materialize': true
 		});
 
 
 		Promise.all([
 			this.field.load(),
 			this.bench.load(),
-			this.treeBig.load(),
-			this.treeLittle.load(),
+			this.chestnut.load(),
+			this.shrub.load(),
+			this.stand.load(),
+			this.streetLamp.load(),
 			this.statue.load(),
-			this.rock.load()
+			this.fountain.load(),
+			this.mineral.load()
 		])
 		.then(() => {
 			this.add(this.field.mesh);
 
-			this.objects.push(this.bench);
-			this.add(this.bench.mesh);
+			this.zone1 = new Zone1(this.scene);
+			this.zone2 = new Zone2(this.scene);
+			this.zone3 = new Zone3(this.scene);
+			this.zone4 = new Zone4(this.scene);
 
-			this.objects.push(this.treeBig);
-			this.raycastMeshes.push(this.treeBig.mesh);
-			this.add(this.treeBig.mesh);
+			this.zones = [this.zone1, this.zone2, this.zone3, this.zone4];
 
-			this.objects.push(this.statue);
-			this.raycastMeshes.push(this.statue.mesh);
-			this.add(this.statue.mesh);
+			this.statues.push(this.statue);
 
-			this.objects.push(this.treeLittle);
-			this.raycastMeshes.push(this.treeLittle.mesh);
-			this.add(this.treeLittle.mesh);
+			let totalBenches = 0,
+				totalChestnuts = 0,
+				totalMinerals = 0,
+				totalShrubs = 0,
+				totalStreetLamps = 0;
 
-			this.objects.push(this.rock);
-			this.add(this.rock.mesh);
-
-			if(Config.gui) {
-				this.treeBig.addToGUI(this.gui, 'bigTree');
-				this.statue.addToGUI(this.gui, 'statue');
-				this.treeLittle.addToGUI(this.gui, 'littleTree');
-				this.rock.addToGUI(this.gui, 'rock');
+			for(let i = 0; i < this.zones.length; i++) {
+				if(this.zones[i].nbBenches)
+					totalBenches += this.zones[i].nbBenches;
+				if(this.zones[i].nbMinerals)
+					totalMinerals += this.zones[i].nbMinerals;
+				if(this.zones[i].nbShrubs)
+					totalShrubs += this.zones[i].nbShrubs;
+				if(this.zones[i].nbStreetLamps)
+					totalStreetLamps += this.zones[i].nbStreetLamps;
+				if(this.zones[i].nbChestnuts)
+					totalChestnuts += this.zones[i].nbChestnuts;
 			}
 
-			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
-		});
+			for(let i = 0; i < totalChestnuts; i++) {
+				let name = 'chestnut-' + i;
+				let chestnut = new AWDObject(name);
+				chestnut.geometry = this.chestnut.geometry;
+				chestnut.options = this.chestnut.options;
+				chestnut.createMesh();
+				this.chestnuts.push(chestnut);
+			if(Config.gui) {
+			}
 
-		this.rock.load()
-		.then(() => {
-			this.objects.push(this.rock);
-			this.raycastMeshes.push(this.rock.mesh);
-			this.add(this.rock.mesh);
-			if(Config.gui) this.rock.addToGUI(this.gui, 'rock');
+			for(let i = 0; i < totalBenches; i++) {
+				let name = 'bench-' + i;
+				let bench = new AWDObject(name);
+				bench.geometry = this.bench.geometry;
+				bench.options = this.bench.options;
+				bench.createMesh();
+				this.benches.push(bench);
+			}
+
+			for( let i = 0; i < totalMinerals; i++ ) {
+				let name = 'mineral-' + i;
+				let mineral = new AWDObject(name);
+				mineral.geometry = this.mineral.geometry;
+				mineral.options = this.mineral.options;
+				mineral.createMesh();
+				this.minerals.push(mineral);
+			}
+
+			for( let i = 0; i < totalShrubs; i++ ) {
+				let name = 'shrub-' + i;
+				let shrub = new AWDObject(name);
+				shrub.geometry = this.shrub.geometry;
+				shrub.options = this.shrub.options;
+				shrub.createMesh();
+				this.shrubs.push(shrub);
+			}
+
+			for( let i = 0; i < totalStreetLamps; i++ ) {
+				let name = 'streetLamp-' + i;
+				let streetLamp = new AWDObject(name);
+				streetLamp.geometry = this.streetLamp.geometry;
+				streetLamp.options = this.streetLamp.options;
+				streetLamp.createMesh();
+				this.streetLamps.push(streetLamp);
+			}
+
+			this.statue.createMesh();
+			this.fountain.createMesh();
+			this.stand.createMesh();
+
+			this.zone1.init(this.chestnuts, this.benches, this.minerals);
+			this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
+			this.zone3.init(this.statue, this.chestnuts, this.shrubs);
+			this.zone4.init(this.fountain, this.benches, this.streetLamps);
+
+			for (let i = 0; i < this.zones.length; i++) {
+				this.zones[i].addScene();
+				this.zones[i].initAnim();
+			}
+
+			//this.createLeaves();
+
+			if(Config.gui) {
+				this.zone1.addToGUI(this.gui);
+				this.zone2.addToGUI(this.gui);
+				this.zone3.addToGUI(this.gui);
+				this.zone4.addToGUI(this.gui);
+			}
+			
 		});
 
 		this.particles = new Particles('particule05', 500);
@@ -254,9 +334,38 @@ class ExperienceScene {
 		
 	}
 
+	// createLeaves() {
+	// 	let numberLeaves = 4;
+
+	// 	let texture = new THREE.TextureLoader().load( "assets2d/leaves.png" );
+	// 	// texture.wrapS = THREE.RepeatWrapping;
+	// 	// texture.wrapT = THREE.RepeatWrapping;
+	// 	//texture.repeat.set( 4, 4 );
+
+	// 	let geometry = new THREE.PlaneGeometry( 15, 15, 1);
+	// 	let material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, map: texture, transparent: true} );
+	// 	let plane = new THREE.Mesh( geometry, material );
+	// 	this.scene.add( plane );
+	// 	plane.position.z = 11;
+	// 	plane.position.y = 7;
+	// 	console.log(plane);
+
+	// 	this.leaf = new THREE.Object3D();
+
+	// 	for(let i = 0; i < numberLeaves; i++) {
+	// 		let leaf = plane.clone();
+	// 		leaf.rotation.y = i * 45;
+
+	// 		this.scene.add(leaf);
+	// 		this.leaf.children.push(leaf);
+	// 	}
+
+	// }
+
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
+		window.addEventListener('keydown', this.onKeydown.bind(this));
 	}
 
 	toggleCamera() {
@@ -274,29 +383,33 @@ class ExperienceScene {
 	 */
 	render() {
 
-		for(let i = 0; i < this.objects.length; i++) {
-			this.objects[i].update();
-		}
 		//Particles 
 		this.particles.update();
+
+		if(this.zone1) this.zone1.update();
+		if(this.zone2) this.zone2.update();
+		if(this.zone3) this.zone3.update();
+		if(this.zone4) this.zone4.update();
 
 		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
 
 		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
 		this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-		let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
+		//let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
-		if ( intersects.length > 0 ) {
-			// The raycast encouters an object
-			let objName = intersects[0].object.name;
-			console.log('Casted object: ', intersects[0].object.name);
-			if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
-				this.animationManager.animateScene1();
-			}
-		} else {
-			this.INTERSECTED = null;
-		}
+		// if ( intersects.length > 0 ) {
+		// 	// The raycast encouters an object
+		// 	let objName = intersects[0].object.name;
+		// 	console.log('Casted object: ', intersects[0].object.name);
+		// 	if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
+				
+		// 	}
+		// } 
+		// else {
+		// 	this.INTERSECTED = null;
+		// }
+
 
 		this.renderer.autoClearColor = true;
 
@@ -335,18 +448,21 @@ class ExperienceScene {
 	}
 
 	onKeydown(ev) {
-		if(ev.keyCode === 73) {
-			this.soundManager.play(this.soundExist);
-			for(let i = 0; i < this.objects.length; i++) {
-				this.objects[i].initTimeline();
-			}
-			this.animationManager.initScene1(this.treeBig, this.statue, this.treeLittle);
+		if(ev.keyCode === 65) {
+			// SoundManager.play(this.soundExist);
+			this.zone1.playAnim();
 		}
-		if(ev.keyCode === 32) {
-			for(let i = 0; i < this.objects.length; i++) {
-				this.objects[i].playTimeline();
-			}
-			this.animationManager.animateScene1();
+		if(ev.keyCode === 90) {
+			// SoundManager.play(this.soundExist);
+			this.zone2.playAnim();
+		}
+		if(ev.keyCode === 69) {
+			// SoundManager.play(this.soundExist);
+			this.zone3.playAnim();
+		}
+		if(ev.keyCode === 82) {
+			// SoundManager.play(this.soundExist);
+			this.zone4.playAnim();
 		}
 			
 	}
