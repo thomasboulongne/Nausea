@@ -132,10 +132,6 @@ class ExperienceScene {
 				reduction: .4
 			})
 		];
-
-		let gui = new Dat.GUI();
-		gui.add(this.passes[1].params, 'reduction', 0, 2);
-		gui.add(this.passes[1].params, 'boost', 0, 5);
 	}
 
 	setAmbiantSound() {
