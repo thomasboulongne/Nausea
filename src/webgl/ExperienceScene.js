@@ -314,7 +314,7 @@ class ExperienceScene {
 			
 		});
 
-		this.particles = new Particles('particule05', 500);
+		this.particles = new Particles('particle', 500);
 		this.particles.load()
 		.then(() => {
 			this.add(this.particles.mesh);

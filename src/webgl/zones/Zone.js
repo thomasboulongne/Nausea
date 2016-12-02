@@ -74,7 +74,7 @@ class Zone {
 				'x' : NumberUtils.toDegree(object.rotation.x),
 				'y' : NumberUtils.toDegree(object.rotation.y),
 				'z' : NumberUtils.toDegree(object.rotation.z)
-			}
+			};
 
 			folder.add(params, 'x', 0, 360).name('rotationx').onChange((degValue) => {
 				let angle = NumberUtils.toRadians(degValue);

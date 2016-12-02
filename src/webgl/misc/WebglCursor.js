@@ -183,7 +183,6 @@ class WebglCursor {
 	}
 
 	onMouseEnter() {
-		console.log('cursor enter');
 		this.enterTl.timeScale(1).play();
 	}
 
