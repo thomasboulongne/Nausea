@@ -17,6 +17,7 @@ import Lights from './Lights';
 
 import WebglCursor from './misc/WebglCursor';
 
+import Zone0 from './zones/Zone0';
 import Zone1 from './zones/Zone1';
 import Zone2 from './zones/Zone2';
 import Zone3 from './zones/Zone3';
@@ -153,6 +154,12 @@ class ExperienceScene {
 
 		this.field = new Field();
 		
+		this.sartreBench = new AWDObject('sartre_bench_xp',{
+			'name': 'sartreBench',
+			'color': 0xcacaca,
+			'materialize': false
+		});
+
 		this.bench = new AWDObject('bench',{
 			'name': 'bench',
 			'color': 0xcacaca,
@@ -204,6 +211,7 @@ class ExperienceScene {
 
 		Promise.all([
 			this.field.load(),
+			this.sartreBench.load(),
 			this.bench.load(),
 			this.chestnut.load(),
 			this.shrub.load(),
@@ -216,12 +224,13 @@ class ExperienceScene {
 		.then(() => {
 			this.add(this.field.mesh);
 
+			this.zone0 = new Zone0(this.scene);
 			this.zone1 = new Zone1(this.scene);
 			this.zone2 = new Zone2(this.scene);
 			this.zone3 = new Zone3(this.scene);
 			this.zone4 = new Zone4(this.scene);
 
-			this.zones = [this.zone1, this.zone2, this.zone3, this.zone4];
+			this.zones = [this.zone0, this.zone1, this.zone2, this.zone3, this.zone4];
 
 			this.statues.push(this.statue);
 
@@ -260,7 +269,7 @@ class ExperienceScene {
 				bench.options = this.bench.options;
 				bench.createMesh();
 				this.benches.push(bench);
-			}
+			}	
 
 			for( let i = 0; i < totalMinerals; i++ ) {
 				let name = 'mineral-' + i;
@@ -289,10 +298,16 @@ class ExperienceScene {
 				this.streetLamps.push(streetLamp);
 			}
 
+			this.sartreBench.createMesh(); 
 			this.statue.createMesh();
 			this.fountain.createMesh();
 			this.stand.createMesh();
 
+			for( let i = 0; i < this.benches.length; i++ ) {
+				console.log(this.benches[i])
+			}
+
+			this.zone0.init(this.sartreBench);
 			this.zone1.init(this.chestnuts, this.benches, this.minerals);
 			this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
 			this.zone3.init(this.statue, this.chestnuts, this.shrubs);
