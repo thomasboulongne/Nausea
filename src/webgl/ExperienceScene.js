@@ -16,6 +16,8 @@ import AnimationManager from './animations/AnimationManager';
 
 import Lights from './Lights';
 
+import WebglCursor from './misc/WebglCursor';
+
 class ExperienceScene {
 
 	/**
@@ -25,6 +27,8 @@ class ExperienceScene {
 		if(Config.gui) this.gui = new Dat.GUI;
 
 		this.domElement = domElement;
+
+		this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED');
 
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;

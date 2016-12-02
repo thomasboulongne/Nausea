@@ -33,9 +33,6 @@ export default {
 </script>
 
 <style lang="sass">
-	.webgl {
-		cursor: none;
-	}
 
 	canvas {
 		position: absolute;

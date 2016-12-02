@@ -1,9 +1,14 @@
-import './HomeCursor.scss';
+import './WebglCursor.scss';
+import Emitter from '../../core/Emitter';
 
-class HomeCursor {
+class WebglCursor {
 	
-	constructor(domElt, options) {
+	constructor(domElt, eventKey, options) {
 		this.domElt = domElt;
+
+		this.domElt.style.cursor = 'none';
+
+		this.eventKey = eventKey;
 
 		this.options = options ? options : {};
 
@@ -34,7 +39,7 @@ class HomeCursor {
 				opacity: 0
 			});
 
-			elt.classList.add('HomeCursor-circle');
+			elt.classList.add('WebglCursor-circle');
 
 			let cx = -offset;
 
@@ -153,7 +158,10 @@ class HomeCursor {
 			attr: {
 				'stroke-dashoffset': 0
 			},
-			ease: Expo.easeInOut
+			ease: Expo.easeInOut,
+			onComplete: () => {
+				Emitter.emit(this.eventKey);
+			}
 		}, '-=0.5');
 
 		this.enterTl.pause();
@@ -185,4 +193,4 @@ class HomeCursor {
 
 }
 
-export default HomeCursor;
+export default WebglCursor;
