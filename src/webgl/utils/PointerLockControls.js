@@ -21,7 +21,7 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 	yawObject.position.x = position.x;
 	yawObject.add( pitchObject );
 
-	yawObject.rotation.y = -2.9;
+	yawObject.rotation.y = -3.6;
 	pitchObject.rotation.x = -0.12;
 
 	let onMouseMove = function ( event ) {
@@ -30,7 +30,7 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 		let mouseX = event.clientX ;
 		let mouseY = event.clientY ;
 
-		let xRange = 2.9;
+		let xRange = 3.6;
 		let yRange = 2;
 
 		if ( scope.enabled === false ) return;
@@ -41,7 +41,7 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 		let percX = mouseX / fW;
 		let percY = mouseY / fH;
 
-		let newX = -xRange * percX;
+		let newX = -xRange * percX - 1.1;
 		let newY = -yRange * percY + 1;
 
 		TweenLite.to(yawObject.rotation, .6, { y: newX});

@@ -96,7 +96,7 @@ class AWDObject {
 		let randomDelai = Math.random();
 		
 		for(let v = 0, j = 0; v < this.geometry.attributes.position.count; v++) {
-			values.push(random * 20);
+			values.push(random * 5);
 			delais.push(randomDelai);
 			j++;
 			if(j > 2)

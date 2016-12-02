@@ -216,20 +216,18 @@ class HomeScene {
 
 		this.skybox = new Skybox('assets2d/homeSkybox/');
 
-		this.skybox.load()
-		.then( texture => {
-			this.scene.background = texture;
-		});
-
 		Promise.all([
+			this.skybox.load(),
 			this.field.load(),
 			this.bench.load(),
 			this.particles.load(),
 			this.sartres.load()
 		])
-		.then(() => {
+		.then(data => {
+			this.scene.background = data[0];
+
 			this.add(this.title.mesh);
-			this.add(this.bench.mesh);
+			// this.add(this.bench.mesh);
 			this.add(this.field.mesh);
 			this.add(this.sartres.mesh);
 			this.add(this.particles.mesh);

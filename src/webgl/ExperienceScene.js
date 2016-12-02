@@ -255,7 +255,6 @@ class ExperienceScene {
 				chestnut.options = this.chestnut.options;
 				chestnut.createMesh();
 				this.chestnuts.push(chestnut);
-			if(Config.gui) {
 			}
 
 			for(let i = 0; i < totalBenches; i++) {
