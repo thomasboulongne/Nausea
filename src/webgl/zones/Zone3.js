@@ -1,5 +1,7 @@
 import Zone from './Zone';
 
+import NumberUtils from '../utils/number-utils';
+
 class Zone3 extends Zone {
 
 	/**
@@ -101,11 +103,23 @@ class Zone3 extends Zone {
 		super.addScene();
 	}
 
+	initAnim() {
+		super.initAnim(); 
+
+	}
+
+	playAnim() {
+		super.playAnim();
+		let statue = this.statue.object.mesh;
+		this.timeline.from(statue.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
+		this.timeline.from(statue.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+	}
+
 	/**
 	 * @update
 	 */
 	update() {
-
+		super.update();
 	}
 
 }

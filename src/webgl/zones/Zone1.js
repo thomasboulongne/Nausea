@@ -1,5 +1,7 @@
 import Zone from './Zone';
 
+import NumberUtils from '../utils/number-utils';
+
 class Zone1 extends Zone {
 
 	/**
@@ -91,10 +93,6 @@ class Zone1 extends Zone {
 		this.objects.push(this.chestnut, this.bench, this.mineral1, this.mineral2, this.mineral3);
 
 		super.init();
-
-		this.initAnim();
-		this.playAnim();
-
 	}
 
 	setMeshNames () {
@@ -118,7 +116,10 @@ class Zone1 extends Zone {
 	}
 
 	playAnim() {
-		super.playAnim(); 
+		super.playAnim();
+		let chestnutMesh = this.chestnut.object.mesh;
+		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
+		this.timeline.from(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
 	}
 
 	/**
@@ -126,17 +127,7 @@ class Zone1 extends Zone {
 	 */
 	update() {
 		//permanant rotation
-		for(let i = 0; i < this.objects.length; i++) {
-			if(this.objects[i].object.options.materialize && this.objects[i].rotate) {
-				//this.objects[i].object.mesh.rotation.y += 0.01;
-			}
-		}
-
-		if(this.animate) {
-			for(let i = 0; i < this.objects.length; i++) {
-				this.objects[i].object.material.uniforms.time.value = this.tweenTime.time;
-			}
-		}
+		super.update();
 	}
 
 }

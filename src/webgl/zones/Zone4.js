@@ -1,5 +1,7 @@
 import Zone from './Zone';
 
+import NumberUtils from '../utils/number-utils';
+
 class Zone4 extends Zone{
 
 	/**
@@ -149,11 +151,23 @@ class Zone4 extends Zone{
 		super.addScene();
 	}
 
+	initAnim() {
+		super.initAnim(); 
+
+	}
+
+	playAnim() {
+		super.playAnim();
+		let fountain = this.fountain.object.mesh;
+		this.timeline.from(fountain.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
+		this.timeline.from(fountain.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+	}
+
 	/**
 	 * @update
 	 */
 	update() {
-
+		super.update();
 	}
 
 }

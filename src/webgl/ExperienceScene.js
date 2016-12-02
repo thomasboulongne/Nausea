@@ -366,7 +366,10 @@ class ExperienceScene {
 			}
 
 			this.zone1.initAnim();
-			this.zone1.playAnim();
+			this.zone2.initAnim();
+			this.zone3.initAnim();
+			this.zone4.initAnim();
+			
 
 			//this.animationManager.initScene1([this.treeBig, this.statue, this.shrub]);
 		});
@@ -410,6 +413,7 @@ class ExperienceScene {
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
+		window.addEventListener('keydown', this.onKeydown.bind(this));
 	}
 
 	toggleCamera() {
@@ -429,6 +433,9 @@ class ExperienceScene {
 		//Particles 
 		//this.particles.update();
 		if(this.zone1) this.zone1.update();
+		if(this.zone2) this.zone2.update();
+		if(this.zone3) this.zone3.update();
+		if(this.zone4) this.zone4.update();
 
 		if(Config.controls) {
 			this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
@@ -483,13 +490,21 @@ class ExperienceScene {
 	}
 
 	onKeydown(ev) {
-		if(ev.keyCode === 73) {
+		if(ev.keyCode === 65) {
 			// SoundManager.play(this.soundExist);
-			// this.animationManager.initScene1([this.treeBig, this.statue, this.shrub]);
-			this.toggleCamera();
+			this.zone1.playAnim();
 		}
-		if(ev.keyCode === 32) {
-			this.animationManager.animateScene1();
+		if(ev.keyCode === 90) {
+			// SoundManager.play(this.soundExist);
+			this.zone2.playAnim();
+		}
+		if(ev.keyCode === 69) {
+			// SoundManager.play(this.soundExist);
+			this.zone3.playAnim();
+		}
+		if(ev.keyCode === 82) {
+			// SoundManager.play(this.soundExist);
+			this.zone4.playAnim();
 		}
 			
 	}

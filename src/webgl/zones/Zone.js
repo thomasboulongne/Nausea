@@ -107,7 +107,18 @@ class Zone {
 	 * @update
 	 */
 	update() {
+		for(let i = 0; i < this.objects.length; i++) {
+			if(this.objects[i].object.options.materialize && this.objects[i].rotate) {
+				//this.objects[i].object.mesh.rotation.y += 0.01;
+			}
+		}
 
+		if(this.animate) {
+			for(let i = 0; i < this.objects.length; i++) {
+				if(this.objects[i].object.options.materialize)
+					this.objects[i].object.material.uniforms.time.value = this.tweenTime.time;
+			}
+		}
 	}
 
 }
