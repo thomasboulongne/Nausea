@@ -6,7 +6,6 @@ class Zone1 extends Zone {
 
 	/**
 	 * @constructor
-	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
 	constructor(scene) {
@@ -23,7 +22,6 @@ class Zone1 extends Zone {
 		this.chestnut = {
 			'name' : 'chestnut1-z1',
 			'object' : chestnuts[0],
-			'rotate' : true,
 			'x' : 0,
 			'y' : 0,
 			'z' : 12,
@@ -36,7 +34,6 @@ class Zone1 extends Zone {
 		this.bench = {
 			'name' : 'bench',
 			'object' : benches[0],
-			'rotate' : false,
 			'x' : -3,
 			'y' : 0.15,
 			'z' : 10.9,
@@ -49,7 +46,6 @@ class Zone1 extends Zone {
 		this.mineral1 = {
 			'name' : 'mineral1',
 			'object' : minerals[0],
-			'rotate' : false,
 			'x' : 2.5,
 			'y' : 0,
 			'z' : 8,
@@ -62,7 +58,6 @@ class Zone1 extends Zone {
 		this.mineral2 = {
 			'name' : 'mineral2',
 			'object' : minerals[1],
-			'rotate' : false,
 			'x' : 2,
 			'y' : 0,
 			'z' : 9.6,
@@ -75,7 +70,6 @@ class Zone1 extends Zone {
 		this.mineral3 = {
 			'name' : 'mineral3',
 			'object' : minerals[2],
-			'rotate' : false,
 			'x' : 1.6,
 			'y' : 0,
 			'z' : 6.2,

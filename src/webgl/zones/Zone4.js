@@ -6,7 +6,6 @@ class Zone4 extends Zone{
 
 	/**
 	 * @constructor
-	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
 	constructor(scene) {

@@ -6,11 +6,10 @@ import Config from './config';
 import Dat from 'dat-gui';
 
 import Field from './objects/Field';
-//import Particles from './objects/Particles';
+import Particles from './objects/Particles';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
-//import AnimationManager from './animations/AnimationManager';
 
 import Lights from './Lights';
 
@@ -19,7 +18,7 @@ import Zone2 from './zones/Zone2';
 import Zone3 from './zones/Zone3';
 import Zone4 from './zones/Zone4';
 
-import NumberUtils from './utils/number-utils';
+//import NumberUtils from './utils/number-utils';
 
 class ExperienceScene {
 
@@ -39,6 +38,7 @@ class ExperienceScene {
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
+
 		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .1, 10000 );
 
 		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.08 );
@@ -57,9 +57,6 @@ class ExperienceScene {
 		this.createObjects();
 
 		this.addEventListeners();
-
-		//this.animationManager = new AnimationManager();
-
 	}
 
 	/**
@@ -96,31 +93,8 @@ class ExperienceScene {
 			x: 0
 		};
 
-		if(Config.controls) {
-			this.controls = new THREE.PointerLockControls( this.camera, controlsPosition, this.center, 0.002 );
-			this.add( this.controls.getObject() );
-		}
-		else {
-			this.camera.position.y = 1;
-			this.camera.rotation.y = NumberUtils.toRadians(180);
-			let folder = this.gui.addFolder('camera');
-			let params = {
-				degx : 0,
-				degy : 0,
-				degz : 0
-			};
-
-			folder.add(params, 'degy', 90, 270).name('rotationy').onChange((degValue) => {
-				let angle = NumberUtils.toRadians(degValue);
-				this.camera.rotation.y = angle;
-			});
-
-			folder.add(params, 'degx', 0, 360).name('rotationx').onChange((degValue) => {
-				let angle = NumberUtils.toRadians(degValue);
-				this.camera.rotation.x = angle;
-			});
-			//folder.add(this.objects[i].object.mesh.position, 'x', -50, 50).name('posx');
-		}
+		this.controls = new THREE.PointerLockControls( this.camera, controlsPosition, this.center, 0.002 );
+		this.add( this.controls.getObject() );
 	}
 
 	setLights() {
@@ -158,7 +132,6 @@ class ExperienceScene {
 	}
 
 	createObjects() {
-		//this.objects = [];
 		this.chestnuts = [];
 		this.statues = [];
 		this.benches = [];
@@ -288,24 +261,6 @@ class ExperienceScene {
 				this.minerals.push(mineral);
 			}
 
-			// for(let i = 0; i < totalChestnuts; i++) {
-			// 	let chestnut = Object.assign({}, this.chestnut);
-			// 	chestnut.mesh = chestnut.mesh.clone();
-			// 	this.chestnuts.push(chestnut);
-			// }
-
-			// for(let i = 0; i < totalBenches; i++) {
-			// 	let bench = Object.assign({}, this.bench);
-			// 	bench.mesh = bench.mesh.clone();
-			// 	this.benches.push(bench);
-			// }
-
-			// for( let i = 0; i < totalMinerals; i++ ) {
-			// 	let mineral = Object.assign({}, this.mineral);
-			// 	mineral.mesh = mineral.mesh.clone();
-			// 	this.minerals.push(mineral);
-			// }
-
 			for( let i = 0; i < totalShrubs; i++ ) {
 				let name = 'shrub-' + i;
 				let shrub = new AWDObject(name);
@@ -328,33 +283,15 @@ class ExperienceScene {
 			this.fountain.createMesh();
 			this.stand.createMesh();
 
-
-			// this.objects.push(this.treeBig);
-			// this.raycastMeshes.push(this.treeBig.mesh);
-			// this.add(this.treeBig.mesh);
-
-			// this.objects.push(this.statue);
-			// this.raycastMeshes.push(this.statue.mesh);
-			// this.add(this.statue.mesh);
-
-			// this.objects.push(this.shrub);
-			// this.raycastMeshes.push(this.shrub.mesh);
-			// this.add(this.shrub.mesh);
-
-			// this.objects.push(this.rock);
-			// this.add(this.rock.mesh);
-
 			this.zone1.init(this.chestnuts, this.benches, this.minerals);
-			this.zone1.addScene();
-
 			this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
-			this.zone2.addScene();
-
 			this.zone3.init(this.statue, this.chestnuts, this.shrubs);
-			this.zone3.addScene();
-
 			this.zone4.init(this.fountain, this.benches, this.streetLamps);
-			this.zone4.addScene();
+
+			for (let i = 0; i < this.zones.length; i++) {
+				this.zones[i].addScene();
+				this.zones[i].initAnim();
+			}
 
 			//this.createLeaves();
 
@@ -364,21 +301,14 @@ class ExperienceScene {
 				this.zone3.addToGUI(this.gui);
 				this.zone4.addToGUI(this.gui);
 			}
-
-			this.zone1.initAnim();
-			this.zone2.initAnim();
-			this.zone3.initAnim();
-			this.zone4.initAnim();
 			
-
-			//this.animationManager.initScene1([this.treeBig, this.statue, this.shrub]);
 		});
 
-		// this.particles = new Particles('particleNoborder', 500);
-		// this.particles.load()
-		// .then(() => {
-		//  this.add(this.particles.mesh);
-		// });
+		this.particles = new Particles('particleNoborder', 500);
+		this.particles.load()
+		.then(() => {
+			this.add(this.particles.mesh);
+		});
 		
 	}
 
@@ -427,35 +357,33 @@ class ExperienceScene {
 	 */
 	render() {
 
-		// for(let i = 0; i < this.objects.length; i++) {
-		// 	this.objects[i].update();
-		// }
 		//Particles 
-		//this.particles.update();
+		this.particles.update();
+
 		if(this.zone1) this.zone1.update();
 		if(this.zone2) this.zone2.update();
 		if(this.zone3) this.zone3.update();
 		if(this.zone4) this.zone4.update();
 
-		if(Config.controls) {
-			this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
+		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
 
-			this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
-			this.raycaster.ray.origin.copy( this.controls.getObject().position );
+		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
+		this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-			let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
+		//let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
-			if ( intersects.length > 0 ) {
-				// The raycast encouters an object
-				let objName = intersects[0].object.name;
-				console.log('Casted object: ', intersects[0].object.name);
-				if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
-					//this.animationManager.animateScene1();
-				}
-			} else {
-				this.INTERSECTED = null;
-			}
-		}
+		// if ( intersects.length > 0 ) {
+		// 	// The raycast encouters an object
+		// 	let objName = intersects[0].object.name;
+		// 	console.log('Casted object: ', intersects[0].object.name);
+		// 	if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
+				
+		// 	}
+		// } 
+		// else {
+		// 	this.INTERSECTED = null;
+		// }
+
 
 		this.renderer.autoClearColor = true;
 

@@ -39,6 +39,7 @@ class AWDObject {
 	}
 
 	createMesh() {
+
 		if( this.options.materialize ) {
 					
 			this.geometryObj = new THREE.Geometry().fromBufferGeometry( this.geometry );
@@ -65,8 +66,8 @@ class AWDObject {
 
 	}
 
-	createMaterial()
-	{
+	createMaterial() {
+
 		let phongShader = THREE.ShaderLib.phong;
 		let uniforms = THREE.UniformsUtils.clone(phongShader.uniforms);
 
@@ -93,6 +94,7 @@ class AWDObject {
 
 		let random = Math.random();
 		let randomDelai = Math.random();
+		
 		for(let v = 0, j = 0; v < this.geometry.attributes.position.count; v++) {
 			values.push(random * 20);
 			delais.push(randomDelai);
