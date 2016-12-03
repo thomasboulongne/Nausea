@@ -6,8 +6,11 @@ class DataEmitter {
 	constructor() {
 		this.group = new THREE.Group();
 
+		this.posZ = 3;
+		this.posY = 0.5;
+
 		this.boxSide = 1;
-		this.maxParticles = 100;
+		this.maxParticles = 50;
 		this.particlesData = [];
 
 		this.addHelper();
@@ -20,8 +23,8 @@ class DataEmitter {
 		this.helper.material.color.setHex( 0xFF0000 );
 		this.helper.material.blending = THREE.AdditiveBlending;
 		this.helper.material.transparent = true;
-		this.helper.position.z = 3;
-		this.helper.position.y = 0.5;
+		this.helper.position.z = this.posZ;
+		this.helper.position.y = this.posY;
 		this.group.add( this.helper );
 	}
 
@@ -32,7 +35,7 @@ class DataEmitter {
 		this.colors = new Float32Array( this.segments * 3 );
 
 		this.pMaterial = new THREE.PointsMaterial( {
-			color: 0xFFFFFF,
+			color: 0x0000FF,
 			size: 3,
 			blending: THREE.AdditiveBlending,
 			transparent: true,
@@ -51,18 +54,42 @@ class DataEmitter {
 			this.particlePositions[ i * 3 + 2 ] = z;
 			// add it to the geometry
 			this.particlesData.push( {
-				velocity: new THREE.Vector3( -1 + Math.random() * 2, -1 + Math.random() * 2,  -1 + Math.random() * 2 ),
+				velocity: new THREE.Vector3( (-1 + Math.random() * 2)/100, (-1 + Math.random() * 2)/100,  (-1 + Math.random() * 2)/100 ),
 				numConnections: 0
 			} );
 		}
+		console.log(this.particlesData)
 
 		this.particles.setDrawRange( 0, this.maxParticles );
 		this.particles.addAttribute( 'position', new THREE.BufferAttribute( this.particlePositions, 3 ).setDynamic( true ) );
 		// create the particle system
 		this.pointCloud = new THREE.Points( this.particles, this.pMaterial );
-		this.pointCloud.position.z = 3;
-		this.pointCloud.position.y = 0.5;
+		this.pointCloud.position.z = this.posZ;
+		this.pointCloud.position.y = this.posY;
 		this.group.add( this.pointCloud );
+	}
+
+	update() {
+		console.log('dataupdate');
+		//let vertexpos = 0;
+
+		for ( let i = 0; i < this.maxParticles; i++ ) {
+			// get the particle
+			let particleData = this.particlesData[i];
+
+			this.particlePositions[ i * 3     ] += particleData.velocity.x;
+			this.particlePositions[ i * 3 + 1 ] += particleData.velocity.y;
+			this.particlePositions[ i * 3 + 2 ] += particleData.velocity.z;
+
+			if ( this.particlePositions[ i * 3 + 1 ] < -this.boxSide/2 || this.particlePositions[ i * 3 + 1 ] > this.boxSide/2 )
+				particleData.velocity.y = -particleData.velocity.y;
+			if ( this.particlePositions[ i * 3 ] < -this.boxSide/2 || this.particlePositions[ i * 3 ] > this.boxSide/2 )
+				particleData.velocity.x = -particleData.velocity.x;
+			if ( this.particlePositions[ i * 3 + 2 ] < -this.boxSide/2 || this.particlePositions[ i * 3 + 2 ] > this.boxSide/2 )
+				particleData.velocity.z = -particleData.velocity.z;
+		}
+
+		this.pointCloud.geometry.attributes.position.needsUpdate = true;
 	}
 }
 

@@ -398,6 +398,9 @@ class ExperienceScene {
 		//Particles 
 		this.particles.update();
 
+		//Datas
+		this.datas.update();
+
 		if(this.zone1) this.zone1.update();
 		if(this.zone2) this.zone2.update();
 		if(this.zone3) this.zone3.update();
