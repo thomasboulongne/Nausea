@@ -68,7 +68,7 @@ class HomeScene {
 
 		this.camera.lookAt(this.center);
 
-		this.scene.fog = new THREE.FogExp2( this.environmentColor, .15 );
+		this.scene.fog = new THREE.FogExp2( this.environmentColor, .25 );
 
 		this.setLights();
 
@@ -373,6 +373,8 @@ class HomeScene {
 
 		//Particles 
 		this.particles.update();
+
+		this.title.update();
 
 		this.renderer.autoClearColor = true;
 

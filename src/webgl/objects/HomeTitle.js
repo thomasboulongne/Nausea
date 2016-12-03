@@ -1,4 +1,5 @@
 import { toRadians } from '../utils/number-utils';
+import ChromaKeyMaterial from '../materials/ChromaKeyMaterial';
 
 class HomeTitle {
 
@@ -6,20 +7,15 @@ class HomeTitle {
 	 * @constructor
 	 */
 	constructor() {
-		// let video = document.getElementById( 'video' );
-		// let texture = new THREE.VideoTexture( video );
-		// let parameters = { color: 0xffffff, map: texture };
-		let parameters = { color: 0xffffff, side: THREE.DoubleSide };
 
-		let material = new THREE.MeshLambertMaterial( parameters );
+		this.material = new ChromaKeyMaterial("./assets2d/videos/title.mp4", 0, 0, 0);
 
-		let plane = new THREE.PlaneGeometry( 3, 1, 4, 4 );
-		this.mesh = new THREE.Mesh( plane, material );
+		let plane = new THREE.PlaneGeometry( 3.5, 1, 4, 4 );
+		this.mesh = new THREE.Mesh( plane, this.material );
 
-		this.mesh.rotation.y = toRadians(90);
+		this.mesh.rotation.y = toRadians(-90);
 		this.mesh.position.y = 2;
 	}
-
 
 	/**
 	 * @method
@@ -27,8 +23,7 @@ class HomeTitle {
 	 * @description Triggered on every TweenMax tick
 	 */
 	update() {
-
-
+		this.material.update();
 	}
 
 }
