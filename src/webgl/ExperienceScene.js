@@ -7,7 +7,7 @@ import Config from './config';
 import Dat from 'dat-gui';
 
 import Field from './objects/Field';
-import Particles from './objects/Particles';
+//import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
 import AWDObject from './AWDObject';
 
@@ -331,11 +331,11 @@ class ExperienceScene {
 
 		this.add(this.datas.group);
 
-		this.particles = new Particles('particule05', 500);
-		this.particles.load()
-		.then(() => {
-			this.add(this.particles.mesh);
-		});
+		//this.particles = new Particles('particule05', 500);
+		// this.particles.load()
+		// .then(() => {
+		// 	this.add(this.particles.mesh);
+		// });
 
 		this.skybox = new Skybox('assets2d/skybox/');
 
@@ -396,7 +396,7 @@ class ExperienceScene {
 	render() {
 
 		//Particles 
-		this.particles.update();
+		//this.particles.update();
 
 		//Datas
 		this.datas.update();

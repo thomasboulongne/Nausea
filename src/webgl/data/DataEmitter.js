@@ -6,22 +6,32 @@ class DataEmitter {
 	constructor() {
 		this.group = new THREE.Group();
 
-		this.posZ = 3;
-		this.posY = 0.5;
+		this.posZ = 12;
+		this.posY = 4;
 
-		this.boxSide = 1;
-		this.maxParticles = 50;
+		this.boxSide = 5;
+		this.maxParticles = 40;
 		this.particlesData = [];
 
-		this.addHelper();
+		this.effectController = {
+			showDots: true,
+			showLines: true,
+			minDistance: 1.25,
+			limitConnections: false,
+			maxConnections: 200,
+			particleCount: 20
+		};
+
+		//this.addHelper();
 		this.addParticles();
+		this.addLines();
 
 	}
 
 	addHelper() {
 		this.helper = new THREE.BoxHelper( new THREE.Mesh( new THREE.BoxGeometry( this.boxSide, this.boxSide, this.boxSide ) ) );
-		this.helper.material.color.setHex( 0xFF0000 );
-		this.helper.material.blending = THREE.AdditiveBlending;
+		this.helper.material.color.setHex( 0x474747 );
+		//this.helper.material.blending = THREE.AdditiveBlending;
 		this.helper.material.transparent = true;
 		this.helper.position.z = this.posZ;
 		this.helper.position.y = this.posY;
@@ -35,9 +45,10 @@ class DataEmitter {
 		this.colors = new Float32Array( this.segments * 3 );
 
 		this.pMaterial = new THREE.PointsMaterial( {
-			color: 0x0000FF,
-			size: 3,
-			blending: THREE.AdditiveBlending,
+			color: 0x474747,
+			size: 1,
+			//blending: THREE.AdditiveBlending,
+			fog: true,
 			transparent: true,
 			sizeAttenuation: false
 		} );
@@ -54,7 +65,7 @@ class DataEmitter {
 			this.particlePositions[ i * 3 + 2 ] = z;
 			// add it to the geometry
 			this.particlesData.push( {
-				velocity: new THREE.Vector3( (-1 + Math.random() * 2)/100, (-1 + Math.random() * 2)/100,  (-1 + Math.random() * 2)/100 ),
+				velocity: new THREE.Vector3( (-1 + Math.random() * 2)/200, (-1 + Math.random() * 2)/200,  (-1 + Math.random() * 2)/200 ),
 				numConnections: 0
 			} );
 		}
@@ -69,9 +80,31 @@ class DataEmitter {
 		this.group.add( this.pointCloud );
 	}
 
+	addLines() {
+		let geometry = new THREE.BufferGeometry();
+		geometry.addAttribute( 'position', new THREE.BufferAttribute( this.positions, 3 ).setDynamic( true ) );
+		geometry.addAttribute( 'color', new THREE.BufferAttribute( this.colors, 3 ).setDynamic( true ) );
+		geometry.computeBoundingSphere();
+		geometry.setDrawRange( 0, 0 );
+		let material = new THREE.LineBasicMaterial( {
+			//vertexColors: THREE.VertexColors,
+			color: 0xa5a5a5,
+			//blending: THREE.AdditiveBlending,
+			transparent: true,
+			fog: true
+		} );
+		this.linesMesh = new THREE.LineSegments( geometry, material );
+		this.linesMesh.position.z = this.posZ;
+		this.linesMesh.position.y = this.posY;
+		this.group.add( this.linesMesh );
+
+		console.log(this.linesMesh);
+	}
+
 	update() {
-		console.log('dataupdate');
-		//let vertexpos = 0;
+		let vertexpos = 0;
+		let colorpos = 0;
+		let numConnected = 0;
 
 		for ( let i = 0; i < this.maxParticles; i++ ) {
 			// get the particle
@@ -87,7 +120,48 @@ class DataEmitter {
 				particleData.velocity.x = -particleData.velocity.x;
 			if ( this.particlePositions[ i * 3 + 2 ] < -this.boxSide/2 || this.particlePositions[ i * 3 + 2 ] > this.boxSide/2 )
 				particleData.velocity.z = -particleData.velocity.z;
+
+			if ( this.effectController.limitConnections && particleData.numConnections >= this.effectController.maxConnections )
+				continue;
+
+			// Check collision
+			for ( let j = i + 1; j < this.maxParticles; j++ ) {
+
+				let particleDataB = this.particlesData[ j ];
+
+				if ( this.effectController.limitConnections && particleDataB.numConnections >= this.effectController.maxConnections )
+					continue;
+
+				let dx = this.particlePositions[ i * 3     ] - this.particlePositions[ j * 3     ];
+				let dy = this.particlePositions[ i * 3 + 1 ] - this.particlePositions[ j * 3 + 1 ];
+				let dz = this.particlePositions[ i * 3 + 2 ] - this.particlePositions[ j * 3 + 2 ];
+
+				let dist = Math.sqrt( dx * dx + dy * dy + dz * dz );
+
+				if ( dist < this.effectController.minDistance ) {
+					particleData.numConnections++;
+					particleDataB.numConnections++;
+					let alpha = 1.0 - dist / this.effectController.minDistance;
+					this.positions[ vertexpos++ ] = this.particlePositions[ i * 3     ];
+					this.positions[ vertexpos++ ] = this.particlePositions[ i * 3 + 1 ];
+					this.positions[ vertexpos++ ] = this.particlePositions[ i * 3 + 2 ];
+					this.positions[ vertexpos++ ] = this.particlePositions[ j * 3     ];
+					this.positions[ vertexpos++ ] = this.particlePositions[ j * 3 + 1 ];
+					this.positions[ vertexpos++ ] = this.particlePositions[ j * 3 + 2 ];
+					this.colors[ colorpos++ ] = alpha;
+					this.colors[ colorpos++ ] = alpha;
+					this.colors[ colorpos++ ] = alpha;
+					this.colors[ colorpos++ ] = alpha;
+					this.colors[ colorpos++ ] = alpha;
+					this.colors[ colorpos++ ] = alpha;
+					numConnected++;
+				}
+			}
 		}
+
+		this.linesMesh.geometry.setDrawRange( 0, numConnected * 2 );
+		this.linesMesh.geometry.attributes.position.needsUpdate = true;
+		this.linesMesh.geometry.attributes.color.needsUpdate = true;
 
 		this.pointCloud.geometry.attributes.position.needsUpdate = true;
 	}
