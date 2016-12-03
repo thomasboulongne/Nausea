@@ -23,6 +23,8 @@ import Zone2 from './zones/Zone2';
 import Zone3 from './zones/Zone3';
 import Zone4 from './zones/Zone4';
 
+import DataEmitter from './data/DataEmitter';
+
 //import NumberUtils from './utils/number-utils';
 
 class ExperienceScene {
@@ -303,10 +305,6 @@ class ExperienceScene {
 			this.fountain.createMesh();
 			this.stand.createMesh();
 
-			for( let i = 0; i < this.benches.length; i++ ) {
-				console.log(this.benches[i])
-			}
-
 			this.zone0.init(this.sartreBench);
 			this.zone1.init(this.chestnuts, this.benches, this.minerals);
 			this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
@@ -328,6 +326,10 @@ class ExperienceScene {
 			}
 			
 		});
+
+		this.datas = new DataEmitter();
+
+		this.add(this.datas.group);
 
 		this.particles = new Particles('particule05', 500);
 		this.particles.load()
