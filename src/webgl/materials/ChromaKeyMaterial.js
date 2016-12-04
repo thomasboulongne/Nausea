@@ -38,6 +38,8 @@ class ChromaKeyMaterial extends THREE.ShaderMaterial {
 
 		this.needsUpdate = true;
 
+		this.side = THREE.DoubleSide;
+
 	}
 
 }
