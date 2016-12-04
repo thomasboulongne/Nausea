@@ -209,8 +209,6 @@ class HomeScene {
 
 		this.skybox = new Skybox('assets2d/homeSkybox/');
 
-		console.log(Store);
-
 		Promise.all([
 			Store.get('sartre_bench_intro',{
 				'name': 'sartre_bench_intro',

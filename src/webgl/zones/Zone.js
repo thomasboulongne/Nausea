@@ -18,7 +18,6 @@ class Zone {
 	}
 
 	init() {
-		this.setMeshNames();
 		this.soundMaterialize = SoundManager.load('materialize.mp3');
 	}
 
@@ -95,6 +94,7 @@ class Zone {
 	 * @addScene
 	 */
 	addScene() {
+		console.log(this.objects);
 		for ( let i = 0; i < this.objects.length; i++) {
 			this.scene.add(this.objects[i].object.mesh);
 			this.objects[i].object.mesh.position.set(this.objects[i].x, this.objects[i].y, this.objects[i].z);
@@ -108,6 +108,7 @@ class Zone {
 	 */
 	update() {
 		for(let i = 0; i < this.objects.length; i++) {
+			// console.log(this.objects);
 			if(this.objects[i].object.options.materialize && this.objects[i].rotate) {
 				//this.objects[i].object.mesh.rotation.y += 0.01;
 			}

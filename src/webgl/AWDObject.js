@@ -10,6 +10,7 @@ class AWDObject {
 	 * @constructor
 	 */
 	constructor(model, options) {
+		if( !options ) options = {};
 		this.model = model;
 		this.name = options.name;
 		this.options = options;
