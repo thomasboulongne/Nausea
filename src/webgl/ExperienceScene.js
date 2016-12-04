@@ -9,6 +9,7 @@ import Dat from 'dat-gui';
 import Field from './objects/Field';
 import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
+import ChromaKeyPlane from './objects/ChromaKeyPlane';
 import AWDObject from './AWDObject';
 
 import SoundManager from './sound/SoundManager';
@@ -303,10 +304,6 @@ class ExperienceScene {
 			this.fountain.createMesh();
 			this.stand.createMesh();
 
-			for( let i = 0; i < this.benches.length; i++ ) {
-				console.log(this.benches[i])
-			}
-
 			this.zone0.init(this.sartreBench);
 			this.zone1.init(this.chestnuts, this.benches, this.minerals);
 			this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
@@ -341,6 +338,9 @@ class ExperienceScene {
 		.then( texture => {
 			this.scene.background = texture;
 		});
+
+		this.video = new ChromaKeyPlane('couple');
+		this.add(this.video.mesh);
 		
 	}
 

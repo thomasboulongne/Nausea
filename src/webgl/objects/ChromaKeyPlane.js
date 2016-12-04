@@ -22,11 +22,17 @@ class ChromaKeyPlane {
 
 		this.material = new ChromaKeyMaterial("./assets2d/videos/" + video + ".mp4", r, g, b);
 
-		let width = options.width ? options.width : 1;
-		let height = options.height ? options.height : 3.5;
+		let width = options.width ? options.width : 2;
+		let height = options.height ? options.height : 2;
 		let plane = new THREE.PlaneGeometry( width, height );
 		this.mesh = new THREE.Mesh( plane, this.material );
+		this.mesh.name = 'video-' + video;
 
+
+		this.mesh.position.x = options.x ? options.x : 0;
+		this.mesh.position.y = options.y ? options.y : 0;
+		this.mesh.position.z = options.z ? options.z : 2;
+		// this.mesh.rotation.y = options.rotY ? options.rotY : Math.PI / 2;
 	}
 
 	/**
