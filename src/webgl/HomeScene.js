@@ -10,7 +10,7 @@ import Field from './objects/Field';
 import HomeTitle from './objects/HomeTitle';
 import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
-import AWDObject from './AWDObject';
+import Store from './WebGLStore';
 
 import SoundManager from './sound/SoundManager';
 import Emitter from '../core/Emitter';
@@ -194,21 +194,14 @@ class HomeScene {
 
 		this.field = new Field();
 		
-		this.bench = new AWDObject('bench',{
-			'name': 'bench',
-			'x': 0,
-			'y': .2,
-			'z': 0,
-			'color': 0xcacaca
-		});
 		
-		this.sartres = new AWDObject('sartres',{
-			'name': 'sartres',
-			'x': 0,
-			'y': .2,
-			'z': 0,
-			'color': 0xcacaca
-		});
+		// this.sartres = new AWDObject('sartres',{
+		// 	'name': 'sartres',
+		// 	'x': 0,
+		// 	'y': .2,
+		// 	'z': 0,
+		// 	'color': 0xcacaca
+		// });
 
 		this.title = new HomeTitle();
 
@@ -216,24 +209,30 @@ class HomeScene {
 
 		this.skybox = new Skybox('assets2d/homeSkybox/');
 
+		console.log(Store);
+
 		Promise.all([
+			Store.get('sartre_bench_intro',{
+				'name': 'sartre_bench_intro',
+				'x': 0,
+				'y': .2,
+				'z': 0,
+				'color': 0xcacaca
+			}),
 			this.skybox.load(),
 			this.field.load(),
-			this.bench.load(),
-			this.particles.load(),
-			this.sartres.load()
+			this.particles.load()
 		])
 		.then(data => {
-			this.scene.background = data[0];
+			this.bench = data[0];
+			this.scene.background = data[1];
 
 			this.add(this.title.mesh);
-			// this.add(this.bench.mesh);
+			this.add(this.bench.mesh);
 			this.add(this.field.mesh);
-			this.add(this.sartres.mesh);
 			this.add(this.particles.mesh);
 
 			this.raycastMeshes.push( this.bench.mesh );
-			this.raycastMeshes.push( this.sartres.mesh );
 			this.startRaycast = true;
 		});
 		
