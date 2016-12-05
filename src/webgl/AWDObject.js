@@ -2,40 +2,60 @@ import 'three/examples/js/loaders/AWDLoader';
 import 'three/examples/js/modifiers/TessellateModifier';
 import 'three/examples/js/modifiers/ExplodeModifier';
 import VertexShader from './shaders/objects/shader.vert';
+
 import LoadingManager from './utils/LoadingManager';
+//import AWDLoader from './utils/AWDLoader';
 
 class AWDObject {
 
 	/**
 	 * @constructor
 	 */
-	constructor(name, options) {
-		this.name = name;
+	constructor(model, options) {
+		if( !options ) options = {};
+		this.model = model;
+		this.name = options.name;
 		this.options = options;
 	}
 
 	load() {
 
-		let loader = new THREE.AWDLoader( LoadingManager );
+		if( !this.options.geometry ) {
 
-		this.options = {
-			color : this.options.color ? this.options.color : "0xcacaca",
-			materialize : this.options.materialize ? this.options.materialize : false
-		};
+			this.options = {
+				color : this.options.color ? this.options.color : "0xcacaca",
+				materialize : this.options.materialize ? this.options.materialize : false
+			};
 
-		return new Promise(resolve => {
-			loader.load( './assets3d/' + this.name + '.awd', function ( mesh ) {
-				this.mesh = mesh;
-				
-				for (let i = 0; i < this.mesh.children.length; i++) {
-					this.mesh.children[i].name = this.name;
-				}
+			let loader = new THREE.AWDLoader( LoadingManager );
 
-				this.geometry = this.mesh.children[0].geometry;
-				
+			return new Promise(resolve => {
+				loader.load( './assets3d/' + this.model + '.awd', function ( mesh ) {
+					this.mesh = mesh;
+					
+					for (let i = 0; i < this.mesh.children.length; i++) {
+						this.mesh.children[i].name = this.name;
+					}
+
+					this.geometry = this.mesh.children[0].geometry;
+
+					this.createMesh();
+					
+					resolve('success');
+				}.bind(this) );
+			});
+		}
+		else {
+			return new Promise( resolve => {
+
+				this.options.materialize = this.options.options.materialize;
+				this.options.color = this.options.options.color;
+				this.geometry = this.options.geometry;
+				this.createMesh();
+
 				resolve('success');
-			}.bind(this) );
-		});
+			});
+		}
 	}
 
 	createMesh() {

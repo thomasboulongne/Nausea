@@ -18,7 +18,6 @@ class Zone {
 	}
 
 	init() {
-		this.setMeshNames();
 		this.soundMaterialize = SoundManager.load('materialize.mp3');
 	}
 
@@ -108,6 +107,7 @@ class Zone {
 	 */
 	update() {
 		for(let i = 0; i < this.objects.length; i++) {
+			// console.log(this.objects);
 			if(this.objects[i].object.options.materialize && this.objects[i].rotate) {
 				//this.objects[i].object.mesh.rotation.y += 0.01;
 			}
@@ -115,8 +115,10 @@ class Zone {
 
 		if(this.animate) {
 			for(let i = 0; i < this.objects.length; i++) {
-				if(this.objects[i].object.options.materialize)
+				if(this.objects[i].object.options.materialize) {
 					this.objects[i].object.material.uniforms.time.value = this.tweenTime.time;
+					//this.objects[i].object.options.material.uniforms.time.value = this.tweenTime.time;
+				}
 			}
 		}
 	}
