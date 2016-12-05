@@ -1,4 +1,5 @@
 import Zone from './Zone';
+import Spline1 from '../splines/Spline1';
 
 import NumberUtils from '../utils/number-utils';
 
@@ -8,8 +9,8 @@ class Zone1 extends Zone {
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene) {
-		super(scene);
+	constructor(scene, camera, controls) {
+		super(scene, camera, controls);
 		//properties to count how many objects to clone
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
@@ -87,6 +88,8 @@ class Zone1 extends Zone {
 		this.objects.push(this.chestnut, this.bench, this.mineral1, this.mineral2, this.mineral3);
 
 		super.init();
+
+		this.initSpline();
 	}
 
 	setMeshNames () {
@@ -116,12 +119,22 @@ class Zone1 extends Zone {
 		this.timeline.from(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
 	}
 
+
+	/**
+	 * @Spline
+	 */
+	initSpline() {
+		this.spline = new Spline1(this.scene, this.camera, this.controls);
+		this.spline.init();
+	}
+
 	/**
 	 * @update
 	 */
 	update() {
 		//permanant rotation
 		super.update();
+		this.spline.update();
 	}
 
 }

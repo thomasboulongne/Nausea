@@ -48,7 +48,7 @@ class ExperienceScene {
 
 		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .1, 10000 );
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.08 );
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.12 );
 		if(Config.gui) this.gui.add(this.scene.fog, 'density', 0, 0.2).name('fog');
 
 		this.setControls();
@@ -64,6 +64,8 @@ class ExperienceScene {
 		this.createObjects();
 
 		this.addEventListeners();
+
+		console.info(this)
 	}
 
 	/**
@@ -234,11 +236,11 @@ class ExperienceScene {
 
 			//this.add(this.video.mesh);
 
-			this.zone0 = new Zone0(this.scene);
-			this.zone1 = new Zone1(this.scene);
-			this.zone2 = new Zone2(this.scene);
-			this.zone3 = new Zone3(this.scene);
-			this.zone4 = new Zone4(this.scene);
+			this.zone0 = new Zone0(this.scene, this.camera);
+			this.zone1 = new Zone1(this.scene, this.camera, this.controls);
+			this.zone2 = new Zone2(this.scene, this.camera);
+			this.zone3 = new Zone3(this.scene, this.camera);
+			this.zone4 = new Zone4(this.scene, this.camera);
 
 			this.zones = [this.zone0, this.zone1, this.zone2, this.zone3, this.zone4];
 
