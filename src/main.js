@@ -10,7 +10,6 @@ class Main {
 
 	constructor() {
 
-
 		this.router = Router;
 
 		this.app = new Vue({
@@ -18,7 +17,6 @@ class Main {
 			router: this.router,
 			render: h => h('router-view')
 		});
-		
 	}
 
 	bind() {}

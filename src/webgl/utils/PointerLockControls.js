@@ -1,10 +1,14 @@
+import throttle from 'lodash/throttle';
+
 /**
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.PointerLockControls = function ( camera, position, lookat ) {
+THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 
 	let scope = this;
+
+	this.fluidity = fluidity;
 
 	camera.rotation.set( 0, 0, 0 );
 
@@ -17,31 +21,34 @@ THREE.PointerLockControls = function ( camera, position, lookat ) {
 	yawObject.position.x = position.x;
 	yawObject.add( pitchObject );
 
-	yawObject.rotation.y = -1.574;
+	yawObject.rotation.y = -3.6;
 	pitchObject.rotation.x = -0.12;
-
-	let PI_2 = Math.PI / 2;
 
 	let onMouseMove = function ( event ) {
 		if ( scope.enabled === false ) return;
 
-		let movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-		let movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+		let mouseX = event.clientX ;
+		let mouseY = event.clientY ;
 
-		yawObject.rotation.y -= movementX * 0.002;
-		pitchObject.rotation.x -= movementY * 0.002;
+		let xRange = 3.6;
+		let yRange = 2;
 
-		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
+		if ( scope.enabled === false ) return;
 
+		let fW = window.innerWidth;
+		let fH = window.innerHeight;
+
+		let percX = mouseX / fW;
+		let percY = mouseY / fH;
+
+		let newX = -xRange * percX - 1.1;
+		let newY = -yRange * percY + 1;
+
+		TweenLite.to(yawObject.rotation, .6, { y: newX});
+		TweenLite.to(pitchObject.rotation, .6, { x: newY});
 	};
 
-	this.dispose = function() {
-
-		document.removeEventListener( 'mousemove', onMouseMove, false );
-
-	};
-
-	document.addEventListener( 'mousemove', onMouseMove, false );
+	document.addEventListener( 'mousemove', throttle(onMouseMove,1), false );
 
 	this.enabled = false;
 

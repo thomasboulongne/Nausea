@@ -20,7 +20,7 @@ void main() {
 
 	vec4 mvPosition = modelViewMatrix * vec4( pos, 1.0 );
 
-	float sizem = sin(modTime*10.0 + (pos.z*0.1))+0.5;
+	float sizem = 1.5;
 
 	gl_PointSize = max(0.5, (size*sizem)) * ( scale / length( mvPosition.xyz ) );
 

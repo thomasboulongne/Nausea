@@ -1,12 +1,11 @@
 <template>
-	<div class="webgl">
-		<div class="crosshair">+</div>
+	<div :class="['webgl', 'experience']" @click="enterExperience">
 	</div>
 </template>
 
 <script>
 	
-import Scene from '../../webgl/Scene';
+import Scene from '../../webgl/ExperienceScene';
 
 export default {
 
@@ -17,27 +16,49 @@ export default {
 	},
 
 	mounted() {
-		const root = this.$el;
-		this.scene = new Scene(root);
-		root.appendChild(this.scene.renderer.domElement);
+		this.scene = new Scene(this.$el);
+		this.canvas = this.scene.renderer.domElement;
+		this.$el.appendChild(this.canvas);
+
+		this.scene.addCanvasElement(this.canvas);
+
+		this.addEventListeners();
+	},
+
+	methods: {
+		enterExperience: function() {
+			this.scene.toggleCamera();
+		},
+		exitExperience: function() {
+			this.scene.toggleCamera();
+		},
+		pointerLockChange: function() {
+			if(document.pointerLockElement === this.canvas ||	document.mozPointerLockElement === this.canvas) {
+			}
+			else {
+				this.exitExperience();
+			}
+		},
+		addEventListeners: function() {
+			document.addEventListener('pointerlockchange', this.pointerLockChange, false);
+		}
 	}
 }
 
 </script>
 
 <style lang="sass">
-	canvas {
-		position: absolute;
-		top: 0;
-		left: 0;
+	.experience 
+	{
+		canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			opacity: 0;
+		}
 	}
 
-	.crosshair {
-		position: fixed;
-		color: black;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		z-index: 1;
+	.experienceOn {
+		cursor: none;
 	}
 </style>

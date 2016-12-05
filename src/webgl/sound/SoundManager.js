@@ -1,6 +1,6 @@
 import Howler from 'howler';
 
-class SoundManager {
+class Manager {
 
 	/**
 	 * @constructor
@@ -15,9 +15,14 @@ class SoundManager {
 	 * @description Add a child to the scene
 	 * @param {object} child - A THREE object
 	 */
-	load(name) {
+	load(name, options) {
+
+		let opt = options ? options : {};
+
 		let sound = new Howler.Howl({
-			src: ['sound/' + name]
+			src: ['sound/' + name],
+			loop: opt.loop ? opt.loop : false,
+			volume: opt.volume ? opt.volume : 1
 		});
 
 		return sound;
@@ -28,5 +33,7 @@ class SoundManager {
 	}
 
 }
+
+const SoundManager = new Manager();
 
 export default SoundManager;

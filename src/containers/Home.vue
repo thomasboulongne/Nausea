@@ -3,13 +3,16 @@
 		<h1>
 			Nausea
 		</h1>
-		<webgl-experience></webgl-experience>
+		<home-loading></home-loading>
+		<webgl-home></webgl-home>
 	</div>
 </template>
 
 <script>
 	
-import WebglExperienceComponent from './components/WebglExperience';
+import WebglHomeComponent from './components/WebglHome';
+import HomeLoading from './components/HomeLoading';
+import Emitter from '../core/Emitter';
 
 export default {
 
@@ -20,10 +23,18 @@ export default {
 	},
 
 	mounted() {
+		Emitter.on('GOTO_EXPERIENCE', this.redirectToExperience.bind(this));
+	},
+
+	methods: {
+		'redirectToExperience': function(){
+			this.$router.push('experience');
+		} 
 	},
 
 	components: {
-		'webgl-experience': WebglExperienceComponent
+		'webgl-home': WebglHomeComponent,
+		'home-loading': HomeLoading
 	}
 }
 

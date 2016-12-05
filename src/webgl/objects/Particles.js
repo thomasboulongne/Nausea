@@ -4,16 +4,33 @@ import FragmentShader from '../shaders/particles/frag.glsl';
 
 class Particles {
 
-	constructor() {
+	constructor(particleTexture, particlesNumber, position) {
 
-		this.verticesNumber = 500;
+		this.particleTexture = particleTexture ? particleTexture : 'particle';
+
+		if( this.position ) {
+			this.position = {
+				x: position.x ? position.x : 50,
+				y: position.y ? position.y : 25,
+				z: position.z ? position.z : 50
+			};
+		}
+		else {
+			this.position = {
+				x: 50,
+				y: 25,
+				z: 50
+			};
+		}
+
+		this.verticesNumber = particlesNumber ? particlesNumber : 500;
 
 		this.vertices = [];
 
 		for ( let i = 0; i < this.verticesNumber; i++ ) {
-			this.vertices.push(Math.random() * 50 - 25);
-			this.vertices.push(Math.random() * 25);
-			this.vertices.push(Math.random() * 50 - 25);
+			this.vertices.push(Math.random() * this.position.x - ( this.position.x / 2 ) );
+			this.vertices.push(Math.random() * this.position.y );
+			this.vertices.push(Math.random() * this.position.z - ( this.position.z / 2 ));
 		}
 
 		this.verticesAttribute = Float32Array.from(this.vertices);
@@ -24,26 +41,25 @@ class Particles {
 	load() {
 
 		return new Promise(resolve => {
-			TextureLoader.load( './assets2d/particle.png', function ( texture ) {
+			TextureLoader.load( './assets2d/' + this.particleTexture + '.png', texture => {
 
 				this.uniformsParticles = {
 
-					color:      { type: "c", value: new THREE.Color( 0xffffff ) },
+					color:      { type: "c", value: new THREE.Color( 0x999999 ) },
 					texture:    { type: "t", value: texture },
 					globalTime:	{ type: "f", value: 0.0 },
 					bass:		{ type: "f", value: 1.0 },
-					scale: 	    { type: "f", value: window.innerHeight * 0.02 },
+					scale: 	{ type: "f", value: window.innerHeight * 0.04 },
 
 				};
 
 				let shaderMaterial = new THREE.ShaderMaterial( {
 
-					uniforms: 		  this.uniformsParticles,
+					uniforms: 		this.uniformsParticles,
 					vertexShader:     VertexShader,
 					fragmentShader:   FragmentShader,
-
-					//blending:		THREE.AdditiveBlending,
-					transparent:	true,
+					// blending: 		THREE.AdditiveBlending,
+					transparent:	true
 					
 				});
 
@@ -71,7 +87,7 @@ class Particles {
 
 				resolve('success');
 
-			}.bind(this) );
+			} );
 		});
 	}
 
