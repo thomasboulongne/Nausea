@@ -30,8 +30,8 @@ class ChromaKeyPlane {
 
 
 		this.mesh.position.x = options.x ? options.x : 0;
-		this.mesh.position.y = options.y ? options.y : 0;
-		this.mesh.position.z = options.z ? options.z : 2;
+		this.mesh.position.y = options.y ? options.y : .8;
+		this.mesh.position.z = options.z ? options.z : 6;
 		// this.mesh.rotation.y = options.rotY ? options.rotY : Math.PI / 2;
 	}
 

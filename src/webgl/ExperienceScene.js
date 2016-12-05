@@ -339,7 +339,7 @@ class ExperienceScene {
 			this.scene.background = texture;
 		});
 
-		this.video = new ChromaKeyPlane('couple');
+		this.video = new ChromaKeyPlane('kid_bike');
 		this.add(this.video.mesh);
 		
 	}
