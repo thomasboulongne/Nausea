@@ -19,8 +19,8 @@ class WebGLStore {
 		}
 		else {
 			return new Promise( resolve => {
-				options.geometry = this.objects[model].geometry;
-				options.material = this.objects[model].material;
+				options.geometry = JSON.parse(JSON.stringify(this.objects[model].geometry));
+				options.material = JSON.parse(JSON.stringify(this.objects[model].material));
 				let obj = new AWDObject(model, options);
 				resolve(obj);
 			});
