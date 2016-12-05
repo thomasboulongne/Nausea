@@ -21,7 +21,7 @@ class Field {
 				// plane
 				let geometry = new THREE.PlaneGeometry(50, 50, 63, 63);
 
-				let material = new THREE.MeshPhongMaterial( {
+				let material = new THREE.MeshLambertMaterial( {
 					color: 0x343434,
 					wireframe: false,
 					side: THREE.DoubleSide

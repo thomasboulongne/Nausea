@@ -9,11 +9,11 @@ import Dat from 'dat-gui';
 import Field from './objects/Field';
 import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
-import AWDObject from './AWDObject';
+import Store from './WebGLStore';
 
 import SoundManager from './sound/SoundManager';
 
-import Lights from './Lights';
+import Lights from './lights/Lights';
 
 import WebglCursor from './misc/WebglCursor';
 
@@ -153,76 +153,86 @@ class ExperienceScene {
 		this.raycastMeshes = [];
 
 		this.field = new Field();
-		
-		this.sartreBench = new AWDObject('sartre_bench_xp',{
-			'name': 'sartreBench',
-			'color': 0xcacaca,
-			'materialize': false
-		});
-
-		this.bench = new AWDObject('bench',{
-			'name': 'bench',
-			'color': 0xcacaca,
-			'materialize': true
-		});
-
-		this.chestnut = new AWDObject('chestnut',{
-			'name': 'chestnut',
-			'color': 0xcacaca,
-			'materialize': true
-		});
-
-		this.shrub = new AWDObject('shrub',{
-			'name': 'shrub',
-			'color': 0xcacaca,
-			'materialize': false
-		});
-
-		this.stand = new AWDObject('stand',{
-			'name': 'stand',
-			'color': 0xcacaca,
-			'materialize': true
-		});
-
-		this.streetLamp = new AWDObject('street_lamp',{
-			'name': 'streetLamp',
-			'color': 0xcacaca,
-			'materialize': false
-		});
-
-		this.statue = new AWDObject('statue',{
-			'name': 'statue',
-			'color': 0xcacaca,
-			'materialize': true
-		});
-
-		this.fountain = new AWDObject('fountain',{
-			'name': 'fountain',
-			'color': 0xcacaca,
-			'materialize': true
-		});
-
-		this.mineral = new AWDObject('rock',{
-			'name': 'mineral',
-			'color': 0xcacaca,
-			'materialize': true
-		});
 
 
 		Promise.all([
-			this.field.load(),
-			this.sartreBench.load(),
-			this.bench.load(),
-			this.chestnut.load(),
-			this.shrub.load(),
-			this.stand.load(),
-			this.streetLamp.load(),
-			this.statue.load(),
-			this.fountain.load(),
-			this.mineral.load()
+			Store.get('sartre_bench_xp',{
+				'name': 'sartreBench',
+				'color': 0xcacaca,
+				'materialize': false
+			}),
+	
+			Store.get('bench',{
+				'name': 'bench',
+				'color': 0xcacaca,
+				'materialize': true
+			}),
+	
+			Store.get('chestnut',{
+				'name': 'chestnut',
+				'color': 0xcacaca,
+				'materialize': true
+			}),
+	
+			Store.get('shrub',{
+				'name': 'shrub',
+				'color': 0xcacaca,
+				'materialize': false
+			}),
+	
+			Store.get('stand',{
+				'name': 'stand',
+				'color': 0xcacaca,
+				'materialize': true
+			}),
+	
+			Store.get('streetLamp',{
+				'name': 'streetLamp',
+				'color': 0xcacaca,
+				'materialize': false
+			}),
+	
+			Store.get('statue',{
+				'name': 'statue',
+				'color': 0xcacaca,
+				'materialize': true
+			}),
+	
+			Store.get('fountain',{
+				'name': 'fountain',
+				'color': 0xcacaca,
+				'materialize': true
+			}),
+	
+			Store.get('mineral',{
+				'name': 'mineral',
+				'color': 0xcacaca,
+				'materialize': true
+			}),
+			this.field.load()
 		])
-		.then(() => {
+		.then( data => {
+			this.sartreBench = data[0];
+	
+			this.bench = data[1];
+	
+			this.chestnut = data[2];
+	
+			this.shrub = data[3];
+	
+			this.stand = data[4];
+	
+			this.street_lamp = data[5];
+	
+			this.statue = data[6];
+	
+			this.fountain = data[7];
+	
+			this.rock = data[8];
+
 			this.add(this.field.mesh);
+
+			//this.add(this.video.mesh);
 
 			this.zone0 = new Zone0(this.scene);
 			this.zone1 = new Zone1(this.scene);
@@ -241,95 +251,92 @@ class ExperienceScene {
 				totalStreetLamps = 0;
 
 			for(let i = 0; i < this.zones.length; i++) {
-				if(this.zones[i].nbBenches)
-					totalBenches += this.zones[i].nbBenches;
+
+				let curZone = this.zones[i];
+
+				if(curZone.nbBenches)
+					totalBenches += curZone.nbBenches;
 				if(this.zones[i].nbMinerals)
-					totalMinerals += this.zones[i].nbMinerals;
+					totalMinerals += curZone.nbMinerals;
 				if(this.zones[i].nbShrubs)
-					totalShrubs += this.zones[i].nbShrubs;
+					totalShrubs += curZone.nbShrubs;
 				if(this.zones[i].nbStreetLamps)
-					totalStreetLamps += this.zones[i].nbStreetLamps;
+					totalStreetLamps += curZone.nbStreetLamps;
 				if(this.zones[i].nbChestnuts)
-					totalChestnuts += this.zones[i].nbChestnuts;
+					totalChestnuts += curZone.nbChestnuts;
 			}
 
-			for(let i = 0; i < totalChestnuts; i++) {
-				let name = 'chestnut-' + i;
-				let chestnut = new AWDObject(name);
-				chestnut.geometry = this.chestnut.geometry;
-				chestnut.options = this.chestnut.options;
-				chestnut.createMesh();
-				this.chestnuts.push(chestnut);
+			let promises = [];
+
+			const gChestnuts = {
+				name: 'chestnut',
+				total: totalChestnuts,
+				objects: this.chestnuts
+			};
+
+			const gBenches = {
+				name: 'bench',
+				total: totalBenches,
+				objects: this.benches
+			};
+
+			const gMinerals = {
+				name: 'mineral',
+				total: totalMinerals,
+				objects: this.minerals
+			};
+
+			const gShrubs = {
+				name: 'shrub',
+				total: totalShrubs,
+				objects: this.shrubs
+			};
+
+			const gStreetLamps = {
+				name: 'streetLamp',
+				total: totalStreetLamps,
+				objects: this.streetLamps
+			};
+
+			let gObjects = [gChestnuts, gBenches, gMinerals, gShrubs, gStreetLamps];
+
+			for(let i = 0; i < gObjects.length; i++) {
+
+				for(let j = 0; j < gObjects[i].total; j++) {
+					let name = gObjects[i].name;
+					promises.push(Store.get(name, {name: name + '-' + i})
+					.then( obj => {
+						gObjects[i].objects.push(obj);
+					}));
+				}
+
 			}
 
-			for(let i = 0; i < totalBenches; i++) {
-				let name = 'bench-' + i;
-				let bench = new AWDObject(name);
-				bench.geometry = this.bench.geometry;
-				bench.options = this.bench.options;
-				bench.createMesh();
-				this.benches.push(bench);
-			}	
+			Promise.all(promises).then(() => {				
+				this.zone0.init(this.sartreBench);
+				this.zone1.init(gChestnuts.objects, gBenches.objects, gMinerals.objects);
+				this.zone2.init(this.stand, gChestnuts.objects, gStreetLamps.objects, gShrubs.objects);
+				this.zone3.init(this.statue, gChestnuts.objects, gShrubs.objects);
+				this.zone4.init(this.fountain, gBenches.objects, gStreetLamps.objects);
 
-			for( let i = 0; i < totalMinerals; i++ ) {
-				let name = 'mineral-' + i;
-				let mineral = new AWDObject(name);
-				mineral.geometry = this.mineral.geometry;
-				mineral.options = this.mineral.options;
-				mineral.createMesh();
-				this.minerals.push(mineral);
-			}
+				for (let i = 0; i < this.zones.length; i++) {
+					this.zones[i].addScene();
+					this.zones[i].initAnim();
+				}
 
-			for( let i = 0; i < totalShrubs; i++ ) {
-				let name = 'shrub-' + i;
-				let shrub = new AWDObject(name);
-				shrub.geometry = this.shrub.geometry;
-				shrub.options = this.shrub.options;
-				shrub.createMesh();
-				this.shrubs.push(shrub);
-			}
+				//this.createLeaves();
 
-			for( let i = 0; i < totalStreetLamps; i++ ) {
-				let name = 'streetLamp-' + i;
-				let streetLamp = new AWDObject(name);
-				streetLamp.geometry = this.streetLamp.geometry;
-				streetLamp.options = this.streetLamp.options;
-				streetLamp.createMesh();
-				this.streetLamps.push(streetLamp);
-			}
-
-			this.sartreBench.createMesh(); 
-			this.statue.createMesh();
-			this.fountain.createMesh();
-			this.stand.createMesh();
-
-			for( let i = 0; i < this.benches.length; i++ ) {
-				console.log(this.benches[i])
-			}
-
-			this.zone0.init(this.sartreBench);
-			this.zone1.init(this.chestnuts, this.benches, this.minerals);
-			this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
-			this.zone3.init(this.statue, this.chestnuts, this.shrubs);
-			this.zone4.init(this.fountain, this.benches, this.streetLamps);
-
-			for (let i = 0; i < this.zones.length; i++) {
-				this.zones[i].addScene();
-				this.zones[i].initAnim();
-			}
-
-			//this.createLeaves();
-
-			if(Config.gui) {
-				this.zone1.addToGUI(this.gui);
-				this.zone2.addToGUI(this.gui);
-				this.zone3.addToGUI(this.gui);
-				this.zone4.addToGUI(this.gui);
-			}
+				if(Config.gui) {
+					this.zone1.addToGUI(this.gui);
+					this.zone2.addToGUI(this.gui);
+					this.zone3.addToGUI(this.gui);
+					this.zone4.addToGUI(this.gui);
+				}
+			});
 			
 		});
 
-		this.particles = new Particles('particule05', 500);
+		this.particles = new Particles('particle', 500);
 		this.particles.load()
 		.then(() => {
 			this.add(this.particles.mesh);
@@ -420,6 +427,7 @@ class ExperienceScene {
 		// 	this.INTERSECTED = null;
 		// }
 
+		//this.video.update();
 
 		this.renderer.autoClearColor = true;
 
