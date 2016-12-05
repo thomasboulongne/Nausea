@@ -16,14 +16,14 @@ module.exports = {
 		filename: "bundle.js",
 		publicPath: "/"
 	},
-
 	resolve: {
+    	root: path.resolve( __dirname, '..', 'src' ),
 		extensions: [
 			"",
 			".vue",
 			".js",
 			".json",
-		],
+		]
 	},
 
 	devTool: 'source-map',

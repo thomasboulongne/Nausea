@@ -43,6 +43,8 @@ export default {
 </script>
 
 <style lang="sass">
+	@import '../../stylesheets/variables.scss';
+
 	footer {
 		position: fixed;
 		width: 100%;
@@ -76,7 +78,7 @@ export default {
 		}
 		p.cop {
 			display: inline;
-			color: #9b9b9b;
+			color: $second-color;
 			font-size: 12px;
 		}
 	}
