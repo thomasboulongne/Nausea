@@ -2,7 +2,9 @@ import 'three/examples/js/loaders/AWDLoader';
 import 'three/examples/js/modifiers/TessellateModifier';
 import 'three/examples/js/modifiers/ExplodeModifier';
 import VertexShader from './shaders/objects/shader.vert';
-import AWDLoader from './utils/AWDLoader';
+
+import LoadingManager from './utils/LoadingManager';
+//import AWDLoader from './utils/AWDLoader';
 
 class AWDObject {
 
@@ -25,8 +27,10 @@ class AWDObject {
 				materialize : this.options.materialize ? this.options.materialize : false
 			};
 
+			let loader = new THREE.AWDLoader( LoadingManager );
+
 			return new Promise(resolve => {
-				AWDLoader.load( './assets3d/' + this.model + '.awd', function ( mesh ) {
+				loader.load( './assets3d/' + this.model + '.awd', function ( mesh ) {
 					this.mesh = mesh;
 					
 					for (let i = 0; i < this.mesh.children.length; i++) {
@@ -34,6 +38,8 @@ class AWDObject {
 					}
 
 					this.geometry = this.mesh.children[0].geometry;
+
+					this.createMesh();
 					
 					resolve('success');
 				}.bind(this) );
@@ -41,7 +47,12 @@ class AWDObject {
 		}
 		else {
 			return new Promise( resolve => {
-				this.mesh = new THREE.Mesh(this.options.geometry, this.options.material);
+
+				this.options.materialize = this.options.options.materialize;
+				this.options.color = this.options.options.color;
+				this.geometry = this.options.geometry;
+				this.createMesh();
+
 				resolve('success');
 			});
 		}

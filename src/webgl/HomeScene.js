@@ -32,7 +32,7 @@ class HomeScene {
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 
-		this.environmentColor = 0x555555;
+		this.environmentColor = 0x212121;
 
 		this.halfWidth = this.width / 2;
 		this.halfHeight = this.height / 2;
@@ -68,7 +68,7 @@ class HomeScene {
 
 		this.camera.lookAt(this.center);
 
-		this.scene.fog = new THREE.FogExp2( this.environmentColor, .25 );
+		this.scene.fog = new THREE.FogExp2( this.environmentColor, .1 );
 
 		this.setLights();
 
@@ -213,7 +213,7 @@ class HomeScene {
 			Store.get('sartre_bench_intro',{
 				'name': 'sartre_bench_intro',
 				'x': 0,
-				'y': .2,
+				'y': -5,
 				'z': 0,
 				'color': 0xcacaca
 			}),
@@ -223,6 +223,7 @@ class HomeScene {
 		])
 		.then(data => {
 			this.bench = data[0];
+			this.bench.mesh.position.y = -0.22;
 			this.scene.background = data[1];
 
 			this.add(this.title.mesh);

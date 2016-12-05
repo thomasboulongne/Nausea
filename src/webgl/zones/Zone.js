@@ -94,7 +94,6 @@ class Zone {
 	 * @addScene
 	 */
 	addScene() {
-		console.log(this.objects);
 		for ( let i = 0; i < this.objects.length; i++) {
 			this.scene.add(this.objects[i].object.mesh);
 			this.objects[i].object.mesh.position.set(this.objects[i].x, this.objects[i].y, this.objects[i].z);
@@ -116,8 +115,10 @@ class Zone {
 
 		if(this.animate) {
 			for(let i = 0; i < this.objects.length; i++) {
-				if(this.objects[i].object.options.materialize)
+				if(this.objects[i].object.options.materialize) {
 					this.objects[i].object.material.uniforms.time.value = this.tweenTime.time;
+					//this.objects[i].object.options.material.uniforms.time.value = this.tweenTime.time;
+				}
 			}
 		}
 	}

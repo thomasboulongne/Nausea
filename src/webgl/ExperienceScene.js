@@ -186,7 +186,7 @@ class ExperienceScene {
 				'materialize': true
 			}),
 	
-			Store.get('street_lamp',{
+			Store.get('streetLamp',{
 				'name': 'streetLamp',
 				'color': 0xcacaca,
 				'materialize': false
@@ -204,7 +204,7 @@ class ExperienceScene {
 				'materialize': true
 			}),
 	
-			Store.get('rock',{
+			Store.get('mineral',{
 				'name': 'mineral',
 				'color': 0xcacaca,
 				'materialize': true
@@ -232,7 +232,7 @@ class ExperienceScene {
 
 			this.add(this.field.mesh);
 
-			this.add(this.video.mesh);
+			//this.add(this.video.mesh);
 
 			this.zone0 = new Zone0(this.scene);
 			this.zone1 = new Zone1(this.scene);
@@ -251,75 +251,73 @@ class ExperienceScene {
 				totalStreetLamps = 0;
 
 			for(let i = 0; i < this.zones.length; i++) {
-				if(this.zones[i].nbBenches)
-					totalBenches += this.zones[i].nbBenches;
+
+				let curZone = this.zones[i];
+
+				if(curZone.nbBenches)
+					totalBenches += curZone.nbBenches;
 				if(this.zones[i].nbMinerals)
-					totalMinerals += this.zones[i].nbMinerals;
+					totalMinerals += curZone.nbMinerals;
 				if(this.zones[i].nbShrubs)
-					totalShrubs += this.zones[i].nbShrubs;
+					totalShrubs += curZone.nbShrubs;
 				if(this.zones[i].nbStreetLamps)
-					totalStreetLamps += this.zones[i].nbStreetLamps;
+					totalStreetLamps += curZone.nbStreetLamps;
 				if(this.zones[i].nbChestnuts)
-					totalChestnuts += this.zones[i].nbChestnuts;
+					totalChestnuts += curZone.nbChestnuts;
 			}
 
 			let promises = [];
 
-			for(let i = 0; i < totalChestnuts; i++) {
-				let name = 'chestnut-' + i;
-				promises.push(Store.get('chestnut', {name: name})
-				.then( obj => {
-					this.chestnuts.push(obj);
-				}));
-				
+			const gChestnuts = {
+				name: 'chestnut',
+				total: totalChestnuts,
+				objects: this.chestnuts
+			};
+
+			const gBenches = {
+				name: 'bench',
+				total: totalBenches,
+				objects: this.benches
+			};
+
+			const gMinerals = {
+				name: 'mineral',
+				total: totalMinerals,
+				objects: this.minerals
+			};
+
+			const gShrubs = {
+				name: 'shrub',
+				total: totalShrubs,
+				objects: this.shrubs
+			};
+
+			const gStreetLamps = {
+				name: 'streetLamp',
+				total: totalStreetLamps,
+				objects: this.streetLamps
+			};
+
+			let gObjects = [gChestnuts, gBenches, gMinerals, gShrubs, gStreetLamps];
+
+			for(let i = 0; i < gObjects.length; i++) {
+
+				for(let j = 0; j < gObjects[i].total; j++) {
+					let name = gObjects[i].name;
+					promises.push(Store.get(name, {name: name + '-' + i})
+					.then( obj => {
+						gObjects[i].objects.push(obj);
+					}));
+				}
+
 			}
-
-			for(let i = 0; i < totalBenches; i++) {
-				let name = 'bench-' + i;
-				promises.push(Store.get('bench', {name: name})
-				.then( obj => {
-					this.benches.push(obj);	
-				}));
-				
-			}	
-
-			for( let i = 0; i < totalMinerals; i++ ) {
-				let name = 'mineral-' + i;
-				promises.push(Store.get('rock', {name: name})
-				.then( obj => {
-					this.minerals.push(obj);	
-				}));
-				
-			}
-
-			for( let i = 0; i < totalShrubs; i++ ) {
-				let name = 'shrub-' + i;
-				promises.push(Store.get('shrub', {name: name})
-				.then( obj => {
-					this.shrubs.push(obj);	
-				}));
-				
-			}
-
-			for( let i = 0; i < totalStreetLamps; i++ ) {
-				let name = 'streetLamp-' + i;
-				promises.push(Store.get('street_lamp', {name: name})
-				.then( obj => {
-					this.streetLamps.push(obj);	
-				}));
-			}
-
-			this.sartreBench.createMesh(); 
-			this.statue.createMesh();
-			this.fountain.createMesh();
-			this.stand.createMesh();
 
 			Promise.all(promises).then(() => {				
 				this.zone0.init(this.sartreBench);
-				this.zone1.init(this.chestnuts, this.benches, this.minerals);
-				this.zone2.init(this.stand, this.chestnuts, this.streetLamps, this.shrubs);
-				this.zone3.init(this.statue, this.chestnuts, this.shrubs);
-				this.zone4.init(this.fountain, this.benches, this.streetLamps);
+				this.zone1.init(gChestnuts.objects, gBenches.objects, gMinerals.objects);
+				this.zone2.init(this.stand, gChestnuts.objects, gStreetLamps.objects, gShrubs.objects);
+				this.zone3.init(this.statue, gChestnuts.objects, gShrubs.objects);
+				this.zone4.init(this.fountain, gBenches.objects, gStreetLamps.objects);
 
 				for (let i = 0; i < this.zones.length; i++) {
 					this.zones[i].addScene();
@@ -429,7 +427,7 @@ class ExperienceScene {
 		// 	this.INTERSECTED = null;
 		// }
 
-		this.video.update();
+		//this.video.update();
 
 		this.renderer.autoClearColor = true;
 
