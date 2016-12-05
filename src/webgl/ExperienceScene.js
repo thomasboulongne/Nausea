@@ -13,7 +13,7 @@ import Store from './WebGLStore';
 
 import SoundManager from './sound/SoundManager';
 
-import Lights from './Lights';
+import Lights from './lights/Lights';
 
 import WebglCursor from './misc/WebglCursor';
 

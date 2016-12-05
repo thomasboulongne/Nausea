@@ -15,7 +15,8 @@ import Store from './WebGLStore';
 import SoundManager from './sound/SoundManager';
 import Emitter from '../core/Emitter';
 
-import Lights from './Lights';
+import Lights from './lights/Lights';
+import HomeLights from './lights/HomeLights';
 
 import { debounce, throttle } from 'lodash';
 
@@ -127,6 +128,11 @@ class HomeScene {
 		this.lights = new Lights();
 		for (let i = 0; i < this.lights.list.length; i++) {
 			this.add(this.lights.list[i]);
+		}
+
+		this.homeLights = new HomeLights();
+		for (let i = 0; i < this.homeLights.lights.length; i++) {
+			this.add(this.homeLights.lights[i]);
 		}
 	}
 
@@ -368,6 +374,8 @@ class HomeScene {
 	 * @description Renders/Draw the scene
 	 */
 	render() {
+
+		this.homeLights.update();
 
 		//Particles 
 		this.particles.update();
