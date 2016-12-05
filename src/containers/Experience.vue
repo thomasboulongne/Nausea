@@ -1,15 +1,14 @@
 <template>
 	<div id="app">
-		<h1>
-			Nausea
-		</h1>
 		<webgl-experience></webgl-experience>
+		<footer-comp></footer-comp>
 	</div>
 </template>
 
 <script>
 	
 import WebglExperienceComponent from './components/WebglExperience';
+import FooterComponent from './components/Footer';
 
 export default {
 
@@ -23,21 +22,12 @@ export default {
 	},
 
 	components: {
-		'webgl-experience': WebglExperienceComponent
+		'webgl-experience': WebglExperienceComponent,
+		'footer-comp': FooterComponent
 	}
 }
 
 </script>
 
 <style lang="sass">
-	#app h1 {
-		color: black;
-		opacity: .1;
-		position: absolute;
-		top: 1vh;
-		left: 50%;
-		transform: translateX(-50%);
-		margin: 0;
-		z-index: 1;
-	}
 </style>

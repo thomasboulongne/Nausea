@@ -1,17 +1,16 @@
 <template>
 	<div id="app">
-		<h1>
-			Nausea
-		</h1>
 		<home-loading></home-loading>
 		<webgl-home></webgl-home>
+		<footer-comp></footer-comp>
 	</div>
 </template>
 
 <script>
 	
 import WebglHomeComponent from './components/WebglHome';
-import HomeLoading from './components/HomeLoading';
+import HomeLoadingComponent from './components/HomeLoading';
+import FooterComponent from './components/Footer';
 import Emitter from '../core/Emitter';
 
 export default {
@@ -34,21 +33,12 @@ export default {
 
 	components: {
 		'webgl-home': WebglHomeComponent,
-		'home-loading': HomeLoading
+		'home-loading': HomeLoadingComponent,
+		'footer-comp': FooterComponent
 	}
 }
 
 </script>
 
 <style lang="sass">
-	#app h1 {
-		color: black;
-		opacity: .1;
-		position: absolute;
-		top: 1vh;
-		left: 50%;
-		transform: translateX(-50%);
-		margin: 0;
-		z-index: 1;
-	}
 </style>
