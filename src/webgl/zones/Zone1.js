@@ -10,6 +10,7 @@ class Zone1 extends Zone {
 	 */
 	constructor(scene) {
 		super(scene);
+
 		//properties to count how many objects to clone
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
@@ -27,7 +28,7 @@ class Zone1 extends Zone {
 			'z' : 12,
 			'scale' : 1,
 			'rotx' : 0,
-			'roty' : 139,
+			'roty' : 0,
 			'rotz' : 0
 		};
 
@@ -109,11 +110,23 @@ class Zone1 extends Zone {
 
 	}
 
+	hoverAnim() {
+		for (let i = 0; i < this.objects.length; i++) {
+			if(this.objects[i].object.options.materialize) {
+				this.objects[i].rotate = true;
+				this.timeline.to(this.objects[i].object.mesh.material.uniforms.opacity, 2, {'value': 1, onComplete: () => {
+					this.objects[i].rotate = false;
+				}}, 0);
+			}
+		}
+	}
+
 	playAnim() {
+		this.hoverAnim();
 		super.playAnim();
 		let chestnutMesh = this.chestnut.object.mesh;
-		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
-		this.timeline.from(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, 2);
+		this.timeline.to(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(139), ease: Expo.easeOut}, 2);
 	}
 
 	/**

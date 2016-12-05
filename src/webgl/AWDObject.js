@@ -74,6 +74,7 @@ class AWDObject {
 		uniforms.type = 'MeshPhongMaterial';
 		uniforms.time = { type: 'f', value: 0 };
 		uniforms.diffuse.value = new THREE.Color( this.options.color );
+		uniforms.opacity.value = 0;
 
 		// Create our vertex/fragment shaders
 		this.material = new THREE.ShaderMaterial({

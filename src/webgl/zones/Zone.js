@@ -34,7 +34,7 @@ class Zone {
 		this.timeline = new TimelineMax();
 		this.timeline.to(this.tweenTime, 16, {time: 2, ease: Expo.easeOut, onComplete: () => {
 			this.animate = false;
-		}});
+		}}, 2);
 		this.timeline.pause();
 	}
 
@@ -109,7 +109,7 @@ class Zone {
 	update() {
 		for(let i = 0; i < this.objects.length; i++) {
 			if(this.objects[i].object.options.materialize && this.objects[i].rotate) {
-				//this.objects[i].object.mesh.rotation.y += 0.01;
+				this.objects[i].object.mesh.rotation.y += 0.005;
 			}
 		}
 
