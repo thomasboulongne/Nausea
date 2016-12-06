@@ -412,7 +412,7 @@ class ExperienceScene {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		window.addEventListener('keydown', this.onKeydown.bind(this));
-		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this))
+		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
 	}
 
 	toggleCamera() {
@@ -424,7 +424,8 @@ class ExperienceScene {
 	}
 
 	startZoneAnimation() {
-		this.INTERSECTED.playAnim();
+		if(this.INTERSECTED != null)
+			this.INTERSECTED.playAnim();
 	}
 
 	/**
@@ -450,7 +451,7 @@ class ExperienceScene {
 					&& mouse.x < zone.orientation.x[1]
 					&& mouse.y > zone.orientation.y[0]
 					&& mouse.y < zone.orientation.y[1]
-					&& !zone.animated) {
+					&& !zone.animated ) {
 					this.intersect = zone;
 				}
 			}

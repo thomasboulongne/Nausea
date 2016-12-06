@@ -11,7 +11,7 @@
 		<div class="right">
 			<span @click="emit('TOGGLE_3D')"><img src="/images/vr.svg" alt="3D"></span>
 			<span @click="emit('TOGGLE_FULLSCREEN')"><img src="/images/fullscreen.svg" alt=""></span>
-			<span @click="emit('TOGGLE_SOUND')"><img src="/images/sound.svg" alt=""></span>
+			<span @click="emit('TOGGLE_SOUND')"><img src="/images/Sound.gif" alt=""></span>
 		</div>
 	</footer>
 </template>
@@ -74,6 +74,11 @@ export default {
 			}
 			img {
 				margin: 0 3em;
+			}
+		}
+		span {
+			img {
+				max-height: 18px;
 			}
 		}
 		p.cop {

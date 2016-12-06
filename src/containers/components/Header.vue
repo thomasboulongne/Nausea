@@ -1,6 +1,6 @@
 <template>
 	<header>
-		<img src="/images/logo.png" alt="Nausea" id="logo">
+		<img src="/images/logo_sm.png" alt="Nausea" id="logo">
 		<div id="discover" :class="clicked ? 'hover' : ''">
 			<a :href="'/' + link.path" @click="discoverClick($event)" v-html="link.text"></a>
 			<div class="icon"></div>
