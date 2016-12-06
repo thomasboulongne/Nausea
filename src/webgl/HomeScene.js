@@ -33,7 +33,7 @@ class HomeScene {
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 
-		this.environmentColor = 0x212121;
+		this.environmentColor = 0x2a2a2a;
 
 		this.halfWidth = this.width / 2;
 		this.halfHeight = this.height / 2;
