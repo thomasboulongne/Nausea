@@ -1,43 +1,45 @@
 <template>
 	<div id="app">
-		<h1>
-			Nausea
-		</h1>
+		<header-comp :link="link"></header-comp>
 		<webgl-experience></webgl-experience>
+		<footer-comp></footer-comp>
 	</div>
 </template>
 
 <script>
-	
+
+import HeaderComponent from './components/Header';
 import WebglExperienceComponent from './components/WebglExperience';
+import FooterComponent from './components/Footer';
 
 export default {
 
 	data() {
 		return {
-			obj: true
+			link: {
+				path: 'text',
+				text: 'Découvrir<br>l\'extrait',
+				trans: 'RTL'
+			}
 		};
 	},
 
 	mounted() {
 	},
 
+	methods: {
+	},
+
 	components: {
-		'webgl-experience': WebglExperienceComponent
+		'webgl-experience': WebglExperienceComponent,
+		'footer-comp': FooterComponent,
+		'header-comp': HeaderComponent
 	}
 }
 
 </script>
 
 <style lang="sass">
-	#app h1 {
-		color: black;
-		opacity: .1;
-		position: absolute;
-		top: 1vh;
-		left: 50%;
-		transform: translateX(-50%);
-		margin: 0;
-		z-index: 1;
-	}
+	@import '../stylesheets/variables.scss';
+
 </style>
