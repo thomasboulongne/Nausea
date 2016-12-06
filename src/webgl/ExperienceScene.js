@@ -23,6 +23,8 @@ import Zone2 from './zones/Zone2';
 import Zone3 from './zones/Zone3';
 import Zone4 from './zones/Zone4';
 
+import DataEmitter from './data/DataEmitter';
+
 //import NumberUtils from './utils/number-utils';
 
 class ExperienceScene {
@@ -46,7 +48,7 @@ class ExperienceScene {
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
 
-		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .1, 10000 );
+		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .01, 100000 );
 
 		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.12 );
 		if(Config.gui) this.gui.add(this.scene.fog, 'density', 0, 0.2).name('fog');
@@ -344,6 +346,11 @@ class ExperienceScene {
 			this.add(this.particles.mesh);
 		});
 
+		this.datas = new DataEmitter();
+
+		this.add(this.datas.group);
+
+
 		this.skybox = new Skybox('assets2d/skybox/');
 
 		this.skybox.load()
@@ -403,7 +410,10 @@ class ExperienceScene {
 	render() {
 
 		//Particles 
-		this.particles.update();
+		//this.particles.update();
+
+		//Datas
+		this.datas.update();
 
 		if(this.zone1) this.zone1.update();
 		if(this.zone2) this.zone2.update();

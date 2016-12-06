@@ -12,13 +12,14 @@ class Spline1 extends Spline {
 
 	init() {
 		this.points = [
-			new THREE.Vector3(0, 1, 0),
-			new THREE.Vector3(-1, 1, 0),
-			new THREE.Vector3(-1, 1, 1),
-			new THREE.Vector3(-1, 1, 2),
-			new THREE.Vector3(-1, 1, 3),
-			new THREE.Vector3(-1, 1, 4),
-			new THREE.Vector3(0, 1, 5)
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(0.5, 1, 3),
+			new THREE.Vector3(1.5, 2, 6),
+			new THREE.Vector3(2, 2.5, 10),
+			new THREE.Vector3(0, 2, 13),
+			new THREE.Vector3(-1, 1, 16),
+			new THREE.Vector3(-3, 1.5, 10),
+			new THREE.Vector3(-1, 2, 8)
 		];
 		super.init();
 

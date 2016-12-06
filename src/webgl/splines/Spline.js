@@ -90,7 +90,7 @@ class Spline {
 			// this.camera.rotation.y = camRot.y;
 			// this.camera.rotation.z = camRot.z;
 
-			//this.camera.lookAt(this.curve.getPoint(this.count));
+			//this.camera.lookAt(this.curve.getPoint(this.count + 1000));
 
 			if (this.count >= (1 - this.amount * this.ratio)) {
 				this.count = 0;
