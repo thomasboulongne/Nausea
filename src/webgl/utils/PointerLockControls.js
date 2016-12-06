@@ -7,6 +7,7 @@ import throttle from 'lodash/throttle';
 THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 
 	let scope = this;
+	this.orientation = 1.1;
 
 	this.fluidity = fluidity;
 
@@ -41,14 +42,14 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 		let percX = mouseX / fW;
 		let percY = mouseY / fH;
 
-		let newX = -xRange * percX - 1.1;
+		let newX = -xRange * percX - this.orientation;
 		let newY = -yRange * percY + 1;
 
 		TweenLite.to(yawObject.rotation, .6, { y: newX});
 		TweenLite.to(pitchObject.rotation, .6, { x: newY});
 	};
 
-	document.addEventListener( 'mousemove', throttle(onMouseMove,1), false );
+	document.addEventListener( 'mousemove', throttle(onMouseMove,1).bind(this), false );
 
 	this.enabled = false;
 

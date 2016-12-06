@@ -66,31 +66,43 @@ class Spline {
 			this.count += this.amount;
 
 			let camPos = this.curve.getPoint(this.count);
-			//let camRot = this.curve.getTangent(this.count);
+			// let camNextPos = this.curve.getPoint(this.count + 10);
 
-			// this.camera.position.z = camPos.z;
-			// this.camera.position.x = camPos.x;
-			// this.camera.position.y = camPos.y + 1;
-			//console.log(camPos.z - this.scene.controls.getObject().position.z);
+			// let camRot = this.curve.getTangent(this.count + 100);
 
-			this.controls.getObject().position.z = camPos.z;
-			this.controls.getObject().position.x = camPos.x;
-			this.controls.getObject().position.y = camPos.y + 1;
+			// let vector = {};
+			// vector.x = camNextPos.x - camPos.x;
+			// vector.z = camNextPos.z - camPos.z;
 
-			this.controls.getObject().translateZ(camPos.z - prevCamPos.z);
-			this.controls.getObject().translateX(camPos.x - prevCamPos.x);
-			this.controls.getObject().translateY(camPos.y - prevCamPos.y);
+			// let angle = Math.atan2(camRot.x, camRot.z);
 
+			// //console.log(angle);
+			// console.log(this.controls);
 
-			//console.log(this.scene.controls.getObject())
+			// this.controls.orientation = angle;
 
-			//console.log(this.scene.controls.getObject().translateX(camPos.x));
+			let yawObject = this.controls.getObject();
+			//let pitchObject = this.controls.getPitch();
+
+			yawObject.position.z = camPos.z;
+			yawObject.position.x = camPos.x;
+			yawObject.position.y = camPos.y + 1;
+
+			yawObject.translateZ(camPos.z - prevCamPos.z);
+			yawObject.translateX(camPos.x - prevCamPos.x);
+			yawObject.translateY(camPos.y - prevCamPos.y);
+
+			// pitchObject.rotation.y = camRot.y;
+			// yawObject.rotation.y = camRot.y;
+			//this.controls.orientation = 3.6;
+
+			//console.log(camPos);
 
 			// this.camera.rotation.x = camRot.x;
 			// this.camera.rotation.y = camRot.y;
 			// this.camera.rotation.z = camRot.z;
 
-			//this.camera.lookAt(this.curve.getPoint(this.count + 1000));
+			//this.camera.lookAt(this.curve.getPoint(this.count / 1000));
 
 			if (this.count >= (1 - this.amount * this.ratio)) {
 				this.count = 0;
