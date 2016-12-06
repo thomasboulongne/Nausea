@@ -22,7 +22,11 @@ export default {
 
 	data() {
 		return {
-			link: {text: 'Retour <br />à l\'expérience', path: 'experience'}
+			link: {
+				text: 'Retour <br />à l\'expérience',
+				path: 'experience',
+				trans: 'LTR'
+			}
 		};
 	},
 

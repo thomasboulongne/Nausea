@@ -1,16 +1,16 @@
 <template>
 	<div id="app">
 		<router-view></router-view>
+		<transition></transition>
 	</div>
 </template>
 
 <script>
 
 import Router from '../core/Router';
+import Transition from './components/Transition';
 
 export default {
-	router: Router,
-
 	data() {
 		return {
 		};
@@ -26,6 +26,7 @@ export default {
 	},
 
 	components: {
+		'transition': Transition
 	}
 }
 

@@ -11,6 +11,8 @@
 
 <script>
 
+import Emitter from '../../core/Emitter';
+
 export default {
 
 	data() {
@@ -28,7 +30,7 @@ export default {
 		this.tl.to(this.$refs.line, 2.5, {
 			x: '150%',
 			onComplete: () => {
-				this.$router.push(this.link.path);
+				Emitter.emit('TRANSITION_' + this.link.trans, this.link.path);
 			}
 		});
 		this.tl.pause();

@@ -18,7 +18,8 @@ export default {
 		return {
 			link: {
 				path: 'text',
-				text: 'Découvrir<br>l\'extrait'
+				text: 'Découvrir<br>l\'extrait',
+				trans: 'RTL'
 			}
 		};
 	},
