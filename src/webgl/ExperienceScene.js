@@ -1,6 +1,7 @@
 import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 import VignettePass from '@superguigui/wagner/src/passes/vignette/VignettePass';
+import ZoomBlurPass from '@superguigui/wagner/src/passes/zoom-blur/ZoomBlurPass';
 
 import './utils/PointerLockControls';
 import Config from './config';
@@ -135,6 +136,9 @@ class ExperienceScene {
 			new VignettePass({
 				boost: 1,
 				reduction: .4
+			}),
+			new ZoomBlurPass({
+				strength: 0.015
 			})
 		];
 	}
