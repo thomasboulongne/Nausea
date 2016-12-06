@@ -101,7 +101,9 @@ class ExperienceScene {
 		};
 
 		this.controls = new THREE.PointerLockControls( this.camera, controlsPosition, this.center, 0.01 );
-		this.add( this.controls.getObject() );
+		this.controlsContainer = new THREE.Object3D();
+		this.controlsContainer.add( this.controls.getObject());
+		this.add( this.controlsContainer );
 	}
 
 	setLights() {
