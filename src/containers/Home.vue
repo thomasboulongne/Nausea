@@ -54,18 +54,22 @@ export default {
 			if(delay === undefined)
 				delay = 1;
 
-			TweenLite.to(this.$refs.enter, .8, {
-				delay: delay,
-				opacity: .85,
-				ease: Power2.easeIn
-			});
+			if(this.$refs.enter) {
+				TweenLite.to(this.$refs.enter, .8, {
+					delay: delay,
+					opacity: .85,
+					ease: Power2.easeIn
+				});
+			}
 		},
 
 		hideEnter() {
-			TweenLite.to(this.$refs.enter, .3, {
-				opacity: .0,
-				ease: Power2.easeIn
-			});
+			if(this.$refs.enter) {
+				TweenLite.to(this.$refs.enter, .3, {
+					opacity: .0,
+					ease: Power2.easeIn
+				});
+			}
 		}
 	},
 
