@@ -1,12 +1,15 @@
 <template>
-	<div id="discover" :class="clicked ? 'hover' : ''">
-		<a :href="'/' + link.path" @click="discoverClick($event)" v-html="link.text"></a>
-		<div class="icon"></div>
-		<div class="lines">
-			<div class="line-holder"></div>
-			<div class="line" ref="line"></div>
+	<header>
+		<img src="/images/logo.png" alt="Nausea" id="logo">
+		<div id="discover" :class="clicked ? 'hover' : ''">
+			<a :href="'/' + link.path" @click="discoverClick($event)" v-html="link.text"></a>
+			<div class="icon"></div>
+			<div class="lines">
+				<div class="line-holder"></div>
+				<div class="line" ref="line"></div>
+			</div>
 		</div>
-	</div>
+	</header>
 </template>
 
 <script>
@@ -55,6 +58,14 @@ export default {
 
 <style lang="sass">
 	@import '../../stylesheets/variables.scss';
+
+	#logo {
+		position: absolute;
+		top: 5vh;
+		left: 5vh;
+		z-index: 2;
+		width: 8vw;
+	}
 
 	#discover {
 		position: absolute;
