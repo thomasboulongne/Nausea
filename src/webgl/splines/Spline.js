@@ -3,11 +3,12 @@ class Spline {
 	/**
 	* @constructor
 	*/
-	constructor(scene, camera, controls) {
+	constructor(target, scene, camera, controlsContainer) {
 
+		this.target = target;
 		this.scene = scene;
 		this.camera = camera;
-		this.controls = controls;
+		this.controlsContainer = controlsContainer;
 
 		this.count = 0;
 		this.amount = 0.001;
@@ -18,9 +19,28 @@ class Spline {
 	init() {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
 
-		this.createGeometry();
+		//this.createGeometry();
 		this.enableSpline();
 	}
+
+	initTimeline () {
+		this.tweenTime = { time : 0};
+		this.timeline = new TimelineMax();
+		this.timeline.to(this.tweenTime, 10, {time: 1, onComplete: () => {
+			this.reverseTimeline();
+		}});
+		this.timeline.play();
+	}
+
+	reverseTimeline () {
+		//this.timeline.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeOut});
+		TweenMax.to(this.controlsContainer.position, 1.5, {x: 0, y: 1, z: 0, ease: Circ.easeOut, onComplete: () => {
+			console.log(this.controlsContainer);
+		}});
+		// console.log('gogo reverse')
+		// this.timeline.to(this.controlsContainer.position, 3, {'x': 0, 'y': 1, z:'0', ease: Circ.easeOut});
+	}
+
 
 	createGeometry() {
 		this.geometry = new THREE.Geometry();
@@ -29,18 +49,13 @@ class Spline {
 			color: 0xFF0000
 		});
 		
-		this.line = new THREE.Line(this.geometry, this.material); 
-
-		console.log(this.line);
+		this.line = new THREE.Line(this.geometry, this.material);
 
 		this.scene.add(this.line);
 	}
 
 	enableSpline() {
-		//let init = this.curve.getPoint(0);
-		// this.camera.position.set(init.x, init.y, init.z);
-		// this.camera.lookAt(this.curve.getPoint(init));
-		
+		this.initTimeline();
 		this.enabledSpline = true;
 
 		console.log(this.scene);
@@ -60,55 +75,28 @@ class Spline {
 	update() {
 		if(this.enabledSpline) {
 
-			let prevCamPos = this.curve.getPoint(this.count);
+			let prevCamPos = this.curve.getPoint(this.tweenTime.time);
 
-			this.count += this.amount;
+			let camPos = this.curve.getPoint(this.tweenTime.time);
 
-			let camPos = this.curve.getPoint(this.count);
-			// let camNextPos = this.curve.getPoint(this.count + 10);
+			let vector = {};
+			vector.x = this.target.x - camPos.x;
+			vector.z = this.target.z - camPos.z;
 
-			// let camRot = this.curve.getTangent(this.count + 100);
+			let angle = Math.atan2(vector.x, vector.z);
 
-			// let vector = {};
-			// vector.x = camNextPos.x - camPos.x;
-			// vector.z = camNextPos.z - camPos.z;
+			this.controlsContainer.position.z = camPos.z;
+			this.controlsContainer.position.x = camPos.x;
+			this.controlsContainer.position.y = camPos.y + 1;
 
-			// let angle = Math.atan2(camRot.x, camRot.z);
+			this.controlsContainer.translateZ(camPos.z - prevCamPos.z);
+			this.controlsContainer.translateX(camPos.x - prevCamPos.x);
+			this.controlsContainer.translateY(camPos.y - prevCamPos.y);
 
-			// //console.log(angle);
-			// console.log(this.controls);
-
-			// this.controls.orientation = angle;
-
-			let yawObject = this.controls.getObject();
-			//let pitchObject = this.controls.getPitch();
-
-			yawObject.position.z = camPos.z;
-			yawObject.position.x = camPos.x;
-			yawObject.position.y = camPos.y + 1;
-
-			yawObject.translateZ(camPos.z - prevCamPos.z);
-			yawObject.translateX(camPos.x - prevCamPos.x);
-			yawObject.translateY(camPos.y - prevCamPos.y);
-
-			// pitchObject.rotation.y = camRot.y;
-			// yawObject.rotation.y = camRot.y;
-			//this.controls.orientation = 3.6;
-
-			//console.log(camPos);
-
-			// this.camera.rotation.x = camRot.x;
-			// this.camera.rotation.y = camRot.y;
-			// this.camera.rotation.z = camRot.z;
-
-			//this.camera.lookAt(this.curve.getPoint(this.count / 1000));
-
-			if (this.count >= (1 - this.amount * this.ratio)) {
-				this.count = 0;
-				this.camera.position.z = 0;
-				this.disableSpline()
-			}
+			this.controlsContainer.rotation.y = angle;
 		}
+
+		//console.log(this.controlsContainer.position);
 
 	}
 

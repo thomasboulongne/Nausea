@@ -239,7 +239,7 @@ class ExperienceScene {
 			//this.add(this.video.mesh);
 
 			this.zone0 = new Zone0(this.scene, this.camera);
-			this.zone1 = new Zone1(this.scene, this.camera, this.controls);
+			this.zone1 = new Zone1(this.scene, this.camera, this.controlsContainer);
 			this.zone2 = new Zone2(this.scene, this.camera);
 			this.zone3 = new Zone3(this.scene, this.camera);
 			this.zone4 = new Zone4(this.scene, this.camera);

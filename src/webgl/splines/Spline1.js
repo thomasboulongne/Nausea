@@ -5,9 +5,9 @@ class Spline1 extends Spline {
 	/**
 	* @constructor
 	*/
-	constructor(scene, camera, controls) {
+	constructor(target, scene, camera, controls) {
 
-		super(scene, camera, controls);
+		super(target, scene, camera, controls);
 	}
 
 	init() {
@@ -15,15 +15,15 @@ class Spline1 extends Spline {
 			new THREE.Vector3(0, 0, 0),
 			new THREE.Vector3(0.5, 1, 3),
 			new THREE.Vector3(1.5, 2, 6),
-			new THREE.Vector3(2, 2.5, 10),
-			new THREE.Vector3(0, 2, 13),
-			new THREE.Vector3(-1, 1, 16),
-			new THREE.Vector3(-3, 1.5, 10),
+			new THREE.Vector3(2, 2.5, 11),
+			new THREE.Vector3(0, 2, 14),
+			new THREE.Vector3(-1, 1, 17),
+			new THREE.Vector3(-3, 1.5, 11),
 			new THREE.Vector3(-1, 2, 8)
 		];
 		super.init();
 
-		this.createGeometry();
+		//this.createGeometry();
 	}
 
 	createGeometry() {

@@ -12,8 +12,8 @@ class Zone1 extends Zone {
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene, camera, controls) {
-		super(scene, camera, controls);
+	constructor(scene, camera, controlsContainer) {
+		super(scene, camera, controlsContainer);
 		//properties to count how many objects to clone
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
@@ -115,10 +115,6 @@ class Zone1 extends Zone {
 
 	initTimeline() {
 		super.initTimeline(); 
-		// TweenMax.delayedCall(0.3, () => {
-		// 	//this.playSound();	
-		// }) ;
-
 	}
 
 	playAnim() {
@@ -130,7 +126,7 @@ class Zone1 extends Zone {
 	}
 
 	playSound() {
-		console.log('play sound voice');
+		
 	}
 
 
@@ -138,7 +134,7 @@ class Zone1 extends Zone {
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline1(this.scene, this.camera, this.controls);
+		this.spline = new Spline1(this.chestnut, this.scene, this.camera, this.controlsContainer);
 		this.spline.init();
 	}
 

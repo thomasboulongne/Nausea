@@ -69,7 +69,6 @@ class DataEmitter {
 				numConnections: 0
 			} );
 		}
-		console.log(this.particlesData)
 
 		this.particles.setDrawRange( 0, this.maxParticles );
 		this.particles.addAttribute( 'position', new THREE.BufferAttribute( this.particlePositions, 3 ).setDynamic( true ) );
@@ -99,8 +98,6 @@ class DataEmitter {
 		this.linesMesh.position.z = this.posZ;
 		this.linesMesh.position.y = this.posY;
 		this.group.add( this.linesMesh );
-
-		console.log(this.linesMesh);
 	}
 
 	update() {
