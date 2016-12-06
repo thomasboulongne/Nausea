@@ -334,10 +334,14 @@ class HomeScene {
 			this.sounds['hover'].play();
 		}
 
+		Emitter.emit('HOME_MOUSEENTER');
+
 		this.cursor.onMouseEnter();
 	}
 
 	onMouseLeave() {
+		Emitter.emit('HOME_MOUSELEAVE');
+
 		if(this.enableHoverSound && this.sounds['hover'].playing()) {
 			this.sounds['hover'].fade(1,0,1000);
 		}
