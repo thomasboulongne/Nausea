@@ -3,8 +3,8 @@
 		<a :href="'/' + link.path" @click="discoverClick($event)" v-html="link.text"></a>
 		<div class="icon"></div>
 		<div class="lines">
-			<div class="line" ref="line"></div>
 			<div class="line-holder"></div>
+			<div class="line" ref="line"></div>
 		</div>
 	</div>
 </template>
@@ -27,8 +27,11 @@ export default {
 	],
 
 	mounted() {
-		this.tl.to(this.$refs.line, 2.5, {
-			x: '150%',
+		this.tl.to(this.$refs.line, .3, {
+			right: '0'
+		})
+		.to(this.$refs.line, .3, {
+			left: '100%',
 			onComplete: () => {
 				Emitter.emit('TRANSITION_' + this.link.trans, this.link.path);
 			}
@@ -71,6 +74,8 @@ export default {
 			}
 		}
 		.icon {
+			position: relative;
+			z-index: 3;
 			$icon-size: 10px;
 			height: $icon-size;
 			width: $icon-size;
@@ -96,7 +101,6 @@ export default {
 			width: 5vw;
 			height: 2px;
 			transition: all .5s;
-			overflow: hidden;
 		}
 
 		.line-holder {
@@ -107,13 +111,14 @@ export default {
 		
 		.line {
 			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-150%, -50%);
+			transform: translateY(-50%);
 			content: '';
-			width: 100%;
-			height: 100%;
-			background: red;
+			left: 0;
+			right: 100%;
+			top: 1px;
+			bottom: -1px;
+			background: black;
+			box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
 		}
 
 		&:hover, &.hover {

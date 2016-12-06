@@ -52,6 +52,10 @@ export default {
 	@import '../stylesheets/variables.scss';
 
 	#text {
+		background-image: url(/images/Sartre.png);
+		background-repeat: no-repeat;
+		background-size: 80vh auto;
+		background-position: top left; 
 		footer {
 		    box-shadow: 0px -20px 130px 40px rgba(255,255,255,1);
 		}
@@ -59,7 +63,7 @@ export default {
 
 	#content {
 		width: 45vw;
-		margin: 15vh 0 15vh 28vw;
+		padding: 15vh 0 15vh 28vw;
 		h1 {
 			font-size: 50px;
 			margin: 0 0 0.3em 0;
