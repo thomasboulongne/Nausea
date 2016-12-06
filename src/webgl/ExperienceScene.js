@@ -339,7 +339,7 @@ class ExperienceScene {
 			this.scene.background = texture;
 		});
 
-		this.video = new ChromaKeyPlane('woman_jogger', {r: 0, g: 0, b:0});
+		this.video = new ChromaKeyPlane('woman_jogger_2', {r: 1, g: 1, b:1});
 		this.add(this.video.mesh);
 		
 	}

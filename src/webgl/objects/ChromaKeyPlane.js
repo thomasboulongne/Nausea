@@ -20,7 +20,7 @@ class ChromaKeyPlane {
 			r = g = b = 0;
 		}
 
-		this.material = new ChromaKeyMaterial("./assets2d/videos/" + video + ".mp4", r, g, b);
+		this.material = new ChromaKeyMaterial("./assets2d/videos/" + video + ".mp4", r, g, b, 0.07);
 
 		let width = options.width ? options.width : 2;
 		let height = options.height ? options.height : 2;
