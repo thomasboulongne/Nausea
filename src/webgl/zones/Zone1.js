@@ -9,15 +9,16 @@ import NumberUtils from '../utils/number-utils';
 class Zone1 extends Zone {
 
 	/**
-	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene, camera, controlsContainer) {
-		super(scene, camera, controlsContainer);
+	constructor(scene, camera, controlsContainer, zoneParams) {
+		super(scene, camera, controlsContainer, zoneParams);
 		//properties to count how many objects to clone
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
 		this.nbMinerals = 3;
+
+		console.log('zone1', this.zoomParams);
 
 	}
 
@@ -134,7 +135,7 @@ class Zone1 extends Zone {
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline1(this.chestnut, this.scene, this.camera, this.controlsContainer);
+		this.spline = new Spline1(this.chestnut, this.scene, this.camera, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 

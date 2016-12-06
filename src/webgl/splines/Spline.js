@@ -1,11 +1,15 @@
+import SoundManager from '../sound/SoundManager';
+
 class Spline {
 
 	/**
 	* @constructor
 	*/
-	constructor(target, scene, camera, controlsContainer) {
+	constructor(target, scene, camera, controlsContainer, zoomParams) {
 
+		console.log('spline', zoomParams);
 		this.target = target;
+		this.zoomParams = zoomParams;
 		this.scene = scene;
 		this.camera = camera;
 		this.controlsContainer = controlsContainer;
@@ -20,6 +24,7 @@ class Spline {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
 
 		//this.createGeometry();
+		this.backSound = SoundManager.load('back.mp3');
 		this.enableSpline();
 	}
 
@@ -33,10 +38,12 @@ class Spline {
 	}
 
 	reverseTimeline () {
-		//this.timeline.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeOut});
-		TweenMax.to(this.controlsContainer.position, 1.5, {x: 0, y: 1, z: 0, ease: Circ.easeOut, onComplete: () => {
-			console.log(this.controlsContainer);
-		}});
+		this.timeline.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut});
+		SoundManager.play(this.backSound);
+		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.025, ease: Circ.easeInOut}, "-=1.5");
+		// TweenMax.to(this.controlsContainer.position, 1.5, {x: 0, y: 1, z: 0, ease: Circ.easeOut, onComplete: () => {
+		// 	console.log(this.controlsContainer);
+		// }});
 		// console.log('gogo reverse')
 		// this.timeline.to(this.controlsContainer.position, 3, {'x': 0, 'y': 1, z:'0', ease: Circ.easeOut});
 	}

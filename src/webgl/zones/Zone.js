@@ -9,10 +9,11 @@ class Zone {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(scene, camera, controlsContainer) {
+	constructor(scene, camera, controlsContainer, zoomParams) {
 		this.scene = scene;
 		this.camera = camera;
 		this.controlsContainer = controlsContainer;
+		this.zoomParams = zoomParams;
 
 		this.animated = false;
 
