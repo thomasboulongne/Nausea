@@ -11,7 +11,7 @@ import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
 import Store from './WebGLStore';
 
-import SoundManager from './sound/SoundManager';
+//import SoundManager from './sound/SoundManager';
 
 import Lights from './lights/Lights';
 
@@ -22,8 +22,6 @@ import Zone1 from './zones/Zone1';
 import Zone2 from './zones/Zone2';
 import Zone3 from './zones/Zone3';
 import Zone4 from './zones/Zone4';
-
-import DataEmitter from './data/DataEmitter';
 
 //import NumberUtils from './utils/number-utils';
 
@@ -50,7 +48,7 @@ class ExperienceScene {
 
 		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .01, 100000 );
 
-		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.12 );
+		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.08 );
 		if(Config.gui) this.gui.add(this.scene.fog, 'density', 0, 0.2).name('fog');
 
 		this.setControls();
@@ -140,10 +138,10 @@ class ExperienceScene {
 	}
 
 	setAmbiantSound() {
-		this.soundAmbiant = SoundManager.load('ambiant.wav');
-		this.soundExist = SoundManager.load('exist.wav');
+		//this.soundAmbiant = SoundManager.load('ambiant.wav');
+		//this.soundExist = SoundManager.load('exist.wav');
 
-		SoundManager.play(this.soundAmbiant);
+		//SoundManager.play(this.soundAmbiant);
 	}
 
 	createObjects() {
@@ -325,7 +323,7 @@ class ExperienceScene {
 
 				for (let i = 0; i < this.zones.length; i++) {
 					this.zones[i].addScene();
-					this.zones[i].initAnim();
+					this.zones[i].initTimeline();
 				}
 
 				//this.createLeaves();
@@ -345,11 +343,6 @@ class ExperienceScene {
 		.then(() => {
 			this.add(this.particles.mesh);
 		});
-
-		this.datas = new DataEmitter();
-
-		this.add(this.datas.group);
-
 
 		this.skybox = new Skybox('assets2d/skybox/');
 
@@ -411,9 +404,6 @@ class ExperienceScene {
 
 		//Particles 
 		//this.particles.update();
-
-		//Datas
-		this.datas.update();
 
 		if(this.zone1) this.zone1.update();
 		if(this.zone2) this.zone2.update();

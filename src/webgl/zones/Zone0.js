@@ -44,11 +44,6 @@ class Zone0 extends Zone {
 		super.addScene();
 	}
 
-	initAnim() {
-		// super.initAnim(); 
-
-	}
-
 	playAnim() {
 		super.playAnim();
 	}

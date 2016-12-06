@@ -150,8 +150,8 @@ class Zone4 extends Zone{
 		super.addScene();
 	}
 
-	initAnim() {
-		super.initAnim(); 
+	initTimeline() {
+		super.initTimeline(); 
 
 	}
 

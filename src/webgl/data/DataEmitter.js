@@ -9,17 +9,17 @@ class DataEmitter {
 		this.posZ = 12;
 		this.posY = 4;
 
-		this.boxSide = 3;
+		this.boxSide = 3.5;
 		this.maxParticles = 20;
 		this.particlesData = [];
 
 		this.effectController = {
 			showDots: true,
 			showLines: true,
-			minDistance: 1.25,
+			minDistance: 1.15,
 			limitConnections: false,
 			maxConnections: 200,
-			particleCount: 20
+			particleCount: 25
 		};
 
 		//this.addHelper();
@@ -46,7 +46,7 @@ class DataEmitter {
 
 		this.pMaterial = new THREE.PointsMaterial( {
 			color: 0x202020,
-			size: 5,
+			size: 4,
 			//blending: THREE.AdditiveBlending,
 			fog: true,
 			transparent: true,
@@ -65,7 +65,7 @@ class DataEmitter {
 			this.particlePositions[ i * 3 + 2 ] = z;
 			// add it to the geometry
 			this.particlesData.push( {
-				velocity: new THREE.Vector3( (-1 + Math.random() * 2)/800, (-1 + Math.random() * 2)/800,  (-1 + Math.random() * 2)/800 ),
+				velocity: new THREE.Vector3( (-1 + Math.random() * 2)/150, (-1 + Math.random() * 2)/150,  (-1 + Math.random() * 2)/150 ),
 				numConnections: 0
 			} );
 		}

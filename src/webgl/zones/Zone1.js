@@ -1,7 +1,10 @@
 import Zone from './Zone';
 import Spline1 from '../splines/Spline1';
 
+import DataEmitter from '../data/DataEmitter';
+
 import NumberUtils from '../utils/number-utils';
+//import SoundManager from '../sound/SoundManager';
 
 class Zone1 extends Zone {
 
@@ -89,6 +92,8 @@ class Zone1 extends Zone {
 
 		super.init();
 
+		this.datas = new DataEmitter();
+
 		this.initSpline();
 	}
 
@@ -105,10 +110,14 @@ class Zone1 extends Zone {
 	 */
 	addScene() {
 		super.addScene();
+		this.scene.add(this.datas.group);
 	}
 
-	initAnim() {
-		super.initAnim(); 
+	initTimeline() {
+		super.initTimeline(); 
+		// TweenMax.delayedCall(0.3, () => {
+		// 	//this.playSound();	
+		// }) ;
 
 	}
 
@@ -117,6 +126,11 @@ class Zone1 extends Zone {
 		let chestnutMesh = this.chestnut.object.mesh;
 		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+		this.playSound();
+	}
+
+	playSound() {
+		console.log('play sound voice');
 	}
 
 
@@ -135,6 +149,8 @@ class Zone1 extends Zone {
 		//permanant rotation
 		super.update();
 		this.spline.update();
+		//Datas
+		this.datas.update();
 	}
 
 }

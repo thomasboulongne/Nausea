@@ -102,8 +102,8 @@ class Zone3 extends Zone {
 		super.addScene();
 	}
 
-	initAnim() {
-		super.initAnim(); 
+	initTimeline() {
+		super.initTimeline(); 
 
 	}
 

@@ -37,7 +37,6 @@ class Spline {
 	}
 
 	enableSpline() {
-		//this.scene.controls.enabled = false;
 		//let init = this.curve.getPoint(0);
 		// this.camera.position.set(init.x, init.y, init.z);
 		// this.camera.lookAt(this.curve.getPoint(init));
