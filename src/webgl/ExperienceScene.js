@@ -35,7 +35,7 @@ class ExperienceScene {
 
 		this.domElement = domElement;
 
-		this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED');
+		this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED', {color: '#4a4a4a'});
 
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
@@ -151,8 +151,6 @@ class ExperienceScene {
 		this.minerals = [];
 		this.shrubs = [];
 		this.streetLamps = [];
-
-		this.raycastMeshes = [];
 
 		this.field = new Field();
 
@@ -302,6 +300,7 @@ class ExperienceScene {
 
 			let gObjects = [gChestnuts, gBenches, gMinerals, gShrubs, gStreetLamps];
 
+
 			for(let i = 0; i < gObjects.length; i++) {
 
 				for(let j = 0; j < gObjects[i].total; j++) {
@@ -324,6 +323,15 @@ class ExperienceScene {
 				for (let i = 0; i < this.zones.length; i++) {
 					this.zones[i].addScene();
 					this.zones[i].initAnim();
+				}
+
+				// Awesome code line by Thomas, big up to @grgrdvrt
+				this.raycastObj = this.zone1.objects.concat(this.zone2.objects.concat(this.zone3.objects.concat(this.zone4.objects)));
+
+				this.raycastMeshes = [];
+				for (let i = 0; i < this.raycastObj.length; i++) {
+					this.raycastMeshes.push(this.raycastObj[i].object.mesh);
+					console.log(this.raycastObj[i].object.mesh);
 				}
 
 				//this.createLeaves();
@@ -412,24 +420,21 @@ class ExperienceScene {
 
 		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
 
-		this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
-		this.raycaster.ray.origin.copy( this.controls.getObject().position );
+		// this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
+		// this.raycaster.ray.origin.copy( this.controls.getObject().position );
 
-		//let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
+		this.raycaster.setFromCamera( this.controls.mouse, this.camera );
 
-		// if ( intersects.length > 0 ) {
-		// 	// The raycast encouters an object
-		// 	let objName = intersects[0].object.name;
-		// 	console.log('Casted object: ', intersects[0].object.name);
-		// 	if(objName == 'statue001' || objName == 'tree-little' || objName == 'tree-big') {
-				
-		// 	}
-		// } 
-		// else {
-		// 	this.INTERSECTED = null;
-		// }
+		let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
-		//this.video.update();
+		if ( intersects.length > 0 ) {
+			// The raycast encouters an object
+			let objName = intersects[0].object.name;
+			console.log('Casted object: ', objName);
+		} 
+		else {
+			this.INTERSECTED = null;
+		}
 
 		this.renderer.autoClearColor = true;
 

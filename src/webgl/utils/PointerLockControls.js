@@ -21,14 +21,16 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 	yawObject.position.x = position.x;
 	yawObject.add( pitchObject );
 
+	this.mouse = new THREE.Vector2();
+
 	yawObject.rotation.y = -3.6;
 	pitchObject.rotation.x = -0.12;
 
 	let onMouseMove = function ( event ) {
 		if ( scope.enabled === false ) return;
 
-		let mouseX = event.clientX ;
-		let mouseY = event.clientY ;
+		this.mouse.x = event.clientX ;
+		this.mouse.y = event.clientY ;
 
 		let xRange = 3.6;
 		let yRange = 2;
@@ -38,8 +40,8 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 		let fW = window.innerWidth;
 		let fH = window.innerHeight;
 
-		let percX = mouseX / fW;
-		let percY = mouseY / fH;
+		let percX = this.mouse.x / fW;
+		let percY = this.mouse.y / fH;
 
 		let newX = -xRange * percX - 1.1;
 		let newY = -yRange * percY + 1;
@@ -48,7 +50,7 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 		TweenLite.to(pitchObject.rotation, .6, { x: newY});
 	};
 
-	document.addEventListener( 'mousemove', throttle(onMouseMove,1), false );
+	document.addEventListener( 'mousemove', throttle(onMouseMove,1).bind(this), false );
 
 	this.enabled = false;
 
