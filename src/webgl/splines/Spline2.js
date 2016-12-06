@@ -1,6 +1,6 @@
 import Spline from './Spline';
 
-class Spline1 extends Spline {
+class Spline2 extends Spline {
 
 	/**
 	* @constructor
@@ -12,20 +12,17 @@ class Spline1 extends Spline {
 
 	init() {
 		this.points = [
-			new THREE.Vector3(0, 1, 0),
-			new THREE.Vector3(0.5, 1, 3),
-			new THREE.Vector3(1.5, 2, 6),
-			new THREE.Vector3(2, 2.5, 11),
-			new THREE.Vector3(0, 2, 14),
-			new THREE.Vector3(-1, 1, 17),
-			new THREE.Vector3(-3, 1.5, 11),
-			new THREE.Vector3(-1, 2, 8)
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(-4, 0.5, 0),
+			new THREE.Vector3(-10, 1, 0),
+			new THREE.Vector3(-14, 1.5, -1),
+			new THREE.Vector3(-18, 1.5, -4)
 		];
 		super.init();
 
-		//this.createGeometry();
+		this.createGeometry();
 
-		//this.enableSpline();
+		this.enableSpline();
 	}
 
 	createGeometry() {
@@ -51,4 +48,4 @@ class Spline1 extends Spline {
 
 }
 
-export default Spline1
+export default Spline2

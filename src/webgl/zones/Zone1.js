@@ -1,7 +1,7 @@
 import Zone from './Zone';
 import Spline1 from '../splines/Spline1';
 
-import DataEmitter from '../data/DataEmitter';
+//import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
 //import SoundManager from '../sound/SoundManager';
@@ -17,8 +17,6 @@ class Zone1 extends Zone {
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
 		this.nbMinerals = 3;
-
-		console.log('zone1', this.zoomParams);
 
 	}
 
@@ -93,7 +91,7 @@ class Zone1 extends Zone {
 
 		super.init();
 
-		this.datas = new DataEmitter();
+		//this.datas = new DataEmitter();
 
 		this.initSpline();
 	}
@@ -111,7 +109,7 @@ class Zone1 extends Zone {
 	 */
 	addScene() {
 		super.addScene();
-		this.scene.add(this.datas.group);
+		//this.scene.add(this.datas.group);
 	}
 
 	initTimeline() {
@@ -147,7 +145,7 @@ class Zone1 extends Zone {
 		super.update();
 		this.spline.update();
 		//Datas
-		this.datas.update();
+		//this.datas.update();
 	}
 
 }
