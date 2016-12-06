@@ -70,7 +70,7 @@ class WebglCursor {
 		TweenLite.set(this.circles[0], {
 			display: 'block',
 			opacity: 1,
-			filter: 'drop-shadow(0px 0px 3px white)'
+			filter: 'drop-shadow(0px 0px 3px ' + this.color + ')'
 		});
 
 		let progress = this.circles[3];
@@ -78,7 +78,7 @@ class WebglCursor {
 		progress.pathLength_spread = this.circleSize * this.spreadFactor * Math.PI;
 
 		TweenLite.set(progress, {
-			filter: 'drop-shadow(0px 0px 7px white)'
+			filter: 'drop-shadow(0px 0px 7px ' + this.color + ')'
 		});
 
 		TweenLite.set(progress.circle, {

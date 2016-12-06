@@ -35,7 +35,7 @@ class ExperienceScene {
 
 		this.domElement = domElement;
 
-		this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED');
+		this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED', {color: '#4a4a4a'});
 
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
