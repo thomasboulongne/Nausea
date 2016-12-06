@@ -13,6 +13,8 @@ import Store from './WebGLStore';
 
 import SoundManager from './sound/SoundManager';
 
+import Emitter from '../core/Emitter';
+
 import Lights from './lights/Lights';
 
 import WebglCursor from './misc/WebglCursor';
@@ -54,8 +56,6 @@ class ExperienceScene {
 		this.setControls();
 
 		this.setLights();
-
-		this.setRaycast();
 
 		this.setComposer();
 
@@ -102,7 +102,7 @@ class ExperienceScene {
 
 		this.controls = new THREE.PointerLockControls( this.camera, controlsPosition, this.center, 0.01 );
 		this.controlsContainer = new THREE.Object3D();
-		this.controlsContainer.add( this.controls.getObject());
+		this.controlsContainer.add( this.controls.getObject() );
 		this.add( this.controlsContainer );
 	}
 
@@ -111,16 +111,6 @@ class ExperienceScene {
 		for (let i = 0; i < this.lights.list.length; i++) {
 			this.add(this.lights.list[i]);
 		}
-	}
-
-	setRaycast() {
-
-		this.INTERSECTED;
-
-		this.raycaster = new THREE.Raycaster();
-
-		this.direction = new THREE.Vector3( 0, 0, -1 );
-		this.rotation = new THREE.Euler( 0, 0, 0, "YXZ" );
 	}
 
 	setComposer() {
@@ -235,10 +225,48 @@ class ExperienceScene {
 			//this.add(this.video.mesh);
 
 			this.zone0 = new Zone0(this.scene);
-			this.zone1 = new Zone1(this.scene);
-			this.zone2 = new Zone2(this.scene);
-			this.zone3 = new Zone3(this.scene);
-			this.zone4 = new Zone4(this.scene);
+			this.zone1 = new Zone1(this.scene, {
+				x: [
+					882,
+					1059
+				],
+				y: [
+					541,
+					674
+				]
+			});
+
+			console.log(this.zone1.orientation);
+			this.zone2 = new Zone2(this.scene, {
+				x: [
+					1407,
+					1640
+				],
+				y: [
+					555,
+					696
+				]
+			});
+			this.zone3 = new Zone3(this.scene, {
+				x: [
+					132,
+					252
+				],
+				y: [
+					553,
+					677
+				]
+			});
+			this.zone4 = new Zone4(this.scene, {
+				x: [
+					459,
+					552
+				],
+				y: [
+					592,
+					677
+				]
+			});
 
 			this.zones = [this.zone0, this.zone1, this.zone2, this.zone3, this.zone4];
 
@@ -325,15 +353,6 @@ class ExperienceScene {
 					this.zones[i].initAnim();
 				}
 
-				// Awesome code line by Thomas, big up to @grgrdvrt
-				this.raycastObj = this.zone1.objects.concat(this.zone2.objects.concat(this.zone3.objects.concat(this.zone4.objects)));
-
-				this.raycastMeshes = [];
-				for (let i = 0; i < this.raycastObj.length; i++) {
-					this.raycastMeshes.push(this.raycastObj[i].object.mesh);
-					console.log(this.raycastObj[i].object.mesh);
-				}
-
 				//this.createLeaves();
 
 				if(Config.gui) {
@@ -393,6 +412,7 @@ class ExperienceScene {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		window.addEventListener('keydown', this.onKeydown.bind(this));
+		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this))
 	}
 
 	toggleCamera() {
@@ -401,6 +421,10 @@ class ExperienceScene {
 
 	addCanvasElement(domElt) {
 		this.canvasElement = domElt;
+	}
+
+	startZoneAnimation() {
+		this.INTERSECTED.playAnim();
 	}
 
 	/**
@@ -413,27 +437,34 @@ class ExperienceScene {
 		//Particles 
 		this.particles.update();
 
-		if(this.zone1) this.zone1.update();
-		if(this.zone2) this.zone2.update();
-		if(this.zone3) this.zone3.update();
-		if(this.zone4) this.zone4.update();
+		if(this.zones) {
 
-		this.rotation.set( this.controls.getPitch().rotation.x, this.controls.getObject().rotation.y, 0 );
+			this.intersect = null;
 
-		// this.raycaster.ray.direction.copy( this.direction ).applyEuler( this.rotation );
-		// this.raycaster.ray.origin.copy( this.controls.getObject().position );
+			for (let i = 0; i < this.zones.length; i++) {
+				let zone = this.zones[i];
+				zone.update();
+				let mouse = this.controls.mouse;
 
-		this.raycaster.setFromCamera( this.controls.mouse, this.camera );
-
-		let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
-
-		if ( intersects.length > 0 ) {
-			// The raycast encouters an object
-			let objName = intersects[0].object.name;
-			console.log('Casted object: ', objName);
-		} 
-		else {
-			this.INTERSECTED = null;
+				if( mouse.x > zone.orientation.x[0]
+					&& mouse.x < zone.orientation.x[1]
+					&& mouse.y > zone.orientation.y[0]
+					&& mouse.y < zone.orientation.y[1]
+					&& !zone.animated) {
+					this.intersect = zone;
+				}
+			}
+			if(this.intersect != null) {
+				if(this.INTERSECTED == null) {
+					// this.intersect.startHoverAnimation();
+					this.cursor.onMouseEnter();
+				}
+			}
+			else {
+				// this.INTERSECTED.endHoverAnimation();
+				this.cursor.onMouseLeave();
+			}
+			this.INTERSECTED = this.intersect;
 		}
 
 		this.renderer.autoClearColor = true;

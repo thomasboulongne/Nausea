@@ -8,8 +8,8 @@ class Zone4 extends Zone{
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene) {
-		super(scene);
+	constructor(scene, orientation) {
+		super(scene, orientation);
 
 		//properties to count how many objects to clone
 		this.nbBenches = 4;

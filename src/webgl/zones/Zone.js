@@ -9,12 +9,23 @@ class Zone {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(scene) {
+	constructor(scene, orientation) {
 		this.scene = scene;
 
 		this.animated = false;
 
 		this.objects = [];
+
+		this.orientation = orientation ? orientation : {
+			x: [
+				0,
+				0
+			],
+			y: [
+				0,
+				0
+			]
+		};
 	}
 
 	init() {
@@ -46,6 +57,7 @@ class Zone {
 	}
 
 	playAnim () {
+		this.animated = true;
 		this.playTimeline();
 
 		SoundManager.play(this.soundMaterialize);
