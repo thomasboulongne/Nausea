@@ -21,9 +21,9 @@ class Spline2 extends Spline {
 		];
 		super.init();
 
-		//this.createGeometry();
+		// this.createGeometry();
 
-		//this.enableSpline();
+		// this.enableSpline();
 	}
 
 	createGeometry() {
