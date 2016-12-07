@@ -8,7 +8,7 @@ class HomeLights {
 
 
 		this.lights = [
-			this.createSpotLight('0xFFFFFF', 0, 1, 0)
+			this.createSpotLight(0xFFFFFF, 0, 1, 0)
 		];
 	}
 

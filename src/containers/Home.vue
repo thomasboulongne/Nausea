@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div id="home">
 		<home-loading></home-loading>
 		<webgl-home></webgl-home>
 		<div class="enter-button" ref="enter">
@@ -40,9 +40,7 @@ export default {
 		},
 
 		showElements() {
-			TweenLite.fromTo(this.$refs.footer.$el, 2, {
-				opacity: 0
-			},{
+			TweenLite.to(this.$refs.footer.$el, 2, {
 				opacity: 1,
 				ease: Power2.easeIn
 			});
@@ -85,7 +83,7 @@ export default {
 <style lang="sass">
 	@import '../stylesheets/variables.scss';
 	
-	#app {
+	#home {
 		.enter-button {
 			position: absolute;
 			top: 55%;

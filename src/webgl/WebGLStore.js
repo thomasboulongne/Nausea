@@ -1,4 +1,5 @@
 import AWDObject from './AWDObject';
+// import { merge } from 'lodash';
 
 class WebGLStore {
 	
@@ -22,7 +23,6 @@ class WebGLStore {
 			return new Promise( resolve => {
 				options.geometry = this.objects[model].geometry;
 				options.material = this.objects[model].material;
-				options.options = this.objects[model].options;
 				let obj = new AWDObject(model, options);
 				obj.load()
 				.then(() => {
