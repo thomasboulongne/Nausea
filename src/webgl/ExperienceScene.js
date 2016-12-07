@@ -244,7 +244,7 @@ class ExperienceScene {
 			this.zone1 = new Zone1(this.scene, this.camera, this.controlsContainer, this.passes[2].params);
 			this.zone2 = new Zone2(this.scene, this.camera, this.controlsContainer, this.passes[2].params);
 			this.zone3 = new Zone3(this.scene, this.camera, this.controlsContainer, this.passes[2].params);
-			this.zone4 = new Zone4(this.scene, this.camera);
+			this.zone4 = new Zone4(this.scene, this.camera, this.controlsContainer, this.passes[2].params);
 
 			this.zones = [this.zone0, this.zone1, this.zone2, this.zone3, this.zone4];
 
