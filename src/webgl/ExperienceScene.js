@@ -37,6 +37,8 @@ class ExperienceScene {
 
 		this.domElement = domElement;
 
+		this.INTERSECTED = null;
+
 		this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED', {color: '#4a4a4a'});
 
 		this.width = window.innerWidth;
@@ -222,8 +224,6 @@ class ExperienceScene {
 
 			this.add(this.field.mesh);
 
-			//this.add(this.video.mesh);
-
 			this.zone0 = new Zone0(this.scene);
 			this.zone1 = new Zone1(this.scene, {
 				x: [
@@ -236,7 +236,6 @@ class ExperienceScene {
 				]
 			});
 
-			console.log(this.zone1.orientation);
 			this.zone2 = new Zone2(this.scene, {
 				x: [
 					1407,
@@ -333,10 +332,18 @@ class ExperienceScene {
 
 				for(let j = 0; j < gObjects[i].total; j++) {
 					let name = gObjects[i].name;
-					promises.push(Store.get(name, {name: name + '-' + i})
-					.then( obj => {
-						gObjects[i].objects.push(obj);
-					}));
+					if(name == 'chestnut') {
+						promises.push(Store.get(name, {name: name + '-' + i, materialize: true})
+						.then( obj => {
+							gObjects[i].objects.push(obj);
+						}));
+					}
+					else {
+						promises.push(Store.get(name, {name: name + '-' + i})
+						.then( obj => {
+							gObjects[i].objects.push(obj);
+						}));
+					}
 				}
 
 			}
@@ -411,8 +418,7 @@ class ExperienceScene {
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
-		window.addEventListener('keydown', this.onKeydown.bind(this));
-		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this))
+		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
 	}
 
 	toggleCamera() {
@@ -424,7 +430,8 @@ class ExperienceScene {
 	}
 
 	startZoneAnimation() {
-		this.INTERSECTED.playAnim();
+		if(this.INTERSECTED != null)
+			this.INTERSECTED.playAnim();
 	}
 
 	/**
@@ -446,11 +453,11 @@ class ExperienceScene {
 				zone.update();
 				let mouse = this.controls.mouse;
 
-				if( mouse.x > zone.orientation.x[0]
-					&& mouse.x < zone.orientation.x[1]
-					&& mouse.y > zone.orientation.y[0]
-					&& mouse.y < zone.orientation.y[1]
-					&& !zone.animated) {
+				if( mouse.x > window.innerWidth * zone.orientation.x[0] / 1920
+					&& mouse.x < window.innerWidth * zone.orientation.x[1] / 1920
+					&& mouse.y > window.innerHeight * zone.orientation.y[0] / 1440
+					&& mouse.y < window.innerHeight * zone.orientation.y[1] / 1440
+					&& !zone.animated ) {
 					this.intersect = zone;
 				}
 			}
@@ -501,26 +508,6 @@ class ExperienceScene {
 
 		this.renderer.setSize(this.width, this.height);
 
-	}
-
-	onKeydown(ev) {
-		if(ev.keyCode === 65) {
-			// SoundManager.play(this.soundExist);
-			this.zone1.playAnim();
-		}
-		if(ev.keyCode === 90) {
-			// SoundManager.play(this.soundExist);
-			this.zone2.playAnim();
-		}
-		if(ev.keyCode === 69) {
-			// SoundManager.play(this.soundExist);
-			this.zone3.playAnim();
-		}
-		if(ev.keyCode === 82) {
-			// SoundManager.play(this.soundExist);
-			this.zone4.playAnim();
-		}
-			
 	}
 }
 

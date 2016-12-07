@@ -28,8 +28,6 @@ class WebglCursor {
 		for (let i = 0; i < this.circlesNb; i++) {
 			let elt = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-			elt.cursor_offset = 
-
 			TweenLite.set(elt, {
 				x: offset,
 				y: offset,
@@ -84,7 +82,7 @@ class WebglCursor {
 		TweenLite.set(progress.circle, {
 			attr: {
 				'stroke-dasharray': progress.pathLength_spread,
-				'stroke-dashoffset': progress.pathLength_spread,
+				'stroke-dashoffset': -progress.pathLength_spread,
 				'stroke-width': 3
 			}
 		});

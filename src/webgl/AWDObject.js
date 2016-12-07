@@ -16,16 +16,14 @@ class AWDObject {
 		this.model = model;
 		this.name = options.name;
 		this.options = options;
+		this.options.color = this.options.color ? this.options.color : 0xcacaca;
+		this.options.materialize = this.options.materialize ? this.options.materialize : false;
 	}
 
 	load() {
 
 		if( !this.options.geometry ) {
 
-			this.options = {
-				color : this.options.color ? this.options.color : "0xcacaca",
-				materialize : this.options.materialize ? this.options.materialize : false
-			};
 
 			let loader = new THREE.AWDLoader( LoadingManager );
 
@@ -48,8 +46,8 @@ class AWDObject {
 		else {
 			return new Promise( resolve => {
 
-				this.options.materialize = this.options.options.materialize;
-				this.options.color = this.options.options.color;
+				this.options.materialize = this.options.materialize;
+				this.options.color = this.options.color;
 				this.geometry = this.options.geometry;
 				this.createMesh();
 
@@ -101,8 +99,7 @@ class AWDObject {
 			fragmentShader: phongShader.fragmentShader,
 			uniforms: uniforms,
 			lights:true,
-			fog: true,
-			transparent: true
+			fog: true
 		});
 		
 	}

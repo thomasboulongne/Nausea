@@ -79,7 +79,7 @@ class HomeScene {
 
 		this.setSounds();
 
-		this.createObjects();
+		this.initObjects();
 
 		this.addEventListeners();
 
@@ -191,6 +191,34 @@ class HomeScene {
 	 */
 	setAmbiantSound() {
 		SoundManager.play(this.sounds.ambiant);
+	}
+
+	initObjects() {
+		let objs = [
+			'bench',
+			'chestnut',
+			'fern',
+			'fountain',
+			'kiosque',
+			'mineral',
+			'sartre_bench_intro',
+			'sartre_bench_xp',
+			'sartres',
+			'shrub',
+			'stand',
+			'statue',
+			'streetLamp'
+		];
+
+		let promises = [];
+		for (let i = 0; i < objs.length; i++) {
+			promises.push(Store.get(objs[i], {name: objs[i]}));
+		}
+
+		Promise.all(promises)
+		.then(() => {
+			this.createObjects();
+		});
 	}
 
 	/**
@@ -306,10 +334,14 @@ class HomeScene {
 			this.sounds['hover'].play();
 		}
 
+		Emitter.emit('HOME_MOUSEENTER');
+
 		this.cursor.onMouseEnter();
 	}
 
 	onMouseLeave() {
+		Emitter.emit('HOME_MOUSELEAVE');
+
 		if(this.enableHoverSound && this.sounds['hover'].playing()) {
 			this.sounds['hover'].fade(1,0,1000);
 		}
@@ -378,9 +410,12 @@ class HomeScene {
 		this.homeLights.update();
 
 		//Particles 
-		this.particles.update();
 
-		this.title.update();
+		if(this.particles)
+			this.particles.update();
+
+		if(this.title)
+			this.title.update();
 
 		this.renderer.autoClearColor = true;
 
