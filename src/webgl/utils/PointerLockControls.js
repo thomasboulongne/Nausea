@@ -6,36 +6,32 @@ import throttle from 'lodash/throttle';
 
 THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 
-	let scope = this;
-
 	this.fluidity = fluidity;
 
 	camera.rotation.set( 0, 0, 0 );
 
-	let pitchObject = new THREE.Object3D();
-	pitchObject.add( camera );
+	this.pitchObject = new THREE.Object3D();
+	this.pitchObject.add( camera );
 
-	let yawObject = new THREE.Object3D();
-	yawObject.position.z = position.z;
-	yawObject.position.y = position.y;
-	yawObject.position.x = position.x;
-	yawObject.add( pitchObject );
+	this.yawObject = new THREE.Object3D();
+	this.yawObject.position.z = position.z;
+	this.yawObject.position.y = position.y;
+	this.yawObject.position.x = position.x;
+	this.yawObject.add( this.pitchObject );
 
 	this.mouse = new THREE.Vector2();
 
-	yawObject.rotation.y = -3.6;
-	pitchObject.rotation.x = -0.12;
+	this.yawObject.rotation.y = -3.2;
+	this.pitchObject.rotation.x = -1;
 
 	let onMouseMove = function ( event ) {
-		if ( scope.enabled === false ) return;
+		if ( this.enabled === false ) return;
 
 		this.mouse.x = event.clientX ;
 		this.mouse.y = event.clientY ;
 
 		let xRange = 3.6;
 		let yRange = 2;
-
-		if ( scope.enabled === false ) return;
 
 		let fW = window.innerWidth;
 		let fH = window.innerHeight;
@@ -46,8 +42,8 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 		let newX = -xRange * percX - 1.1;
 		let newY = -yRange * percY + 1;
 
-		TweenLite.to(yawObject.rotation, .6, { y: newX});
-		TweenLite.to(pitchObject.rotation, .6, { x: newY});
+		TweenLite.to(this.yawObject.rotation, .6, { y: newX});
+		TweenLite.to(this.pitchObject.rotation, .6, { x: newY});
 	};
 
 	document.addEventListener( 'mousemove', throttle(onMouseMove,1).bind(this), false );
@@ -60,13 +56,13 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 
 	this.getObject = function () {
 
-		return yawObject;
+		return this.yawObject;
 
 	};
 
 	this.getPitch = function () {
 
-		return pitchObject;
+		return this.pitchObject;
 
 	};
 
@@ -79,7 +75,7 @@ THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 
 		return function( v ) {
 
-			rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
+			rotation.set( this.pitchObject.rotation.x, this.yawObject.rotation.y, 0 );
 
 			v.copy( direction ).applyEuler( rotation );
 

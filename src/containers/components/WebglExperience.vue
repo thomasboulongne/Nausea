@@ -1,5 +1,5 @@
 <template>
-	<div :class="['webgl', 'experience']" @click="enterExperience">
+	<div :class="['webgl', 'experience']">
 	</div>
 </template>
 
@@ -21,27 +21,9 @@ export default {
 		this.$el.appendChild(this.canvas);
 
 		this.scene.addCanvasElement(this.canvas);
-
-		this.addEventListeners();
 	},
 
 	methods: {
-		enterExperience: function() {
-			this.scene.toggleCamera();
-		},
-		exitExperience: function() {
-			this.scene.toggleCamera();
-		},
-		pointerLockChange: function() {
-			if(document.pointerLockElement === this.canvas ||	document.mozPointerLockElement === this.canvas) {
-			}
-			else {
-				this.exitExperience();
-			}
-		},
-		addEventListeners: function() {
-			document.addEventListener('pointerlockchange', this.pointerLockChange, false);
-		}
 	}
 }
 

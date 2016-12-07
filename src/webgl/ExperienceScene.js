@@ -123,7 +123,7 @@ class ExperienceScene {
 				amount: .05
 			}),
 			new VignettePass({
-				boost: 1,
+				boost: 7,
 				reduction: .4
 			})
 		];
@@ -361,6 +361,8 @@ class ExperienceScene {
 				}
 
 				//this.createLeaves();
+				
+				this.intro();
 
 				if(Config.gui) {
 					this.zone1.addToGUI(this.gui);
@@ -385,6 +387,23 @@ class ExperienceScene {
 			this.scene.background = texture;
 		});
 		
+	}
+
+	intro() {
+		let tl = new TimelineLite();
+		tl.to(this.passes[1].params, 4, {
+			boost: 1
+		})
+		.to(this.controls.pitchObject.rotation, 5, {
+			x: .1,
+			ease: Power1.easeInOut,
+			onComplete: () => {
+				this.controls.enabled = true;
+			}
+		})
+		.add(() => {
+			Emitter.emit('INTRO_END');
+		}, '-=1.5');
 	}
 
 	// createLeaves() {
@@ -419,10 +438,13 @@ class ExperienceScene {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
+
+		window.addEventListener('keydown', this.toggleCamera.bind(this));
 	}
 
-	toggleCamera() {
-		this.controls.enabled = !this.controls.enabled;
+	toggleCamera(event) {
+		if(event != undefined || event.keyCode === 27)
+			this.controls.enabled = !this.controls.enabled;
 	}
 
 	addCanvasElement(domElt) {

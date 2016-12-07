@@ -24,9 +24,9 @@ export default {
 
 	mounted() {
 		Emitter.on('OBJ_LOADED', this.updateLoading);
-		let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		
-		TweenLite.set(svg, {
+		TweenLite.set(this.svg, {
 			attr: {	
 				height: window.innerHeight,
 				width: window.innerWidth
@@ -38,16 +38,16 @@ export default {
 
 		let lastR = 1;
 		for (let i = lastR; i > 0; i -= 0.35) {
-			svg.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + window.innerHeight * i + '" stroke-width="1" stroke="#262626"/></circle>';
+			this.svg.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + window.innerHeight * i + '" stroke-width="1" stroke="#262626"/></circle>';
 			lastR = i;
 		}
 
-		this.$el.appendChild(svg);
+		this.$el.appendChild(this.svg);
 
 
-		let svgProgress = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		this.svgProgress = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		
-		TweenLite.set(svgProgress, {
+		TweenLite.set(this.svgProgress, {
 			filter: 'drop-shadow(0px 0px 7px #FFFFFF)',
 			position: 'absolute',
 			top: 0,
@@ -59,9 +59,9 @@ export default {
 		});
 
 		let radius = window.innerHeight * lastR;
-		svgProgress.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + radius + '" stroke-width="4" stroke="#FFFFFF" transform="rotate(-90, ' + cx + ', ' + cy + ')"/></circle>';
+		this.svgProgress.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + radius + '" stroke-width="4" stroke="#FFFFFF" transform="rotate(-90, ' + cx + ', ' + cy + ')"/></circle>';
 
-		this.progressCircle = svgProgress.childNodes[svgProgress.childNodes.length - 1];
+		this.progressCircle = this.svgProgress.childNodes[this.svgProgress.childNodes.length - 1];
 
 		this.progressCircle.pathLength = radius * Math.PI * 2;
 
@@ -73,7 +73,10 @@ export default {
 			}
 		});
 
-		this.$el.appendChild(svgProgress);
+		this.circles = Array.from(this.svg.childNodes);
+		// this.circles.push(this.progressCircle);
+
+		this.$el.appendChild(this.svgProgress);
 	},
 
 	methods: {
@@ -92,10 +95,22 @@ export default {
 
 			if (this.state == 1) {
 				setTimeout(()=>{Emitter.emit('LOADING_COMPLETE');}, 1000);
-				TweenLite.to(this.$el, 1, {opacity: 0, delay: 2, onComplete: ()=>{
-					TweenLite.set(this.$el, {display: 'none'});
-					Emitter.off('OBJ_LOADED', this.updateLoading);
-				}});
+				let tl = new TimelineLite()
+				tl.to(this.$el, 1, {
+					opacity: 0,
+					delay: 2,
+					onComplete: ()=>{
+						TweenLite.set(this.$el, {display: 'none'});
+						Emitter.off('OBJ_LOADED', this.updateLoading);
+					}
+				})
+				.to(this.circles, 2, {
+					delay: 1,
+					attr: {
+						r: "+=" + window.innerHeight
+					},
+					ease: Power3.easeIn
+				}, 0);
 			}
 		}
 	}
