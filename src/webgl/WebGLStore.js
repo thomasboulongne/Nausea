@@ -9,7 +9,6 @@ class WebGLStore {
 
 	get(model, options) {
 		if(!this.objects[model]) {
-
 			this.objects[model] = new AWDObject(model, options);
 			return new Promise( resolve => {
 				this.objects[model].load()
@@ -22,6 +21,7 @@ class WebGLStore {
 			return new Promise( resolve => {
 				options.geometry = this.objects[model].geometry;
 				options.material = this.objects[model].material;
+				options.materialize = this.objects[model].options.materialize;
 				let obj = new AWDObject(model, options);
 				obj.load()
 				.then(() => {
