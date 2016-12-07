@@ -2,6 +2,7 @@
 	<div id="experience">
 		<header-comp :link="link" ref="header"></header-comp>
 		<webgl-experience></webgl-experience>
+		<endscreen-comp v-if="false"></endscreen-comp>
 		<footer-comp ref="footer"></footer-comp>
 	</div>
 </template>
@@ -11,6 +12,7 @@
 import HeaderComponent from './components/Header';
 import WebglExperienceComponent from './components/WebglExperience';
 import FooterComponent from './components/Footer';
+import EndscreenComponent from './components/Endscreen';
 
 import Emitter from '../core/Emitter';
 
@@ -50,7 +52,8 @@ export default {
 	components: {
 		'webgl-experience': WebglExperienceComponent,
 		'footer-comp': FooterComponent,
-		'header-comp': HeaderComponent
+		'header-comp': HeaderComponent,
+		'endscreen-comp': EndscreenComponent
 	}
 }
 
