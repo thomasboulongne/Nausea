@@ -46,7 +46,7 @@ export default {
 		discoverClick(event) {
 			event.preventDefault();
 			this.clicked = true;
-			this.tl.play();
+			this.tl.restart();
 		}
 	},
 

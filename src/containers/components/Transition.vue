@@ -22,7 +22,7 @@ export default {
 	},
 
 	watch: {
-		$route: function(val) {
+		'$parent.page': function(val) {
 			if(this.rtl_on) {
 				this.rtl_end();
 			}
@@ -43,7 +43,7 @@ export default {
 				width: '100%',
 				ease: Power4.EaseInOut,
 				onComplete: () => {
-					this.$router.push(path);
+					this.$parent.page = path;
 				}
 			});
 		},
@@ -67,7 +67,7 @@ export default {
 				width: '100%',
 				ease: Power4.EaseInOut,
 				onComplete: () => {
-					this.$router.push(path);
+					this.$parent.page = path;
 				}
 			});
 		},

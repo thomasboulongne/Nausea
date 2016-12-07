@@ -36,7 +36,9 @@ export default {
 
 	methods: {
 		'redirectToExperience': function(){
-			this.$router.push('experience');
+			// this.$router.push('experience');
+			this.$parent.home = false;
+			this.$parent.experience = true;
 		},
 
 		showElements() {

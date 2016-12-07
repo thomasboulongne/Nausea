@@ -12,11 +12,9 @@ class Main {
 
 	constructor() {
 
-		this.router = Router;
-
 		this.app = new Vue({
 			el: '#application',
-			router: this.router,
+			router: Router,
 			render: h => h('app'),
 			components: {
 				'app': App

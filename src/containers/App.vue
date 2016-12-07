@@ -1,18 +1,21 @@
 <template>
 	<div id="app">
-		<router-view></router-view>
-		<transition></transition>
+		<home-comp v-if="home"></home-comp>
+		<experience-comp v-if="experience"></experience-comp>
 	</div>
 </template>
 
 <script>
 
-import Router from '../core/Router';
-import Transition from './components/Transition';
+import Emitter from '../core/Emitter';
+import Home from './Home';
+import Experience from './Experience';
 
 export default {
 	data() {
 		return {
+			home: true,
+			experience: false
 		};
 	},
 
@@ -20,13 +23,15 @@ export default {
 	},
 
 	mounted() {
+
 	},
 
 	methods: {
 	},
 
 	components: {
-		'transition': Transition
+		'home-comp': Home,
+		'experience-comp': Experience
 	}
 }
 
