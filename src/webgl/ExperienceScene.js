@@ -154,56 +154,47 @@ class ExperienceScene {
 		Promise.all([
 			Store.get('sartre_bench_xp',{
 				'name': 'sartreBench',
-				'color': 0xcacaca,
-				'materialize': false
+				'color': 0xcacaca
 			}),
 	
 			Store.get('bench',{
 				'name': 'bench',
-				'color': 0xcacaca,
-				'materialize': true
+				'color': 0xcacaca
 			}),
 	
 			Store.get('chestnut',{
 				'name': 'chestnut',
-				'color': 0xcacaca,
-				'materialize': true
+				'color': 0xcacaca
 			}),
 	
 			Store.get('shrub',{
 				'name': 'shrub',
-				'color': 0xcacaca,
-				'materialize': false
+				'color': 0xcacaca
 			}),
 	
 			Store.get('stand',{
 				'name': 'stand',
-				'color': 0xcacaca,
-				'materialize': true
+				'color': 0xcacaca
 			}),
 	
 			Store.get('streetLamp',{
 				'name': 'streetLamp',
-				'color': 0xcacaca,
-				'materialize': false
+				'color': 0xcacaca
 			}),
 	
 			Store.get('statue',{
 				'name': 'statue',
-				'color': 0xcacaca,
-				'materialize': true
+				'color': 0xcacaca
 			}),
 	
 			Store.get('fountain',{
 				'name': 'fountain',
-				'color': 0xcacaca,
-				'materialize': true
+				'color': 0xcacaca
 			}),
 	
 			Store.get('mineral',{
 				'name': 'mineral',
-				'color': 0xcacaca,
-				'materialize': true
+				'color': 0xcacaca
 			}),
 			this.field.load()
 		])

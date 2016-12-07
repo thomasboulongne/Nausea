@@ -8,7 +8,6 @@ class WebGLStore {
 	}
 
 	get(model, options) {
-
 		if(!this.objects[model]) {
 
 			this.objects[model] = new AWDObject(model, options);

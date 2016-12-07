@@ -195,24 +195,63 @@ class HomeScene {
 
 	initObjects() {
 		let objs = [
-			'bench',
-			'chestnut',
-			'fern',
-			'fountain',
-			'kiosque',
-			'mineral',
-			'sartre_bench_intro',
-			'sartre_bench_xp',
-			'sartres',
-			'shrub',
-			'stand',
-			'statue',
-			'streetLamp'
+			{
+				'name': 'bench',
+				'materialize': true
+			},
+			{
+				'name': 'chestnut',
+				'materialize': true
+			},
+			{
+				'name': 'fern',
+				'materialize': true
+			},
+			{
+				'name': 'fountain',
+				'materialize': true
+			},
+			{
+				'name': 'kiosque',
+				'materialize': true
+			},
+			{
+				'name': 'mineral',
+				'materialize': true
+			},
+			{
+				'name': 'sartre_bench_intro',
+				'materialize': false
+			},
+			{
+				'name': 'sartre_bench_xp',
+				'materialize': false
+			},
+			{
+				'name': 'sartres',
+				'materialize': true
+			},
+			{
+				'name': 'shrub',
+				'materialize': true
+			},
+			{
+				'name': 'stand',
+				'materialize': true
+			},
+			{
+				'name': 'statue',
+				'materialize': true
+			},
+			{
+				'name': 'streetLamp',
+				'materialize': false
+			}
 		];
 
 		let promises = [];
 		for (let i = 0; i < objs.length; i++) {
-			promises.push(Store.get(objs[i], {name: objs[i]}));
+			promises.push(Store.get(objs[i].name, objs[i]));
 		}
 
 		Promise.all(promises)
