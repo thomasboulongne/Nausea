@@ -483,12 +483,14 @@ class ExperienceScene {
 			}
 			if(this.intersect != null) {
 				if(this.INTERSECTED == null) {
-					// this.intersect.startHoverAnimation();
+					this.intersect.startHoverAnimation();
 					this.cursor.onMouseEnter();
 				}
 			}
 			else {
-				// this.INTERSECTED.endHoverAnimation();
+				if(this.INTERSECTED != null && !this.INTERSECTED.animated)
+					this.INTERSECTED.endHoverAnimation();
+				
 				this.cursor.onMouseLeave();
 			}
 			this.INTERSECTED = this.intersect;

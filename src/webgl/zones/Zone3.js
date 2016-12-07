@@ -121,7 +121,7 @@ class Zone3 extends Zone {
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline3(this.statue, this.scene, this.camera, this.controlsContainer, this.zoomParams);
+		this.spline = new Spline3(this.statue, this.scene, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 

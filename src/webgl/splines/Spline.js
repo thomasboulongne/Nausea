@@ -15,6 +15,10 @@ class Spline {
 		this.count = 0;
 		this.amount = 0.001;
 		this.ratio = 100;
+
+		this.enabledSpline = false;
+
+		console.log('create spline', this.controlsContainer);
 	}
 
 
@@ -22,6 +26,7 @@ class Spline {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
 
 		//this.createGeometry();
+		this.initTimeline();
 		this.backSound = SoundManager.load('back.mp3');
 		//this.enableSpline();
 	}
@@ -32,7 +37,7 @@ class Spline {
 		this.timeline.to(this.tweenTime, 10, {time: 1, onComplete: () => {
 			this.reverseTimeline();
 		}});
-		this.timeline.play();
+		this.timeline.pause();
 	}
 
 	reverseTimeline () {
@@ -60,9 +65,10 @@ class Spline {
 	}
 
 	enableSpline() {
+		console.log('PLAY TIMELINE');
 		console.log('early', this.controlsContainer);
-		this.initTimeline();
 		this.enabledSpline = true;
+		this.timeline.play();
 	}
 
 	disableSpline() {

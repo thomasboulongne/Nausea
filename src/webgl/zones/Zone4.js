@@ -169,7 +169,7 @@ class Zone4 extends Zone{
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline4(this.fountain, this.scene, this.camera, this.controlsContainer, this.zoomParams);
+		this.spline = new Spline4(this.fountain, this.scene, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 

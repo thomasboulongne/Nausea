@@ -3,6 +3,7 @@ import Zone from './Zone';
 import Spline2 from '../splines/Spline2';
 
 import NumberUtils from '../utils/number-utils';
+import SoundManager from '../sound/SoundManager';
 
 class Zone2 extends Zone {
 
@@ -127,6 +128,10 @@ class Zone2 extends Zone {
 
 		super.init();
 
+		this.sound = SoundManager.load('06-decor.mp3', {
+			volume: 3
+		});
+
 		this.initSpline();
 	}
 
@@ -155,10 +160,16 @@ class Zone2 extends Zone {
 		let stand = this.stand.object.mesh;
 		this.timeline.from(stand.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(stand.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+
+		this.playSound();
+	}
+
+	playSound() {
+		SoundManager.play(this.sound);
 	}
 
 	initSpline() {
-		this.spline = new Spline2(this.stand, this.scene, this.camera, this.controlsContainer, this.zoomParams);
+		this.spline = new Spline2(this.stand, this.scene, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 

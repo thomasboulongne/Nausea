@@ -32,7 +32,9 @@ class Zone {
 	}
 
 	init() {
-		this.soundMaterialize = SoundManager.load('materialize.mp3');
+		this.soundMaterialize = SoundManager.load('materialize.mp3', {
+			volume: 0.5
+		});
 		//this.soundVoice = SoundManager.load('exister.waw');
 	}
 
@@ -42,13 +44,28 @@ class Zone {
 		}
 	}
 
+	initHoverTimeline () {
+		this.hoverTl = new TimelineMax();
+		for(let i = 0; i < this.objects.length; i++) {
+			let obj = this.objects[i].object;
+			if(obj.material.fragmentShader) {
+				this.hoverTl.to(obj.material.uniforms.opacity, 2.2, {value: 1}, 0);
+				this.hoverTl.to(obj.mesh.rotation, 2.2, {y: NumberUtils.toRadians(10), ease: Circ.easeIn}, 0);
+			}
+		}
+
+		this.hoverTl.pause();
+	}
+
 	initTimeline () {
 		this.animate = true;
+		this.initHoverTimeline();
 		this.tweenTime = { time : 0};
 		this.timeline = new TimelineMax();
 		this.timeline.to(this.tweenTime, 7, {time: 2, ease: Circ.easeOut, onComplete: () => {
 			this.animate = false;
 		}});
+
 		this.timeline.pause();
 	}
 
@@ -57,15 +74,29 @@ class Zone {
 	}
 
 	playAnim () {
+		console.log('play anim')
 		this.animated = true;
 		this.playTimeline();
 
 		this.zoomParams.strength = 0.020;
 
-		console.log(this.zoomParams);
+		TweenMax.delayedCall(2, () => {
+			this.spline.enableSpline();
+		});
+
 
 		SoundManager.play(this.soundMaterialize);
-		//SoundManager.play(this.soundVoice);
+	}
+
+	startHoverAnimation() {
+		console.log('startHoverAnimation')
+		this.hoverTl.play();
+	}
+
+	endHoverAnimation() {
+		console.log('endHoverAnimation')
+		this.hoverTl.reverse();
+		//this.objects[i].object.material.uniforms.opacity.value = 0;
 	}
 
 	addToGUI(gui) {
