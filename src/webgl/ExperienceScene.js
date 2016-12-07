@@ -65,8 +65,6 @@ class ExperienceScene {
 		this.createObjects();
 
 		this.addEventListeners();
-
-		console.info(this.passes[2].params.strength)
 	}
 
 	/**
@@ -138,7 +136,7 @@ class ExperienceScene {
 				reduction: .4
 			}),
 			new ZoomBlurPass({
-				strength: 0.020
+				strength: 0.001
 			})
 		];
 	}
@@ -245,7 +243,7 @@ class ExperienceScene {
 			this.zone0 = new Zone0(this.scene, this.camera);
 			this.zone1 = new Zone1(this.scene, this.camera, this.controlsContainer, this.passes[2].params);
 			this.zone2 = new Zone2(this.scene, this.camera, this.controlsContainer, this.passes[2].params);
-			this.zone3 = new Zone3(this.scene, this.camera);
+			this.zone3 = new Zone3(this.scene, this.camera, this.controlsContainer, this.passes[2].params);
 			this.zone4 = new Zone4(this.scene, this.camera);
 
 			this.zones = [this.zone0, this.zone1, this.zone2, this.zone3, this.zone4];

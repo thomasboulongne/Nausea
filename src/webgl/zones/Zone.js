@@ -48,6 +48,10 @@ class Zone {
 	playAnim () {
 		this.playTimeline();
 
+		this.zoomParams.strength = 0.020;
+
+		console.log(this.zoomParams);
+
 		SoundManager.play(this.soundMaterialize);
 		//SoundManager.play(this.soundVoice);
 	}

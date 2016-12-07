@@ -5,9 +5,9 @@ class Spline1 extends Spline {
 	/**
 	* @constructor
 	*/
-	constructor(target, scene, camera, controls, zoomParams) {
+	constructor(target, scene, camera, controlsContainer, zoomParams) {
 
-		super(target, scene, camera, controls, zoomParams);
+		super(target, scene, camera, controlsContainer, zoomParams);
 	}
 
 	init() {
@@ -23,9 +23,9 @@ class Spline1 extends Spline {
 		];
 		super.init();
 
-		//this.createGeometry();
+		// this.createGeometry();
 
-		//this.enableSpline();
+		// this.enableSpline();
 	}
 
 	createGeometry() {
@@ -51,4 +51,4 @@ class Spline1 extends Spline {
 
 }
 
-export default Spline1
+export default Spline1;

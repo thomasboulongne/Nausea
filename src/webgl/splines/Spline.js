@@ -7,7 +7,6 @@ class Spline {
 	*/
 	constructor(target, scene, camera, controlsContainer, zoomParams) {
 
-		console.log('spline', zoomParams);
 		this.target = target;
 		this.zoomParams = zoomParams;
 		this.scene = scene;
@@ -40,7 +39,10 @@ class Spline {
 	reverseTimeline () {
 		this.timeline.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut});
 		SoundManager.play(this.backSound);
-		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.020, ease: Circ.easeInOut}, "-=1.5");
+		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.020, ease: Circ.easeInOut, onComplete: () => {
+			this.controlsContainer.rotation.y = 0;
+			console.log(this.controlsContainer.rotation);
+		}}, "-=1.5");
 		// TweenMax.to(this.controlsContainer.position, 1.5, {x: 0, y: 1, z: 0, ease: Circ.easeOut, onComplete: () => {
 		// 	console.log(this.controlsContainer);
 		// }});
@@ -106,4 +108,4 @@ class Spline {
 
 }
 
-export default Spline
+export default Spline;
