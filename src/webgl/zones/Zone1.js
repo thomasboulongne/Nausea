@@ -1,20 +1,22 @@
 import Zone from './Zone';
+import Spline1 from '../splines/Spline1';
+
+//import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
+//import SoundManager from '../sound/SoundManager';
 
 class Zone1 extends Zone {
 
 	/**
-	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation) {
-		super(scene, orientation);
+	constructor(scene, orientation, controlsContainer, zoomParams) {
+		super(scene, orientation, controlsContainer, zoomParams);
 		//properties to count how many objects to clone
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
 		this.nbMinerals = 3;
-
 	}
 
 	init(chestnuts, benches, minerals) {
@@ -87,6 +89,10 @@ class Zone1 extends Zone {
 		this.objects.push(this.chestnut, this.bench, this.mineral1, this.mineral2, this.mineral3);
 
 		super.init();
+
+		//this.datas = new DataEmitter();
+
+		this.initSpline();
 	}
 
 	setMeshNames () {
@@ -102,11 +108,11 @@ class Zone1 extends Zone {
 	 */
 	addScene() {
 		super.addScene();
+		//this.scene.add(this.datas.group);
 	}
 
-	initAnim() {
-		super.initAnim(); 
-
+	initTimeline() {
+		super.initTimeline(); 
 	}
 
 	playAnim() {
@@ -114,6 +120,20 @@ class Zone1 extends Zone {
 		let chestnutMesh = this.chestnut.object.mesh;
 		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+		this.playSound();
+	}
+
+	playSound() {
+		
+	}
+
+
+	/**
+	 * @Spline
+	 */
+	initSpline() {
+		this.spline = new Spline1(this.chestnut, this.scene, this.camera, this.controlsContainer, this.zoomParams);
+		this.spline.init();
 	}
 
 	/**
@@ -122,6 +142,9 @@ class Zone1 extends Zone {
 	update() {
 		//permanant rotation
 		super.update();
+		this.spline.update();
+		//Datas
+		//this.datas.update();
 	}
 
 }

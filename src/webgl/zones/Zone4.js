@@ -1,4 +1,5 @@
 import Zone from './Zone';
+import Spline4 from '../splines/Spline4';
 
 import NumberUtils from '../utils/number-utils';
 
@@ -8,8 +9,8 @@ class Zone4 extends Zone{
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation) {
-		super(scene, orientation);
+	constructor(scene, orientation, controlsContainer, zoomParams) {
+		super(scene, orientation, controlsContainer, zoomParams);
 
 		//properties to count how many objects to clone
 		this.nbBenches = 4;
@@ -22,7 +23,7 @@ class Zone4 extends Zone{
 			'name' : 'fountain',
 			'object' : fountain,
 			'x' : 17,
-			'y' : 0.25,
+			'y' : 0.35,
 			'z' : 6.2,
 			'scale' : 1,
 			'rotx' : 0,
@@ -133,6 +134,8 @@ class Zone4 extends Zone{
 		this.objects.push(this.fountain, this.bench1, this.bench2, this.bench3, this.bench4, this.streetLamp1, this.streetLamp2, this.streetLamp3, this.streetLamp4);
 
 		super.init();
+
+		this.initSpline();
 	}
 
 	setMeshNames () {
@@ -150,8 +153,8 @@ class Zone4 extends Zone{
 		super.addScene();
 	}
 
-	initAnim() {
-		super.initAnim(); 
+	initTimeline() {
+		super.initTimeline(); 
 
 	}
 
@@ -163,10 +166,19 @@ class Zone4 extends Zone{
 	}
 
 	/**
+	 * @Spline
+	 */
+	initSpline() {
+		this.spline = new Spline4(this.fountain, this.scene, this.camera, this.controlsContainer, this.zoomParams);
+		this.spline.init();
+	}
+
+	/**
 	 * @update
 	 */
 	update() {
 		super.update();
+		this.spline.update();
 	}
 
 }

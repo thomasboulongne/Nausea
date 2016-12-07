@@ -1,6 +1,7 @@
 import Wagner from '@superguigui/wagner';
 import NoisePass from '@superguigui/wagner/src/passes/noise/noise';
 import VignettePass from '@superguigui/wagner/src/passes/vignette/VignettePass';
+import ZoomBlurPass from '@superguigui/wagner/src/passes/zoom-blur/ZoomBlurPass';
 
 import './utils/PointerLockControls';
 import Config from './config';
@@ -11,7 +12,7 @@ import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
 import Store from './WebGLStore';
 
-import SoundManager from './sound/SoundManager';
+//import SoundManager from './sound/SoundManager';
 
 import Emitter from '../core/Emitter';
 
@@ -50,7 +51,7 @@ class ExperienceScene {
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
 
-		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .1, 10000 );
+		this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .01, 100000 );
 
 		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.08 );
 		if(Config.gui) this.gui.add(this.scene.fog, 'density', 0, 0.2).name('fog');
@@ -125,15 +126,18 @@ class ExperienceScene {
 			new VignettePass({
 				boost: 7,
 				reduction: .4
+			}),
+			new ZoomBlurPass({
+				strength: 0.0025
 			})
 		];
 	}
 
 	setAmbiantSound() {
-		this.soundAmbiant = SoundManager.load('ambiant.wav');
-		this.soundExist = SoundManager.load('exist.wav');
+		//this.soundAmbiant = SoundManager.load('ambiant.wav');
+		//this.soundExist = SoundManager.load('exist.wav');
 
-		SoundManager.play(this.soundAmbiant);
+		//SoundManager.play(this.soundAmbiant);
 	}
 
 	createObjects() {
@@ -225,6 +229,7 @@ class ExperienceScene {
 			this.add(this.field.mesh);
 
 			this.zone0 = new Zone0(this.scene);
+
 			this.zone1 = new Zone1(this.scene, {
 				x: [
 					882,
@@ -234,7 +239,7 @@ class ExperienceScene {
 					541,
 					674
 				]
-			});
+			}, this.controlsContainer, this.passes[2].params);
 
 			this.zone2 = new Zone2(this.scene, {
 				x: [
@@ -245,7 +250,8 @@ class ExperienceScene {
 					555,
 					696
 				]
-			});
+			}, this.controlsContainer, this.passes[2].params);
+
 			this.zone3 = new Zone3(this.scene, {
 				x: [
 					132,
@@ -255,7 +261,8 @@ class ExperienceScene {
 					553,
 					677
 				]
-			});
+			}, this.controlsContainer, this.passes[2].params);
+
 			this.zone4 = new Zone4(this.scene, {
 				x: [
 					459,
@@ -265,7 +272,7 @@ class ExperienceScene {
 					592,
 					677
 				]
-			});
+			}, this.controlsContainer, this.passes[2].params);
 
 			this.zones = [this.zone0, this.zone1, this.zone2, this.zone3, this.zone4];
 
@@ -357,7 +364,7 @@ class ExperienceScene {
 
 				for (let i = 0; i < this.zones.length; i++) {
 					this.zones[i].addScene();
-					this.zones[i].initAnim();
+					this.zones[i].initTimeline();
 				}
 
 				//this.createLeaves();
@@ -464,7 +471,7 @@ class ExperienceScene {
 	render() {
 
 		//Particles 
-		this.particles.update();
+		//this.particles.update();
 
 		if(this.zones) {
 

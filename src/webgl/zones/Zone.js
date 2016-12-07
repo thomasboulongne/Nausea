@@ -9,8 +9,11 @@ class Zone {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation) {
+	constructor(scene, orientation, controlsContainer, zoomParams) {
+
 		this.scene = scene;
+		this.controlsContainer = controlsContainer;
+		this.zoomParams = zoomParams;
 
 		this.animated = false;
 
@@ -30,6 +33,7 @@ class Zone {
 
 	init() {
 		this.soundMaterialize = SoundManager.load('materialize.mp3');
+		//this.soundVoice = SoundManager.load('exister.waw');
 	}
 
 	setMeshNames () {
@@ -42,7 +46,7 @@ class Zone {
 		this.animate = true;
 		this.tweenTime = { time : 0};
 		this.timeline = new TimelineMax();
-		this.timeline.to(this.tweenTime, 16, {time: 2, ease: Expo.easeOut, onComplete: () => {
+		this.timeline.to(this.tweenTime, 7, {time: 2, ease: Circ.easeOut, onComplete: () => {
 			this.animate = false;
 		}});
 		this.timeline.pause();
@@ -52,15 +56,16 @@ class Zone {
 		this.timeline.play();
 	}
 
-	initAnim () {
-		this.initTimeline();
-	}
-
 	playAnim () {
 		this.animated = true;
 		this.playTimeline();
 
+		this.zoomParams.strength = 0.020;
+
+		console.log(this.zoomParams);
+
 		SoundManager.play(this.soundMaterialize);
+		//SoundManager.play(this.soundVoice);
 	}
 
 	addToGUI(gui) {
