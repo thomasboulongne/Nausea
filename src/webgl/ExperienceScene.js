@@ -43,6 +43,8 @@ class ExperienceScene {
 
 		this.scene = new THREE.Scene();
 
+		this.add(new THREE.AxisHelper(8));
+
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setClearColor(0xffffff);
@@ -339,8 +341,19 @@ class ExperienceScene {
 			this.scene.background = texture;
 		});
 
-		this.video = new ChromaKeyPlane('woman_jogger_2', {r: 1, g: 1, b:1});
+		this.video = new ChromaKeyPlane('couple', {r: 1, g: 1, b:1});
+
+		this.video.mesh.position.set(-13, 1.4, -.3);
+		this.video.mesh.rotation.y = 1;
+		// this.video.mesh.scale.set(0.8, 0.8, 0.8);
 		this.add(this.video.mesh);
+
+		this.video2 = new ChromaKeyPlane('man_walking', {r: 1, g: 1, b:1});
+
+		this.video2.mesh.position.set(-9, .6, 3.8);
+		this.video2.mesh.rotation.y = 1.3;
+		this.video2.mesh.scale.set(1.3, 1.3, 1.3);
+		this.add(this.video2.mesh);
 		
 	}
 
