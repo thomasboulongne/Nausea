@@ -228,15 +228,6 @@ class HomeScene {
 
 		this.field = new Field();
 		
-		
-		// this.sartres = new AWDObject('sartres',{
-		// 	'name': 'sartres',
-		// 	'x': 0,
-		// 	'y': .2,
-		// 	'z': 0,
-		// 	'color': 0xcacaca
-		// });
-
 		this.title = new HomeTitle();
 
 		this.particles = new Particles('particleWhite', 500, { x: 10});
@@ -384,14 +375,17 @@ class HomeScene {
 		let tl = new TimelineLite();
 		tl.to(this.camera.position, exitTime, {
 			x: -.1,
-			y: 1,
+			y: .9,
+			z: .2,
 			ease: Power4.easeIn,
 			onComplete: ()=>{
 				Emitter.emit('GOTO_EXPERIENCE');
 			}
 		}, 0)
 		.to(this.center, exitTime, {
-			y: 1,
+			x: -.1,
+			y: .9,
+			z: .2,
 			ease: Power4.easeIn,
 		}, 0)
 		.to(this.passes[1].params, exitTime * .7, {
