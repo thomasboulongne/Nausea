@@ -72,6 +72,7 @@ export default {
 			text-indent: 1em;
 			line-height: 40px;
 			color: $text-color;
+			font-family: 'Baskerville';
 		}
 	}
 </style>

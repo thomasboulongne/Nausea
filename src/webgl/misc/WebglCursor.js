@@ -91,7 +91,7 @@ class WebglCursor {
 
 	setupTweens() {
 
-		this.enterTl = new TimelineLite();
+		this.enterTl = new TimelineMax();
 
 		let middle = this.circles[1];
 		let large = this.circles[2];
@@ -103,7 +103,7 @@ class WebglCursor {
 
 		let mdSVGSize = lgSVGSize / 2;
 		let mdSize = lgSize / 2;
-		let mdOffset = lgOffset / 2;
+		let mdOffset = lgOffset / 2
 
 		this.enterTl.to(large, .7, {
 			x: lgOffset,
@@ -113,16 +113,16 @@ class WebglCursor {
 			display: 'block',
 			ease: Expo.easeOut,
 			opacity: 1
-		}, 0).to(large.circle, .7, {
+		}, 0)
+		.to(large.circle, .7, {
 			attr: {
 				cx: -lgOffset,
 				cy: -lgOffset,
 				r: lgSize/2
 			},
 			ease: Expo.easeOut
-		}, 0);
-
-		this.enterTl.to(middle, 1.1, {
+		}, 0)
+		.to(middle, 1.1, {
 			x: mdOffset,
 			y: mdOffset,
 			width: mdSVGSize,
@@ -130,16 +130,19 @@ class WebglCursor {
 			display: 'block',
 			ease: Expo.easeInOut,
 			opacity: .2
-		}, 0).to(middle.circle, 1.1, {
+		}, 0)
+		.to(middle.circle, 1.1, {
 			attr: {
 				cx: -mdOffset,
 				cy: -mdOffset,
 				r: mdSize/2
 			},
+			onUpdate: () => {
+				console.log(middle.circle.getAttribute('r'));
+			},
 			ease: Expo.easeInOut
-		}, 0);
-
-		this.enterTl.to(progress, .7, {
+		}, 0)
+		.to(progress, .7, {
 			x: lgOffset,
 			y: lgOffset,
 			width: lgSVGSize,
@@ -155,9 +158,8 @@ class WebglCursor {
 				r: lgSize/2
 			},
 			ease: Expo.easeOut
-		}, 0);
-
-		this.enterTl.to(progress.circle,2, {
+		}, 0)
+		.to(progress.circle,2, {
 			attr: {
 				'stroke-dashoffset': 0
 			},
@@ -165,9 +167,8 @@ class WebglCursor {
 			onComplete: () => {
 				Emitter.emit(this.eventKey);
 			}
-		}, '-=0.5');
-
-		this.enterTl.pause();
+		}, '-=0.5')
+		.pause();
 	}
 
 	addEventListeners() {

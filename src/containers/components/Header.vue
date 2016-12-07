@@ -2,9 +2,9 @@
 	<header>
 		<img src="/images/logo_sm.png" alt="Nausea" id="logo">
 		<div id="discover" :class="clicked ? 'hover' : ''">
-			<a :href="'/' + link.path" @click="discoverClick($event)" v-html="link.text"></a>
-			<div class="icon"></div>
-			<div class="lines">
+			<a :href="'/'" @click="discoverClick($event)" v-html="link.text"></a>
+			<div class="icon" @click="discoverClick($event)"></div>
+			<div class="lines" @click="discoverClick($event)">
 				<div class="line-holder"></div>
 				<div class="line" ref="line"></div>
 			</div>
@@ -76,21 +76,23 @@ export default {
 		z-index: 2;
 		a {
 			margin-right: 1em;
-			color: $second-color;
+			color: $main-color;
 			cursor: pointer;
 			transition: all .5s;
+			text-align: right;
 			span {
 				display: block;
 				font-style: italic;
 			}
 		}
 		.icon {
+			cursor: pointer;
 			position: relative;
 			z-index: 3;
 			$icon-size: 10px;
 			height: $icon-size;
 			width: $icon-size;
-			border: solid $second-color 1px;
+			border: solid $main-color 1px;
 			transform-origin: center;
 			transform: rotate(45deg);
 			transition: all .5s;
@@ -102,12 +104,13 @@ export default {
 				top: 50%;
 				left: 50%;
 				transform: translate(-50%, -50%);
-				background: $second-color;
+				background: $main-color;
 				transition: all .5s;
 			}
 		}
 
 		.lines {
+			cursor: pointer;
 			position: relative;
 			width: 5vw;
 			height: 2px;
@@ -151,7 +154,6 @@ export default {
 			}
 
 			.line-holder {
-				background: $main-color;
 			}
 		}
 	}

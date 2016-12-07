@@ -67,7 +67,8 @@ export default {
 				opacity: 1
 			})
 			.to(this.$refs.footer.$el, 1.5, {
-				opacity: 1
+				opacity: 1,
+				y: 0
 			}, 0);
 		}
 	},
@@ -90,6 +91,10 @@ export default {
 		header, footer {
 			z-index: 2;
 			opacity: 0;
+		}
+
+		footer {
+			transform: translateY(60%);
 		}
 	}
 

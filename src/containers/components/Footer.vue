@@ -1,7 +1,7 @@
 <template>
 	<footer>
 		<div class="left">
-			<a href="http://gobelins.fr">
+			<a href="http://gobelins.fr" id="gobelins">
 				<img src="/images/gobelins.svg" alt="Gobelins, l'école de l'image" target="_blank">
 			</a>
 			<router-link :to="{ path: 'home' }"><span>À propos</span></router-link>
@@ -50,7 +50,7 @@ export default {
 		width: 100%;
 		bottom: 0;
 		left: 0;
-		height: 60px;
+		height: 50px;
 		background: white;
 		z-index: 1;
 		display: flex !important;
@@ -62,7 +62,14 @@ export default {
 		}
 		.right {
 			span {
+				display: flex;
 				margin-right: 2em;
+			}
+		}
+		#gobelins {
+			img {
+				max-height: 23px;
+				filter: brightness(2.5);
 			}
 		}
 		a {

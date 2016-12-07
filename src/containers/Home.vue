@@ -3,8 +3,8 @@
 		<home-loading></home-loading>
 		<webgl-home></webgl-home>
 		<div class="enter-button" ref="enter">
-			Entrer
 		</div>
+		<span class="home-tooltip" ref="tooltip">Maintenez votre curseur sur l'homme<br>pour entrer dans l'expérience</span>
 		<footer-comp ref="footer"></footer-comp>
 	</div>
 </template>
@@ -57,7 +57,7 @@ export default {
 			if(this.$refs.enter) {
 				TweenLite.to(this.$refs.enter, .8, {
 					delay: delay,
-					opacity: .85,
+					opacity: 1,
 					ease: Power2.easeIn
 				});
 			}
@@ -84,11 +84,24 @@ export default {
 
 <style lang="sass">
 	@import '../stylesheets/variables.scss';
+
+	@keyframes pulse {
+		50% {
+			opacity: 0;
+			height: 22vh;
+			width: 22vh;
+		}
+		100% {
+			opacity: 0;
+			height: 22vh;
+			width: 22vh;
+		}
+	}
 	
 	#home {
 		.enter-button {
 			position: absolute;
-			top: 55%;
+			top: 59%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			text-transform: uppercase;
@@ -97,28 +110,34 @@ export default {
 			letter-spacing: 2.3px;
 			font-family: 'BaskervilleMT';
 			opacity: 0;
-			text-shadow: 0px 0px 15px black;
-			&:before {
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%) rotate(45deg);
-				content: '';
-				height: 12vh;
-				width: 12vh;
-				box-shadow: inset 0px 0px 10px 1px rgba(0,0,0,0.3);
-			}
 			&:after {
 				position: absolute;
 				top: 50%;
 				left: 50%;
 				transform: translate(-50%, -50%) rotate(45deg);
-				border: solid 1px $white;
+				border: solid 1px #fff;
 				content: '';
-				height: 12vh;
-				width: 12vh;
-				box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.3);
+				height: 6vh;
+				width: 6vh;
+				animation: pulse 3s infinite;
+				border-radius: 100%;
+				animation-timing-function: ease-out;
 			}
+
+		}
+
+		span.home-tooltip {
+			text-align: center;
+			position: absolute;
+			bottom: 13%;
+			left: 50%;
+			transform: translateX(-50%);
+			text-transform: uppercase;
+			color: #bbb;
+			font-size: 11px;
+			font-family: 'Gotham-Book';
+			line-height: 2em;
+			letter-spacing: 1px;
 		}
 
 		footer {
