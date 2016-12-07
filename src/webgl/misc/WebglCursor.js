@@ -120,22 +120,9 @@ class WebglCursor {
 				r: lgSize/2
 			},
 			ease: Expo.easeOut
-		}, 0).to(progress, .7, {
-			x: lgOffset,
-			y: lgOffset,
-			width: lgSVGSize,
-			height: lgSVGSize,
-			display: 'block',
-			ease: Expo.easeOut,
-			opacity: 1
-		}, 0).to(progress.circle, .7, {
-			attr: {
-				cx: -lgOffset,
-				cy: -lgOffset,
-				r: lgSize/2
-			},
-			ease: Expo.easeOut
-		}, 0).to(middle, 1.1, {
+		}, 0);
+
+		this.enterTl.to(middle, 1.1, {
 			x: mdOffset,
 			y: mdOffset,
 			width: mdSVGSize,
@@ -150,6 +137,24 @@ class WebglCursor {
 				r: mdSize/2
 			},
 			ease: Expo.easeInOut
+		}, 0);
+
+		this.enterTl.to(progress, .7, {
+			x: lgOffset,
+			y: lgOffset,
+			width: lgSVGSize,
+			height: lgSVGSize,
+			display: 'block',
+			ease: Expo.easeOut,
+			opacity: 1
+		}, 0)
+		.to(progress.circle, .7, {
+			attr: {
+				cx: -lgOffset,
+				cy: -lgOffset,
+				r: lgSize/2
+			},
+			ease: Expo.easeOut
 		}, 0);
 
 		this.enterTl.to(progress.circle,2, {

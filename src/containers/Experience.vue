@@ -61,6 +61,7 @@ export default {
 
 	#experience {
 		header, footer {
+			z-index: 2;
 			opacity: 0;
 		}
 	}

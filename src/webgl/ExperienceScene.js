@@ -40,8 +40,6 @@ class ExperienceScene {
 
 		this.INTERSECTED = null;
 
-		this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED', {color: '#4a4a4a'});
-
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 
@@ -55,6 +53,8 @@ class ExperienceScene {
 
 		this.scene.fog = new THREE.FogExp2( 0xffffff, 0.08 );
 		if(Config.gui) this.gui.add(this.scene.fog, 'density', 0, 0.2).name('fog');
+
+		this.enabledRaycast = false;
 
 		this.setControls();
 
@@ -397,6 +397,8 @@ class ExperienceScene {
 			ease: Power1.easeInOut,
 			onComplete: () => {
 				this.controls.enabled = true;
+				this.enabledRaycast = true;
+				this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED', {color: '#4a4a4a'});
 			}
 		})
 		.add(() => {
@@ -464,7 +466,7 @@ class ExperienceScene {
 		//Particles 
 		//this.particles.update();
 
-		if(this.zones) {
+		if(this.zones && this.enabledRaycast) {
 
 			this.intersect = null;
 
