@@ -30,20 +30,27 @@ class Spline {
 
 	initTimeline () {
 		this.tweenTime = { time : 0};
-		this.timeline = new TimelineMax();
-		this.timeline.to(this.tweenTime, 10, {time: 1, onComplete: () => {
-			this.reverseTimeline();
-		}});
-		this.timeline.play();
+		let tl = new TimelineLite();
+		tl.to(this.tweenTime, 10, {
+			time: 1, 
+			onComplete: () => {
+				this.enabledSpline = false;
+				this.reverseTimeline();
+			}
+		})
+		.to(this.zoomParams, 1, {
+			strength: 0.025
+		}, 0);
 	}
 
 	reverseTimeline () {
-		this.timeline.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut});
+		// this.timeline.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut});
 		SoundManager.play(this.backSound);
-		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.025, ease: Circ.easeInOut}, "-=1.5");
-		// TweenMax.to(this.controlsContainer.position, 1.5, {x: 0, y: 1, z: 0, ease: Circ.easeOut, onComplete: () => {
-		// 	console.log(this.controlsContainer);
-		// }});
+		let tl = new TimelineLite();
+		tl.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0, ease: Circ.easeOut})
+		.to(this.controlsContainer.position, 1.5, {x: 0, y: 1, z: 0, ease: Circ.easeOut, onComplete: () => {
+			console.log(this.controlsContainer);
+		}}, 0);
 		// console.log('gogo reverse')
 		// this.timeline.to(this.controlsContainer.position, 3, {'x': 0, 'y': 1, z:'0', ease: Circ.easeOut});
 	}

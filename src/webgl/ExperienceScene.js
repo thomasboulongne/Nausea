@@ -138,7 +138,7 @@ class ExperienceScene {
 				reduction: .4
 			}),
 			new ZoomBlurPass({
-				strength: 0.025
+				strength: 0
 			})
 		];
 	}
