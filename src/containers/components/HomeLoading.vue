@@ -1,10 +1,15 @@
 <template>
-	<div id="loading">
-		<img id="home-logo" src="/images/logo_sm_white.png" alt="">
-		<span id="home-percentage">{{percentage.value}}%</span>
-		<div id="hp-warning">
-			<img src="/images/headphones.svg" alt="">
-			<span>Better with headphones</span>
+	<div class="landing-screen">
+		<div id="loading" ref="loading">
+			<img id="home-logo" src="/images/logo_sm_white.png" alt="">
+			<span id="home-percentage">{{percentage.value}}%</span>
+			<div id="hp-warning">
+				<img src="/images/headphones.svg" alt="">
+				<span>Better with headphones</span>
+			</div>
+		</div>
+		<div id="quote" ref="quote">
+			
 		</div>
 	</div>
 </template>
@@ -42,7 +47,7 @@ export default {
 			lastR = i;
 		}
 
-		this.$el.appendChild(this.svg);
+		this.$refs.loading.appendChild(this.svg);
 
 
 		this.svgProgress = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -76,7 +81,7 @@ export default {
 		this.circles = Array.from(this.svg.childNodes);
 		// this.circles.push(this.progressCircle);
 
-		this.$el.appendChild(this.svgProgress);
+		this.$refs.loading.appendChild(this.svgProgress);
 	},
 
 	methods: {
@@ -94,15 +99,19 @@ export default {
 			});
 
 			if (this.state == 1) {
-				setTimeout(()=>{Emitter.emit('LOADING_COMPLETE');}, 1000);
+				// setTimeout(()=>{Emitter.emit('LOADING_COMPLETE');}, 1000);
+				// TweenLite.set(this.$refs.loading, {display: 'none'});
 				let tl = new TimelineLite()
-				tl.to(this.$el, 1, {
-					opacity: 0,
+				tl.to(this.$refs.loading, 1, {
 					delay: 2,
+					opacity: 0,
 					onComplete: ()=>{
-						TweenLite.set(this.$el, {display: 'none'});
 						Emitter.off('OBJ_LOADED', this.updateLoading);
 					}
+				}, '-=1')
+				.to(this.$refs.quote, 1, {
+					display: 'block',
+					opacity: 1
 				})
 				.to(this.circles, 2, {
 					delay: 1,
@@ -167,5 +176,17 @@ export default {
 				margin: auto;
 			}
 		}
+	}
+	#quote {
+		display: none;
+		opacity: 0;
+
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background-image: url('/images/noise.png');
+		z-index: 3;
 	}
 </style>
