@@ -31,8 +31,8 @@ class WebglCursor {
 			TweenLite.set(elt, {
 				x: offset,
 				y: offset,
-				height: this.circleSize + this.circleSize,
-				width: this.circleSize + this.circleSize,
+				height: this.circleSize * 2,
+				width: this.circleSize * 2,
 				display: 'none',
 				opacity: 0
 			});
@@ -96,13 +96,35 @@ class WebglCursor {
 		let large = this.circles[2];
 		let progress = this.circles[3];
 
-		let lgSVGSize = this.circleSize * this.spreadFactor + this.circleMargin;
-		let lgSize = this.circleSize * this.spreadFactor;
-		let lgOffset = (lgSize + this.circleMargin) / -2;
+		let lgSVGSize = {
+			from: this.circleSize * 2,
+			to: this.circleSize * this.spreadFactor + this.circleMargin
+		};
 
-		let mdSVGSize = lgSVGSize / 2;
-		let mdSize = lgSize / 2;
-		let mdOffset = lgOffset / 2;
+		let mdSVGSize = {
+			from: this.circleSize * 2,
+			to: lgSVGSize.to / 2
+		};
+
+		let lgSize = {
+			from: this.circleSize,
+			to: this.circleSize * this.spreadFactor
+		};
+
+		let mdSize = {
+			from: this.circleSize,
+			to: lgSize.to / 2
+		};
+
+		let lgOffset = {
+			from: (this.circleSize + this.circleMargin) / -2,
+			to: (lgSize.to + this.circleMargin) / -2
+		};
+
+		let mdOffset = {
+			from: (this.circleSize + this.circleMargin) / -2,
+			to: lgOffset.to / 2
+		};
 
 		let totalDuration = {
 			value: 0
@@ -128,7 +150,7 @@ class WebglCursor {
 
 				let current2 = current - 1100;
 				if(current2 > 0) {
-					progress.circle.setAttribute('stroke-dashoffset', progress.pathLength_spread - ( current2 * progress.pathLength_spread ) / 2000);
+					progress.circle.setAttribute('stroke-dashoffset', this.easeInOutExpo(current2, -progress.pathLength_spread, progress.pathLength_spread, 2000));
 				}
 			},
 			onComplete: () => {
@@ -160,19 +182,30 @@ class WebglCursor {
 		this.tween.timeScale(3).reverse();
 	}
 
-	updateSVG(elt, step, SVGSize, size, offset, current) {
+	updateSVG(elt, duration, SVGSize, size, offset, current) {
 		TweenLite.set(elt, {
-			x: (current * offset)/step,
-			y: (current * offset)/step
+			x: this.easeOutExpo(current, offset.from, offset.to - offset.from, duration),
+			y: this.easeOutExpo(current, offset.from, offset.to - offset.from, duration)
 		});
-		elt.style.width = (current * SVGSize)/step;
-		elt.style.height = (current * SVGSize)/step;
+		elt.style.width = this.easeOutExpo(current, SVGSize.from, SVGSize.to - SVGSize.from, duration);
+		elt.style.height = this.easeOutExpo(current, SVGSize.from, SVGSize.to - SVGSize.from, duration);
 		elt.style.display = 'block';
-		elt.style.opacity = (current * .7)/step;
+		elt.style.opacity = this.easeOutExpo(current, 0, .7, duration);
 
-		elt.circle.setAttribute('cx', -(current * offset)/step);
-		elt.circle.setAttribute('cy', -(current * offset)/step);
-		elt.circle.setAttribute('r', (current * size/2)/step);
+		elt.circle.setAttribute('cx', this.easeOutExpo(current, offset.from, offset.to - offset.from, duration) * -1);
+		elt.circle.setAttribute('cy', this.easeOutExpo(current, offset.from, offset.to - offset.from, duration) * -1);
+		elt.circle.setAttribute('r', this.easeOutExpo(current, size.from, (size.to / 2) - size.from, duration));
+	}
+
+	// t: current time, b: begInnIng value, c: change In value, d: duration
+	easeOutExpo (t, b, c, d) {
+		return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+	}
+	easeInOutExpo(t, b, c, d) {
+		if (t==0) return b;
+		if (t==d) return b+c;
+		if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
+		return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
 	}
 
 }
