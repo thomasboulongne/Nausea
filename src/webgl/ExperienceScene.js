@@ -474,11 +474,11 @@ class ExperienceScene {
 
 		rootsTl
 		.to(this.roots[1].mesh.position, 4, {
-			delay: 6,
+			delay: 8,
 			y: -.24
 		}, 1)
 		.to(this.roots[1].mesh.scale, 4, {
-			delay: 6,
+			delay: 8,
 			x: 3,
 			y: 3,
 			z: 3
@@ -486,11 +486,11 @@ class ExperienceScene {
 
 		rootsTl
 		.to(this.roots[2].mesh.position, 4, {
-			delay: 6,
+			delay: 7,
 			y: 0
 		}, 2)
 		.to(this.roots[2].mesh.scale, 4, {
-			delay: 6,
+			delay: 7,
 			x: 3,
 			y: 3,
 			z: 3
@@ -498,11 +498,11 @@ class ExperienceScene {
 
 		rootsTl
 		.to(this.roots[3].mesh.position, 4, {
-			delay: 6,
+			delay: 5,
 			y: .02
 		}, 3)
 		.to(this.roots[3].mesh.scale, 4, {
-			delay: 6,
+			delay: 5,
 			x: 2,
 			y: 2,
 			z: 2

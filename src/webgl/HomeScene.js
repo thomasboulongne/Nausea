@@ -325,8 +325,6 @@ class HomeScene {
 		TweenMax.ticker.addEventListener('tick', this.bindRender);
 		this.bindEnter = this.enter.bind(this);
 		Emitter.on('LOADING_COMPLETE', this.bindEnter);
-		this.bindExit = this.exit.bind(this);
-		Emitter.on('EXPERIENCE_CLICKED', this.bindExit);
 	}
 
 	/**
@@ -337,7 +335,6 @@ class HomeScene {
 		this.domElement.removeEventListener('click', this.bindClick);
 		TweenMax.ticker.removeEventListener('tick', this.bindRender);
 		Emitter.off('LOADING_COMPLETE', this.bindEnter);
-		Emitter.off('EXPERIENCE_CLICKED', this.bindExit);
 		window.removeEventListener('mousemove', this.boundMouseMove);
 	}
 
@@ -370,19 +367,25 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		if(this.endStartAnimation && this.enableHoverSound && !this.sounds['hover'].playing() & !this.INTERSECTED ) {
+		if(this.endStartAnimation && this.enableHoverSound && !this.sounds['hover'].playing() && !this.INTERSECTED ) {
 			this.sounds['hover'].volume(1);
 			this.sounds['hover'].stop();
 			this.sounds['hover'].play();
 		}
 
-		Emitter.emit('HOME_MOUSEENTER');
 
-		this.cursor.onMouseEnter();
+		if(!this.in) {
+			Emitter.emit('HOME_MOUSEENTER');
+
+			this.cursor.onMouseEnter();
+		}
+		this.in = true;
 	}
 
 	onMouseLeave() {
 		Emitter.emit('HOME_MOUSELEAVE');
+
+		this.in = false;
 
 		if(this.enableHoverSound && this.sounds['hover'].playing()) {
 			this.sounds['hover'].fade(1,0,1000);
@@ -421,6 +424,7 @@ class HomeScene {
 	}
 
 	exit() {
+		console.log('ENTER SOUND PLAY');
 		this.sounds['enter'].play();
 		let exitTime = .7;
 		let tl = new TimelineLite();
