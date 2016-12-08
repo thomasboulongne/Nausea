@@ -72,7 +72,7 @@ class Zone {
 				this.animate = false;
 				
 			}
-		})
+		});
 
 		this.timeline.pause();
 	}
@@ -93,7 +93,7 @@ class Zone {
 	playAnim () {
 		this.animated = true;
 		for(let i = 0; i < this.objects.length; i++) {
-			this.objects[i].object.material.transparent = false
+			this.objects[i].object.material.transparent = false;
 		}
 		this.playTimeline();
 
@@ -114,14 +114,11 @@ class Zone {
 	}
 
 	startHoverAnimation() {
-		console.log('startHoverAnimation')
 		this.hoverTl.play();
 	}
 
 	endHoverAnimation() {
-		console.log('endHoverAnimation')
 		this.hoverTl.reverse();
-		//this.objects[i].object.material.uniforms.opacity.value = 0;
 	}
 
 	addToGUI(gui) {

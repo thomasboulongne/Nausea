@@ -21,12 +21,13 @@ class Spline {
 		this.zoneSpline = 0;
 
 		this.enabledSpline = false;
+
 	}
 
 
 	init() {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
-
+		this.createGeometry();
 		this.initTimeline();
 		this.backSound = SoundManager.load('back.mp3');
 	}
@@ -41,11 +42,11 @@ class Spline {
 	}
 
 	reverseTimeline () {
-		this.timeline.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut});
+		this.timeline
+			.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut})
+			.to(this.controlsContainer.position, 0.2, {x: 0, y: 0, z:0}, '-=0.2');
 		SoundManager.play(this.backSound);
 		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.0025, ease: Circ.easeInOut, onComplete: () => {
-			// this.controlsContainer.children[0].rotation.y = 0;
-			// TweenMax.to(this.controlsContainer.children[0].rotation, .6, {y: 0});
 			this.disableSpline();
 			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0, onComplete: () => {
 				if(this.zoneSpline === 1)
