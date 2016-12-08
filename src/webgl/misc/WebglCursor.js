@@ -91,7 +91,6 @@ class WebglCursor {
 
 	setupTweens() {
 
-		this.enterTl = new TimelineMax();
 
 		let middle = this.circles[1];
 		let large = this.circles[2];
@@ -103,72 +102,39 @@ class WebglCursor {
 
 		let mdSVGSize = lgSVGSize / 2;
 		let mdSize = lgSize / 2;
-		let mdOffset = lgOffset / 2
+		let mdOffset = lgOffset / 2;
 
-		this.enterTl.to(large, .7, {
-			x: lgOffset,
-			y: lgOffset,
-			width: lgSVGSize,
-			height: lgSVGSize,
-			display: 'block',
-			ease: Expo.easeOut,
-			opacity: 1
-		}, 0)
-		.to(large.circle, .7, {
-			attr: {
-				cx: -lgOffset,
-				cy: -lgOffset,
-				r: lgSize/2
-			},
-			ease: Expo.easeOut
-		}, 0)
-		.to(middle, 1.1, {
-			x: mdOffset,
-			y: mdOffset,
-			width: mdSVGSize,
-			height: mdSVGSize,
-			display: 'block',
-			ease: Expo.easeInOut,
-			opacity: .2
-		}, 0)
-		.to(middle.circle, 1.1, {
-			attr: {
-				cx: -mdOffset,
-				cy: -mdOffset,
-				r: mdSize/2
-			},
+		let totalDuration = {
+			value: 0
+		};
+
+		let steps = [
+			700,
+			1100
+		];
+
+		this.tween = TweenLite.to(totalDuration, 3.1, {
+			value: 3100,
 			onUpdate: () => {
-				console.log(middle.circle.getAttribute('r'));
+				let current = totalDuration.value;
+				if(current <= steps[0]) {
+					this.updateSVG( large, steps[0], lgSVGSize, lgSize, lgOffset, current );
+					this.updateSVG( progress, steps[0], lgSVGSize, lgSize, lgOffset, current );
+				}
+
+				if(current <= steps[1]) {
+					this.updateSVG( middle, steps[1], mdSVGSize, mdSize, mdOffset, current);
+				}
+
+				let current2 = current - 1100;
+				if(current2 > 0) {
+					progress.circle.setAttribute('stroke-dashoffset', progress.pathLength_spread - ( current2 * progress.pathLength_spread ) / 2000);
+				}
 			},
-			ease: Expo.easeInOut
-		}, 0)
-		.to(progress, .7, {
-			x: lgOffset,
-			y: lgOffset,
-			width: lgSVGSize,
-			height: lgSVGSize,
-			display: 'block',
-			ease: Expo.easeOut,
-			opacity: 1
-		}, 0)
-		.to(progress.circle, .7, {
-			attr: {
-				cx: -lgOffset,
-				cy: -lgOffset,
-				r: lgSize/2
-			},
-			ease: Expo.easeOut
-		}, 0)
-		.to(progress.circle,2, {
-			attr: {
-				'stroke-dashoffset': 0
-			},
-			ease: Expo.easeInOut,
 			onComplete: () => {
 				Emitter.emit(this.eventKey);
 			}
-		}, '-=0.5')
-		.pause();
+		}).pause();
 	}
 
 	addEventListeners() {
@@ -187,11 +153,26 @@ class WebglCursor {
 	}
 
 	onMouseEnter() {
-		this.enterTl.timeScale(1).play();
+		this.tween.timeScale(1).play();
 	}
 
 	onMouseLeave() {
-		this.enterTl.timeScale(3).reverse();
+		this.tween.timeScale(3).reverse();
+	}
+
+	updateSVG(elt, step, SVGSize, size, offset, current) {
+		TweenLite.set(elt, {
+			x: (current * offset)/step,
+			y: (current * offset)/step
+		});
+		elt.style.width = (current * SVGSize)/step;
+		elt.style.height = (current * SVGSize)/step;
+		elt.style.display = 'block';
+		elt.style.opacity = (current * .7)/step;
+
+		elt.circle.setAttribute('cx', -(current * offset)/step);
+		elt.circle.setAttribute('cy', -(current * offset)/step);
+		elt.circle.setAttribute('r', (current * size/2)/step);
 	}
 
 }

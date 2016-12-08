@@ -343,7 +343,6 @@ class ExperienceScene {
 						}));
 					}
 				}
-
 			}
 
 			Promise.all(promises).then(() => {				
