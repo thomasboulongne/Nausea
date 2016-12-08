@@ -233,7 +233,7 @@ class HomeScene {
 			},
 			{
 				'name': 'shrub',
-				'materialize': true
+				'materialize': false
 			},
 			{
 				'name': 'stand',

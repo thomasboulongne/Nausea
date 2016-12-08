@@ -1,5 +1,7 @@
 import SoundManager from '../sound/SoundManager';
 
+import Emitter from '../../core/Emitter';
+
 class Spline {
 
 	/**
@@ -15,15 +17,18 @@ class Spline {
 		this.count = 0;
 		this.amount = 0.001;
 		this.ratio = 100;
+
+		this.zoneSpline = 0;
+
+		this.enabledSpline = false;
 	}
 
 
 	init() {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
 
-		//this.createGeometry();
+		this.initTimeline();
 		this.backSound = SoundManager.load('back.mp3');
-		//this.enableSpline();
 	}
 
 	initTimeline () {
@@ -32,7 +37,7 @@ class Spline {
 		this.timeline.to(this.tweenTime, 10, {time: 1, onComplete: () => {
 			this.reverseTimeline();
 		}});
-		this.timeline.play();
+		this.timeline.pause();
 	}
 
 	reverseTimeline () {
@@ -42,7 +47,12 @@ class Spline {
 			// this.controlsContainer.children[0].rotation.y = 0;
 			// TweenMax.to(this.controlsContainer.children[0].rotation, .6, {y: 0});
 			this.disableSpline();
-			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0}, 1);
+			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0, onComplete: () => {
+				if(this.zoneSpline === 1)
+					Emitter.emit('END_ZONE1');
+				if(this.zoneSpline === 4)
+					Emitter.emit('END_ZONE4');
+			}}, 1);
 		}}, "-=1.5");
 	}
 
@@ -60,9 +70,8 @@ class Spline {
 	}
 
 	enableSpline() {
-		console.log('early', this.controlsContainer);
-		this.initTimeline();
 		this.enabledSpline = true;
+		this.timeline.play();
 	}
 
 	disableSpline() {
@@ -80,17 +89,18 @@ class Spline {
 
 			let prevCamPos = this.curve.getPoint(this.tweenTime.time);
 
-			let camPos = this.curve.getPoint(this.tweenTime.time);
+			let camPos = this.curve.getPoint(this.tweenTime.time + 0.01);
 
-			let vector = {};
-			vector.x = this.target.x - camPos.x;
-			vector.z = this.target.z - camPos.z;
+			let vector = {
+				x: this.target.x - camPos.x,
+				z: this.target.z - camPos.z
+			};
 
 			let angle = Math.atan2(vector.x, vector.z);
 
 			this.controlsContainer.position.z = camPos.z;
 			this.controlsContainer.position.x = camPos.x;
-			this.controlsContainer.position.y = camPos.y + 1;
+			this.controlsContainer.position.y = camPos.y;
 
 			this.controlsContainer.translateZ(camPos.z - prevCamPos.z);
 			this.controlsContainer.translateX(camPos.x - prevCamPos.x);

@@ -1,4 +1,5 @@
 import SoundManager from '../sound/SoundManager';
+import Emitter from '../../core/Emitter';
 
 import NumberUtils from '../utils/number-utils';
 
@@ -29,11 +30,15 @@ class Zone {
 				0
 			]
 		};
+
+		this.addListeners();
 	}
 
 	init() {
-		this.soundMaterialize = SoundManager.load('materialize.mp3');
-		//this.soundVoice = SoundManager.load('exister.waw');
+		this.soundMaterialize = SoundManager.load('materialize.mp3', {
+			volume: 0.35
+		});
+		this.soundsEndZone = [SoundManager.load('04-cache.mp3'), SoundManager.load('10-debordait.mp3')];
 	}
 
 	setMeshNames () {
@@ -42,14 +47,38 @@ class Zone {
 		}
 	}
 
+	initHoverTimeline () {
+		this.hoverTl = new TimelineMax();
+		for(let i = 0; i < this.objects.length; i++) {
+			let obj = this.objects[i].object;
+			if(obj.material.fragmentShader) {
+				this.hoverTl.to(obj.material.uniforms.opacity, 2.2, {value: 1}, 0);
+				this.hoverTl.to(obj.mesh.rotation, 2.2, {y: NumberUtils.toRadians(10), ease: Circ.easeIn}, 0);
+			}
+		}
+
+		this.hoverTl.pause();
+	}
+
 	initTimeline () {
 		this.animate = true;
+		this.initHoverTimeline();
 		this.tweenTime = { time : 0};
 		this.timeline = new TimelineMax();
 		this.timeline.to(this.tweenTime, 7, {time: 2, ease: Circ.easeOut, onComplete: () => {
 			this.animate = false;
 		}});
+
 		this.timeline.pause();
+	}
+
+	addListeners() {
+		Emitter.on('END_ZONE1', () => {
+			this.playEndZoneSound(0);
+		});
+		Emitter.on('END_ZONE4', () => {
+			this.playEndZoneSound(1);
+		});
 	}
 
 	playTimeline () {
@@ -62,10 +91,29 @@ class Zone {
 
 		this.zoomParams.strength = 0.020;
 
-		console.log(this.zoomParams);
+		TweenMax.delayedCall(2, () => {
+			this.spline.enableSpline();
+		});
+
 
 		SoundManager.play(this.soundMaterialize);
-		//SoundManager.play(this.soundVoice);
+	}
+
+	playEndZoneSound (id) {
+		TweenMax.delayedCall(3, () => {
+			SoundManager.play(this.soundsEndZone[id]);
+		});
+	}
+
+	startHoverAnimation() {
+		console.log('startHoverAnimation')
+		this.hoverTl.play();
+	}
+
+	endHoverAnimation() {
+		console.log('endHoverAnimation')
+		this.hoverTl.reverse();
+		//this.objects[i].object.material.uniforms.opacity.value = 0;
 	}
 
 	addToGUI(gui) {
@@ -138,6 +186,9 @@ class Zone {
 				}
 			}
 		}
+
+		if(this.datas)
+			this.datas.update();
 	}
 
 }

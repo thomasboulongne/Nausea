@@ -8,6 +8,7 @@ class Spline3 extends Spline {
 	constructor(target, scene, controlsContainer, zoomParams) {
 
 		super(target, scene, controlsContainer, zoomParams);
+		this.zoneSpline = 3;
 	}
 
 	init() {
@@ -20,10 +21,6 @@ class Spline3 extends Spline {
 			new THREE.Vector3(8, 1.1, -5)
 		];
 		super.init();
-
-		// this.createGeometry();
-
-		// this.enableSpline();
 	}
 
 	createGeometry() {

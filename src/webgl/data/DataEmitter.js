@@ -3,20 +3,21 @@ class DataEmitter {
 	/**
 	 * @constructor
 	 */
-	constructor() {
+	constructor(options) {
 		this.group = new THREE.Group();
 
-		this.posZ = 12;
-		this.posY = 4;
+		this.posZ = options.z;
+		this.posY = options.y;
+		this.posX = options.x;
 
-		this.boxSide = 3.5;
-		this.maxParticles = 20;
+		this.boxSide = options.side;
+		this.maxParticles = options.particles;
 		this.particlesData = [];
 
 		this.effectController = {
 			showDots: true,
 			showLines: true,
-			minDistance: 1.15,
+			minDistance: options.minDistance,
 			limitConnections: false,
 			maxConnections: 200,
 			particleCount: 25
@@ -34,6 +35,7 @@ class DataEmitter {
 		//this.helper.material.blending = THREE.AdditiveBlending;
 		this.helper.material.transparent = true;
 		this.helper.position.z = this.posZ;
+		this.helper.position.x = this.posX;
 		this.helper.position.y = this.posY;
 		this.group.add( this.helper );
 	}
@@ -45,8 +47,8 @@ class DataEmitter {
 		this.colors = new Float32Array( this.segments * 3 );
 
 		this.pMaterial = new THREE.PointsMaterial( {
-			color: 0x202020,
-			size: 4,
+			color: 0x939393,
+			size: 3,
 			//blending: THREE.AdditiveBlending,
 			fog: true,
 			transparent: true,
@@ -75,6 +77,7 @@ class DataEmitter {
 		// create the particle system
 		this.pointCloud = new THREE.Points( this.particles, this.pMaterial );
 		this.pointCloud.position.z = this.posZ;
+		this.pointCloud.position.x = this.posX;
 		this.pointCloud.position.y = this.posY;
 		this.group.add( this.pointCloud );
 	}
@@ -89,13 +92,14 @@ class DataEmitter {
 			//vertexColors: THREE.VertexColors,
 			depthTest: false,
 			linewidth: 1,
-			color: 0xb5b5b5,
+			color: 0xc6c6c6,
 			//blending: THREE.AdditiveBlending,
 			transparent: true,
 			fog: true
 		} );
 		this.linesMesh = new THREE.LineSegments( geometry, material );
 		this.linesMesh.position.z = this.posZ;
+		this.linesMesh.position.x = this.posX;
 		this.linesMesh.position.y = this.posY;
 		this.group.add( this.linesMesh );
 	}
@@ -158,6 +162,7 @@ class DataEmitter {
 			}
 		}
 
+		this.linesMesh.frustumCulled = false;
 		this.linesMesh.geometry.setDrawRange( 0, numConnected * 2 );
 		this.linesMesh.geometry.attributes.position.needsUpdate = true;
 		this.linesMesh.geometry.attributes.color.needsUpdate = true;

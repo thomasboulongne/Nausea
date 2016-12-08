@@ -12,7 +12,7 @@ import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
 import Store from './WebGLStore';
 
-//import SoundManager from './sound/SoundManager';
+import SoundManager from './sound/SoundManager';
 
 import Emitter from '../core/Emitter';
 
@@ -61,6 +61,8 @@ class ExperienceScene {
 		this.setLights();
 
 		this.setComposer();
+
+		this.loadSounds();
 
 		this.setAmbiantSound();
 
@@ -134,10 +136,15 @@ class ExperienceScene {
 	}
 
 	setAmbiantSound() {
-		//this.soundAmbiant = SoundManager.load('ambiant.wav');
-		//this.soundExist = SoundManager.load('exist.wav');
 
-		//SoundManager.play(this.soundAmbiant);
+		SoundManager.play(this.soundAmbiant);
+	}
+
+	loadSounds () {
+		this.soundAmbiant = SoundManager.load('ambiant.wav', {
+			volume: .25
+		});
+		this.soundIntro = SoundManager.load('02-jardinpublic.mp3');
 	}
 
 	createObjects() {
@@ -387,6 +394,7 @@ class ExperienceScene {
 	}
 
 	intro() {
+		SoundManager.play(this.soundIntro);
 		let tl = new TimelineLite();
 		tl.to(this.passes[1].params, 4, {
 			boost: 1
@@ -484,12 +492,14 @@ class ExperienceScene {
 			}
 			if(this.intersect != null) {
 				if(this.INTERSECTED == null) {
-					// this.intersect.startHoverAnimation();
+					this.intersect.startHoverAnimation();
 					this.cursor.onMouseEnter();
 				}
 			}
 			else {
-				// this.INTERSECTED.endHoverAnimation();
+				if(this.INTERSECTED != null && !this.INTERSECTED.animated)
+					this.INTERSECTED.endHoverAnimation();
+				
 				this.cursor.onMouseLeave();
 			}
 			this.INTERSECTED = this.intersect;

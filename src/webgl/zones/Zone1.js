@@ -1,10 +1,10 @@
 import Zone from './Zone';
 import Spline1 from '../splines/Spline1';
 
-//import DataEmitter from '../data/DataEmitter';
+import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
-//import SoundManager from '../sound/SoundManager';
+import SoundManager from '../sound/SoundManager';
 
 class Zone1 extends Zone {
 
@@ -90,7 +90,18 @@ class Zone1 extends Zone {
 
 		super.init();
 
-		//this.datas = new DataEmitter();
+		this.sound = SoundManager.load('03-assis.mp3', {
+			volume: 3
+		});
+
+		this.datas = new DataEmitter({
+			x: 0,
+			y: 4,
+			z: 12,
+			particles: 20,
+			side: 3.5,
+			minDistance: 1.15
+		});
 
 		this.initSpline();
 	}
@@ -108,7 +119,6 @@ class Zone1 extends Zone {
 	 */
 	addScene() {
 		super.addScene();
-		//this.scene.add(this.datas.group);
 	}
 
 	initTimeline() {
@@ -117,14 +127,20 @@ class Zone1 extends Zone {
 
 	playAnim() {
 		super.playAnim();
+		this.scene.add(this.datas.group);
 		let chestnutMesh = this.chestnut.object.mesh;
+		let benchMesh = this.bench.object.mesh;
+
 		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
-		this.timeline.from(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+
+		this.timeline.fromTo(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.chestnut.roty), ease: Expo.easeOut}, '0');
+		this.timeline.fromTo(benchMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.bench.roty), ease: Expo.easeOut}, '0');
+
 		this.playSound();
 	}
 
 	playSound() {
-		
+		SoundManager.play(this.sound);
 	}
 
 
@@ -132,7 +148,7 @@ class Zone1 extends Zone {
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline1(this.chestnut, this.scene, this.camera, this.controlsContainer, this.zoomParams);
+		this.spline = new Spline1(this.chestnut, this.scene, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 
@@ -143,8 +159,6 @@ class Zone1 extends Zone {
 		//permanant rotation
 		super.update();
 		this.spline.update();
-		//Datas
-		//this.datas.update();
 	}
 
 }

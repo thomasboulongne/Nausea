@@ -1,7 +1,10 @@
 import Zone from './Zone';
 import Spline4 from '../splines/Spline4';
 
+import DataEmitter from '../data/DataEmitter';
+
 import NumberUtils from '../utils/number-utils';
+import SoundManager from '../sound/SoundManager';
 
 class Zone4 extends Zone{
 
@@ -135,6 +138,19 @@ class Zone4 extends Zone{
 
 		super.init();
 
+		this.sound = SoundManager.load('07-devoilee.mp3', {
+			volume: 3
+		});
+
+		this.datas = new DataEmitter({
+			x: 17,
+			y: 2,
+			z: 6,
+			particles: 30,
+			side: 3.5,
+			minDistance: 1.15
+		});
+
 		this.initSpline();
 	}
 
@@ -144,6 +160,10 @@ class Zone4 extends Zone{
 
 	addToGUI(gui) {
 		super.addToGUI(gui);
+	}
+
+	playSound() {
+		SoundManager.play(this.sound);
 	}
 
 	/**
@@ -160,16 +180,19 @@ class Zone4 extends Zone{
 
 	playAnim() {
 		super.playAnim();
+		this.scene.add(this.datas.group);
 		let fountain = this.fountain.object.mesh;
 		this.timeline.from(fountain.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(fountain.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+
+		this.playSound();
 	}
 
 	/**
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline4(this.fountain, this.scene, this.camera, this.controlsContainer, this.zoomParams);
+		this.spline = new Spline4(this.fountain, this.scene, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 
