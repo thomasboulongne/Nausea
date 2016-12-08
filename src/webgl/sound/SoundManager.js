@@ -144,8 +144,8 @@ class Manager {
 				}
 			},
 			{
-				'name': 'ambiant',
-				'file': 'ambiant',
+				'name': 'atmos01',
+				'file': 'atmos01',
 				'options': {
 					'volume': 1,
 					'loop': false
@@ -204,7 +204,7 @@ class Manager {
 		this.sounds = {};
 
 		for (let i = 0; i < soundsToLoad.length; i++) {
-			this.sounds[soundsToLoad[i]] = this.load(soundsToLoad[i].file, soundsToLoad[i].options);
+			this.sounds[soundsToLoad[i].name] = this.load(soundsToLoad[i].file, soundsToLoad[i].options);
 		}
 	}
 

@@ -172,25 +172,14 @@ class HomeScene {
 	setSounds() {
 		this.enableHoverSound = true;
 
-		this.loadSounds();
-
 		this.setAmbiantSound();
-	}
-
-	loadSounds() {
-		this.sounds = {};
-		this.sounds['ambiant'] = SoundManager.load('ambiant.wav', {loop: true});
-		this.sounds['exist'] = SoundManager.load('exist.wav');
-		this.sounds['enter'] = SoundManager.load('Enter.mp3');
-		this.sounds['hover'] = SoundManager.load('Hover.mp3');
-		this.sounds['progression'] = SoundManager.load('ProgressBar.mp3');
 	}
 
 	/**
 	 * Create sound manager
 	 */
 	setAmbiantSound() {
-		SoundManager.play(this.sounds.ambiant);
+		SoundManager.play('atmos01');
 	}
 
 	initObjects() {
