@@ -91,9 +91,6 @@ class HomeScene {
 
 	destructor() {
 		this.removeEventListeners();
-		for (let i = 0; i < this.sounds.length; i++) {
-			this.sounds[i].unload();
-		}
 		this.scene = null;
 	}
 
@@ -356,10 +353,10 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		if(this.endStartAnimation && this.enableHoverSound && !this.sounds['hover'].playing() && !this.INTERSECTED ) {
-			this.sounds['hover'].volume(1);
-			this.sounds['hover'].stop();
-			this.sounds['hover'].play();
+		if(this.endStartAnimation && this.enableHoverSound && !SoundManager.get('hover').playing() && !this.INTERSECTED ) {
+			SoundManager.get('hover').volume(1);
+			SoundManager.get('hover').stop();
+			SoundManager.play('hover');
 		}
 
 
@@ -377,7 +374,7 @@ class HomeScene {
 		this.in = false;
 
 		if(this.enableHoverSound && this.sounds['hover'].playing()) {
-			this.sounds['hover'].fade(1,0,1000);
+			SoundManager.get('hover').fade(1,0,1000);
 		}
 		this.cursor.onMouseLeave();
 	}
@@ -414,7 +411,7 @@ class HomeScene {
 
 	exit() {
 		console.log('ENTER SOUND PLAY');
-		this.sounds['enter'].play();
+		SoundManager.play('enter');
 		let exitTime = .7;
 		let tl = new TimelineLite();
 		tl.to(this.camera.position, exitTime, {
