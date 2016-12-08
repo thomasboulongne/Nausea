@@ -482,10 +482,10 @@ class ExperienceScene {
 				zone.update();
 				let mouse = this.controls.mouse;
 
-				if( mouse.x > window.innerWidth * zone.orientation.x[0] / 1920
-					&& mouse.x < window.innerWidth * zone.orientation.x[1] / 1920
-					&& mouse.y > window.innerHeight * zone.orientation.y[0] / 1440
-					&& mouse.y < window.innerHeight * zone.orientation.y[1] / 1440
+				if( mouse.x > window.innerWidth * zone.orientation.x[0] / 1706
+					&& mouse.x < window.innerWidth * zone.orientation.x[1] / 1706
+					&& mouse.y > window.innerHeight * zone.orientation.y[0] / 1299
+					&& mouse.y < window.innerHeight * zone.orientation.y[1] / 1299
 					&& !zone.animated ) {
 					this.intersect = zone;
 				}
