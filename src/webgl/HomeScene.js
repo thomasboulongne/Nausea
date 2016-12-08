@@ -12,7 +12,7 @@ import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
 import Store from './WebGLStore';
 
-import SoundManager from './sound/SoundManager';
+import SoundManager from '../sound/SoundManager';
 import Emitter from '../core/Emitter';
 
 import Lights from './lights/Lights';
