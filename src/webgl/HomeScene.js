@@ -12,7 +12,7 @@ import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
 import Store from './WebGLStore';
 
-import SoundManager from './sound/SoundManager';
+import SoundManager from '../sound/SoundManager';
 import Emitter from '../core/Emitter';
 
 import Lights from './lights/Lights';
@@ -91,9 +91,6 @@ class HomeScene {
 
 	destructor() {
 		this.removeEventListeners();
-		for (let i = 0; i < this.sounds.length; i++) {
-			this.sounds[i].unload();
-		}
 		this.scene = null;
 	}
 
@@ -172,25 +169,14 @@ class HomeScene {
 	setSounds() {
 		this.enableHoverSound = true;
 
-		this.loadSounds();
-
 		this.setAmbiantSound();
-	}
-
-	loadSounds() {
-		this.sounds = {};
-		this.sounds['ambiant'] = SoundManager.load('ambiant.wav', {loop: true});
-		this.sounds['exist'] = SoundManager.load('exist.wav');
-		this.sounds['enter'] = SoundManager.load('Enter.mp3');
-		this.sounds['hover'] = SoundManager.load('Hover.mp3');
-		this.sounds['progression'] = SoundManager.load('ProgressBar.mp3');
 	}
 
 	/**
 	 * Create sound manager
 	 */
 	setAmbiantSound() {
-		SoundManager.play(this.sounds.ambiant);
+		SoundManager.play('atmos01');
 	}
 
 	initObjects() {
@@ -367,10 +353,10 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		if(this.endStartAnimation && this.enableHoverSound && !this.sounds['hover'].playing() && !this.INTERSECTED ) {
-			this.sounds['hover'].volume(1);
-			this.sounds['hover'].stop();
-			this.sounds['hover'].play();
+		if(this.endStartAnimation && this.enableHoverSound && !SoundManager.get('hover').playing() && !this.INTERSECTED ) {
+			SoundManager.get('hover').volume(1);
+			SoundManager.get('hover').stop();
+			SoundManager.play('hover');
 		}
 
 
@@ -388,7 +374,7 @@ class HomeScene {
 		this.in = false;
 
 		if(this.enableHoverSound && this.sounds['hover'].playing()) {
-			this.sounds['hover'].fade(1,0,1000);
+			SoundManager.get('hover').fade(1,0,1000);
 		}
 		this.cursor.onMouseLeave();
 	}
@@ -425,7 +411,7 @@ class HomeScene {
 
 	exit() {
 		console.log('ENTER SOUND PLAY');
-		this.sounds['enter'].play();
+		SoundManager.play('enter');
 		let exitTime = .7;
 		let tl = new TimelineLite();
 		tl.to(this.camera.position, exitTime, {
