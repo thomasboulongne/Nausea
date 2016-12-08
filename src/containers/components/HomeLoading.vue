@@ -9,8 +9,14 @@
 			</div>
 		</div>
 		<div id="quote" ref="quote">
-			
-		</div>
+			<div class="container" ref="container">
+				<div class="sentence"><span>Ça </span><span>m'a </span><span>coupé </span><span>le </span><span>souffle</span><span>. </span></div>
+				<div class="sentence"><span>Jamais,</span></div>
+				<div class="sentence"><span>avant </span><span>ces </span><span>derniers </span><span>jours</span><span>, </span></div>
+				<div class="sentence"><span>je </span><span>n'avais </span><span>pressenti </span><span>ce </span><span>que </span><span>voulait </span><span>dire </span></div>
+				<div class="sentence"><span>exister</span></div>
+			</div>
+	</div>
 	</div>
 </template>
 
@@ -100,19 +106,17 @@ export default {
 
 			if (this.state == 1) {
 				// setTimeout(()=>{Emitter.emit('LOADING_COMPLETE');}, 1000);
-				// TweenLite.set(this.$refs.loading, {display: 'none'});
+				// 
 				let tl = new TimelineLite()
 				tl.to(this.$refs.loading, 1, {
 					delay: 2,
 					opacity: 0,
-					onComplete: ()=>{
+					onComplete: () => {
 						Emitter.off('OBJ_LOADED', this.updateLoading);
+						TweenLite.set(this.$refs.loading, {display: 'none'});
+						this.quoteAnimation();
 					}
-				}, '-=1')
-				.to(this.$refs.quote, 1, {
-					display: 'block',
-					opacity: 1
-				})
+				}, 0)
 				.to(this.circles, 2, {
 					delay: 1,
 					attr: {
@@ -121,6 +125,32 @@ export default {
 					ease: Power3.easeIn
 				}, 0);
 			}
+		},
+
+		quoteAnimation() {
+
+			let sentences = Array.from(this.$refs.container.childNodes);
+			let tl = new TimelineMax();
+			tl.pause();
+
+			for (let i = 0; i < sentences.length; i++) {
+				if( sentences[i].nodeType == Node.ELEMENT_NODE ) {
+					console.log(sentences[i].childNodes);
+					tl.staggerTo(Array.from(sentences[i].childNodes), 1, {
+						opacity: 1,
+						y: 0,
+						ease: Power3.easeOut,
+						onStart: () => {
+							// console.log('Start tween n°' + i);
+						},
+						onComplete: () => {
+							// console.log('End tween n°' + i);
+						}
+					}, .2);
+				}
+			}
+
+			tl.play();
 		}
 	}
 }
@@ -128,13 +158,14 @@ export default {
 </script>
 
 <style lang="sass">
+	@import '../../stylesheets/variables.scss';
 	#loading {
 		position: fixed;
 		top: 0;
 		left: 0;
 		width: 100vw;
 		height: 100vh;
-		z-index: 2;
+		z-index: 3;
 		background-color: #000000;
 		opacity: 1;
 
@@ -178,15 +209,46 @@ export default {
 		}
 	}
 	#quote {
-		display: none;
-		opacity: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 1;
 
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 100vw;
-		height: 100vh;
+		right: 0;
+		bottom: 0;
+
 		background-image: url('/images/noise.png');
-		z-index: 3;
+		z-index: 2;
+		.container {
+			position: absolute;
+			display: flex;
+			flex-wrap: wrap;
+			width: 50%;
+			justify-content: center;
+			.sentence {
+				span {
+					opacity: 0;
+					transform: translateY(0.3em);
+					white-space: pre;
+					display: inline-block;
+					color: $white;
+					font-size: 44px;
+					line-height: 1.5em;
+					&:last-child {
+					}
+				}
+
+				&:last-child {
+					flex-basis: 100%;
+					text-align: center;
+					span {
+						font-size: 54px;
+					}
+				}
+			}
+		}
 	}
 </style>
