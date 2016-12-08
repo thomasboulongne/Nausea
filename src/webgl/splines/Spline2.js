@@ -8,6 +8,7 @@ class Spline2 extends Spline {
 	constructor(target, scene, controlsContainer, zoomParams) {
 
 		super(target, scene, controlsContainer, zoomParams);
+		this.zoneSpline = 2;
 	}
 
 	init() {

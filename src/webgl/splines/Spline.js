@@ -1,5 +1,7 @@
 import SoundManager from '../sound/SoundManager';
 
+import Emitter from '../../core/Emitter';
+
 class Spline {
 
 	/**
@@ -16,19 +18,17 @@ class Spline {
 		this.amount = 0.001;
 		this.ratio = 100;
 
-		this.enabledSpline = false;
+		this.zoneSpline = 0;
 
-		console.log('create spline', this.controlsContainer);
+		this.enabledSpline = false;
 	}
 
 
 	init() {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
 
-		//this.createGeometry();
 		this.initTimeline();
 		this.backSound = SoundManager.load('back.mp3');
-		//this.enableSpline();
 	}
 
 	initTimeline () {
@@ -47,7 +47,12 @@ class Spline {
 			// this.controlsContainer.children[0].rotation.y = 0;
 			// TweenMax.to(this.controlsContainer.children[0].rotation, .6, {y: 0});
 			this.disableSpline();
-			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0}, 1);
+			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0, onComplete: () => {
+				if(this.zoneSpline === 1)
+					Emitter.emit('END_ZONE1');
+				if(this.zoneSpline === 4)
+					Emitter.emit('END_ZONE4');
+			}}, 1);
 		}}, "-=1.5");
 	}
 
@@ -65,8 +70,6 @@ class Spline {
 	}
 
 	enableSpline() {
-		console.log('PLAY TIMELINE');
-		console.log('early', this.controlsContainer);
 		this.enabledSpline = true;
 		this.timeline.play();
 	}

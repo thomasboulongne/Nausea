@@ -2,6 +2,7 @@ import Zone from './Zone';
 import Spline4 from '../splines/Spline4';
 
 import NumberUtils from '../utils/number-utils';
+import SoundManager from '../sound/SoundManager';
 
 class Zone4 extends Zone{
 
@@ -135,6 +136,10 @@ class Zone4 extends Zone{
 
 		super.init();
 
+		this.sound = SoundManager.load('07-devoilee.mp3', {
+			volume: 3
+		});
+
 		this.initSpline();
 	}
 
@@ -144,6 +149,10 @@ class Zone4 extends Zone{
 
 	addToGUI(gui) {
 		super.addToGUI(gui);
+	}
+
+	playSound() {
+		SoundManager.play(this.sound);
 	}
 
 	/**
@@ -163,6 +172,8 @@ class Zone4 extends Zone{
 		let fountain = this.fountain.object.mesh;
 		this.timeline.from(fountain.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(fountain.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
+
+		this.playSound();
 	}
 
 	/**

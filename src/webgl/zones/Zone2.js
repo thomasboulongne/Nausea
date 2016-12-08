@@ -129,7 +129,7 @@ class Zone2 extends Zone {
 		super.init();
 
 		this.sound = SoundManager.load('06-decor.mp3', {
-			volume: 3
+			volume: 4
 		});
 
 		this.initSpline();
@@ -161,7 +161,10 @@ class Zone2 extends Zone {
 		this.timeline.from(stand.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(stand.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
 
-		this.playSound();
+		TweenMax.delayedCall(3.5, () => {
+			this.playSound();
+		});
+			
 	}
 
 	playSound() {

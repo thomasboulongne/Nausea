@@ -1,4 +1,5 @@
 import SoundManager from '../sound/SoundManager';
+import Emitter from '../../core/Emitter';
 
 import NumberUtils from '../utils/number-utils';
 
@@ -29,13 +30,15 @@ class Zone {
 				0
 			]
 		};
+
+		this.addListeners();
 	}
 
 	init() {
 		this.soundMaterialize = SoundManager.load('materialize.mp3', {
-			volume: 0.5
+			volume: 0.35
 		});
-		//this.soundVoice = SoundManager.load('exister.waw');
+		this.soundsEndZone = [SoundManager.load('04-cache.mp3'), SoundManager.load('10-debordait.mp3')];
 	}
 
 	setMeshNames () {
@@ -69,12 +72,20 @@ class Zone {
 		this.timeline.pause();
 	}
 
+	addListeners() {
+		Emitter.on('END_ZONE1', () => {
+			this.playEndZoneSound(0);
+		});
+		Emitter.on('END_ZONE4', () => {
+			this.playEndZoneSound(1);
+		});
+	}
+
 	playTimeline () {
 		this.timeline.play();
 	}
 
 	playAnim () {
-		console.log('play anim')
 		this.animated = true;
 		this.playTimeline();
 
@@ -86,6 +97,12 @@ class Zone {
 
 
 		SoundManager.play(this.soundMaterialize);
+	}
+
+	playEndZoneSound (id) {
+		TweenMax.delayedCall(3, () => {
+			SoundManager.play(this.soundsEndZone[id]);
+		});
 	}
 
 	startHoverAnimation() {
