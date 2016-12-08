@@ -219,7 +219,7 @@ class Manager {
 		let opt = options ? options : {};
 
 		let sound = new Howler.Howl({
-			src: ['sound/' + name],
+			src: ['sound/' + name + '.mp3'],
 			loop: opt.loop ? opt.loop : false,
 			volume: opt.volume ? opt.volume : 1
 		});
