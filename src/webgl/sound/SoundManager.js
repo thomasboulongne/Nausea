@@ -231,7 +231,7 @@ class Manager {
 		return this.sounds[sound];
 	}
 
-	play(sound, options) {
+	play(sound) {
 		this.sounds[sound].play();
 	}
 
