@@ -1,7 +1,7 @@
 import Zone from './Zone';
 import Spline1 from '../splines/Spline1';
 
-//import DataEmitter from '../data/DataEmitter';
+import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
 import SoundManager from '../sound/SoundManager';
@@ -94,7 +94,14 @@ class Zone1 extends Zone {
 			volume: 3
 		});
 
-		//this.datas = new DataEmitter();
+		this.datas = new DataEmitter({
+			x: 0,
+			y: 4,
+			z: 12,
+			particles: 20,
+			side: 3.5,
+			minDistance: 1.15
+		});
 
 		this.initSpline();
 	}
@@ -112,7 +119,6 @@ class Zone1 extends Zone {
 	 */
 	addScene() {
 		super.addScene();
-		//this.scene.add(this.datas.group);
 	}
 
 	initTimeline() {
@@ -121,6 +127,7 @@ class Zone1 extends Zone {
 
 	playAnim() {
 		super.playAnim();
+		this.scene.add(this.datas.group);
 		let chestnutMesh = this.chestnut.object.mesh;
 		let benchMesh = this.bench.object.mesh;
 
@@ -152,8 +159,6 @@ class Zone1 extends Zone {
 		//permanant rotation
 		super.update();
 		this.spline.update();
-		//Datas
-		//this.datas.update();
 	}
 
 }

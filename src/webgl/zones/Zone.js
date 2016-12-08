@@ -186,6 +186,9 @@ class Zone {
 				}
 			}
 		}
+
+		if(this.datas)
+			this.datas.update();
 	}
 
 }

@@ -89,7 +89,7 @@ class Spline {
 
 			let prevCamPos = this.curve.getPoint(this.tweenTime.time);
 
-			let camPos = this.curve.getPoint(this.tweenTime.time);
+			let camPos = this.curve.getPoint(this.tweenTime.time + 0.01);
 
 			let vector = {
 				x: this.target.x - camPos.x,
@@ -107,8 +107,6 @@ class Spline {
 			this.controlsContainer.translateY(camPos.y - prevCamPos.y);
 
 			this.controlsContainer.rotation.y = angle;
-
-			console.info(this.controlsContainer.rotation.y);
 		}
 
 		//console.log(this.controlsContainer.position);
