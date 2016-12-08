@@ -109,8 +109,6 @@ class Spline {
 			this.controlsContainer.rotation.y = angle;
 		}
 
-		//console.log(this.controlsContainer.position);
-
 	}
 
 }

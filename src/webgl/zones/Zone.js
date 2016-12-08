@@ -65,9 +65,14 @@ class Zone {
 		this.initHoverTimeline();
 		this.tweenTime = { time : 0};
 		this.timeline = new TimelineMax();
-		this.timeline.to(this.tweenTime, 7, {time: 2, ease: Circ.easeOut, onComplete: () => {
-			this.animate = false;
-		}});
+		this.timeline.to(this.tweenTime, 7, {
+			time: 2,
+			ease: Circ.easeOut,
+			onComplete: () => {
+				this.animate = false;
+				
+			}
+		})
 
 		this.timeline.pause();
 	}
@@ -87,6 +92,9 @@ class Zone {
 
 	playAnim () {
 		this.animated = true;
+		for(let i = 0; i < this.objects.length; i++) {
+			this.objects[i].object.material.transparent = false
+		}
 		this.playTimeline();
 
 		this.zoomParams.strength = 0.020;
