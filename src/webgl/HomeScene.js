@@ -246,6 +246,18 @@ class HomeScene {
 			{
 				'name': 'streetLamp',
 				'materialize': false
+			},
+			{
+				'name': 'root',
+				'materialize': false
+			},
+			{
+				'name': 'root2',
+				'materialize': false
+			},
+			{
+				'name': 'root02',
+				'materialize': false
 			}
 		];
 

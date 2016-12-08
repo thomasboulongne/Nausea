@@ -203,6 +203,37 @@ class ExperienceScene {
 				'name': 'mineral',
 				'color': 0xcacaca
 			}),
+	
+			Store.get('root2',{
+				'name': 'root0',
+				'color': 0xcacaca
+			}),
+	
+			Store.get('root',{
+				'name': 'root3',
+				'color': 0xcacaca
+			}),
+	
+			Store.get('root02',{
+				'name': 'root2',
+				'color': 0xcacaca
+			}),
+	
+			Store.get('root02',{
+				'name': 'root5',
+				'color': 0xcacaca
+			}),
+	
+			Store.get('root02',{
+				'name': 'root1',
+				'color': 0xcacaca
+			}),
+	
+			Store.get('root',{
+				'name': 'root4',
+				'color': 0xcacaca
+			}),
+
 			this.field.load()
 		])
 		.then( data => {
@@ -223,6 +254,8 @@ class ExperienceScene {
 			this.fountain = data[7];
 	
 			this.rock = data[8];
+	
+			this.roots = [data[9],data[10],data[11],data[12],data[13],data[14]];
 
 			this.add(this.field.mesh);
 
@@ -352,6 +385,7 @@ class ExperienceScene {
 				}
 			}
 
+
 			Promise.all(promises).then(() => {				
 				this.zone0.init(this.sartreBench);
 				this.zone1.init(gChestnuts.objects, gBenches.objects, gMinerals.objects);
@@ -365,17 +399,46 @@ class ExperienceScene {
 				}
 
 				//this.createLeaves();
+
+				this.roots[0].mesh.position.set(0,-2,5);
+				this.roots[0].mesh.scale.set(1,1,1);
+				this.roots[0].mesh.rotation.set(-.05,Math.PI / 2,0);
+				
+				this.roots[1].mesh.position.set(-.9,-2.8,7);
+				this.roots[1].mesh.scale.set(1,1,1);
+				this.roots[1].mesh.rotation.set(-.05,Math.PI / 1.8,0);
+				
+				this.roots[2].mesh.position.set(.6,-2.8,7);
+				this.roots[2].mesh.scale.set(1,1,1);
+				this.roots[2].mesh.rotation.set(-.15,Math.PI / 2.4,0);
+				
+				this.roots[3].mesh.position.set(-1.6,-2.8,8);
+				this.roots[3].mesh.scale.set(1,1,1);
+				this.roots[3].mesh.rotation.set(-.05,Math.PI / 1.2,0);
+				
+				this.roots[4].mesh.position.set(-.6,-2.8,10);
+				this.roots[4].mesh.scale.set(1,1,1);
+				this.roots[4].mesh.rotation.set(-.12,Math.PI / 1.8,0);
+				
+				this.roots[5].mesh.position.set(.6,-2.8,11);
+				this.roots[5].mesh.scale.set(1,1,1);
+				this.roots[5].mesh.rotation.set(-.05,Math.PI / 2.2,0);
+
+				for (let i = 0; i < this.roots.length; i++) {
+					this.add(this.roots[i].mesh);
+				}
 				
 				this.intro();
 
 				if(Config.gui) {
+					this.zone0.addToGUI(this.gui);
 					this.zone1.addToGUI(this.gui);
 					this.zone2.addToGUI(this.gui);
 					this.zone3.addToGUI(this.gui);
 					this.zone4.addToGUI(this.gui);
 				}
 			});
-			
+
 		});
 
 		this.particles = new Particles('particle', 500);
@@ -394,12 +457,90 @@ class ExperienceScene {
 	}
 
 	intro() {
-		SoundManager.play(this.soundIntro);
-		let tl = new TimelineLite();
-		tl.to(this.passes[1].params, 4, {
+		
+		let rootsTl = new TimelineLite();
+		let cameraTl = new TimelineLite();
+
+		rootsTl
+		.to(this.roots[0].mesh.position, 4, {
+			delay: 5,
+			y: -.3
+		},0)
+		.to(this.roots[0].mesh.scale, 4, {
+			x: 3,
+			y: 3,
+			z: 3
+		}, 0);
+
+		rootsTl
+		.to(this.roots[1].mesh.position, 4, {
+			delay: 6,
+			y: -.24
+		}, 1)
+		.to(this.roots[1].mesh.scale, 4, {
+			delay: 6,
+			x: 3,
+			y: 3,
+			z: 3
+		}, 1);
+
+		rootsTl
+		.to(this.roots[2].mesh.position, 4, {
+			delay: 6,
+			y: 0
+		}, 2)
+		.to(this.roots[2].mesh.scale, 4, {
+			delay: 6,
+			x: 3,
+			y: 3,
+			z: 3
+		}, 2);
+
+		rootsTl
+		.to(this.roots[3].mesh.position, 4, {
+			delay: 6,
+			y: .02
+		}, 3)
+		.to(this.roots[3].mesh.scale, 4, {
+			delay: 6,
+			x: 2,
+			y: 2,
+			z: 2
+		}, 3);
+
+		rootsTl
+		.to(this.roots[4].mesh.position, 4, {
+			delay: 6,
+			y: .15
+		}, 4)
+		.to(this.roots[4].mesh.scale, 4, {
+			delay: 6,
+			x: 3,
+			y: 3,
+			z: 3
+		}, 4);
+
+		rootsTl
+		.to(this.roots[5].mesh.position, 4, {
+			delay: 6,
+			y: .15
+		}, 5)
+		.to(this.roots[5].mesh.scale, 4, {
+			delay: 6,
+			x: 3,
+			y: 3,
+			z: 3
+		}, 5);
+
+		cameraTl
+		.add(() => {
+			SoundManager.play(this.soundIntro);
+		}, "+=4")
+		.to(this.passes[1].params, 4, {
+			delay: 2,
 			boost: 1
 		})
-		.to(this.controls.pitchObject.rotation, 5, {
+		.to(this.controls.pitchObject.rotation, 10, {
 			x: .1,
 			ease: Power1.easeInOut,
 			onComplete: () => {
@@ -407,7 +548,7 @@ class ExperienceScene {
 				this.enabledRaycast = true;
 				this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED', {color: '#4a4a4a'});
 			}
-		})
+		}, '-=2')
 		.add(() => {
 			Emitter.emit('INTRO_END');
 		}, '-=1.5');
