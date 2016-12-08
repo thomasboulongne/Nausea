@@ -25,10 +25,6 @@ class Spline1 extends Spline {
 		super.init();
 
 		console.log('init spline', this.controlsContainer);
-
-		// this.createGeometry();
-
-		// this.enableSpline();
 	}
 
 	createGeometry() {

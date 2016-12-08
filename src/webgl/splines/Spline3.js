@@ -21,10 +21,6 @@ class Spline3 extends Spline {
 			new THREE.Vector3(8, 1.1, -5)
 		];
 		super.init();
-
-		// this.createGeometry();
-
-		// this.enableSpline();
 	}
 
 	createGeometry() {

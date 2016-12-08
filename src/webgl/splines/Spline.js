@@ -91,21 +91,24 @@ class Spline {
 
 			let camPos = this.curve.getPoint(this.tweenTime.time);
 
-			let vector = {};
-			vector.x = this.target.x - camPos.x;
-			vector.z = this.target.z - camPos.z;
+			let vector = {
+				x: this.target.x - camPos.x,
+				z: this.target.z - camPos.z
+			};
 
 			let angle = Math.atan2(vector.x, vector.z);
 
 			this.controlsContainer.position.z = camPos.z;
 			this.controlsContainer.position.x = camPos.x;
-			this.controlsContainer.position.y = camPos.y + 1;
+			this.controlsContainer.position.y = camPos.y;
 
 			this.controlsContainer.translateZ(camPos.z - prevCamPos.z);
 			this.controlsContainer.translateX(camPos.x - prevCamPos.x);
 			this.controlsContainer.translateY(camPos.y - prevCamPos.y);
 
 			this.controlsContainer.rotation.y = angle;
+
+			console.info(this.controlsContainer.rotation.y);
 		}
 
 		//console.log(this.controlsContainer.position);
