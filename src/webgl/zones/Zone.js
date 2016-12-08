@@ -52,8 +52,8 @@ class Zone {
 		for(let i = 0; i < this.objects.length; i++) {
 			let obj = this.objects[i].object;
 			if(obj.material.fragmentShader) {
-				this.hoverTl.to(obj.material.uniforms.opacity, 2.2, {value: 1}, 0);
-				this.hoverTl.to(obj.mesh.rotation, 2.2, {y: NumberUtils.toRadians(10), ease: Circ.easeIn}, 0);
+				this.hoverTl.to(obj.material.uniforms.opacity, 3.1, {value: 1}, 0);
+				this.hoverTl.to(obj.mesh.rotation, 3.1, {y: NumberUtils.toRadians(10), ease: Circ.easeInOut}, 0);
 			}
 		}
 

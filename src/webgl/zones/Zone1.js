@@ -131,10 +131,10 @@ class Zone1 extends Zone {
 		let chestnutMesh = this.chestnut.object.mesh;
 		let benchMesh = this.bench.object.mesh;
 
-		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
+		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Circ.easeInOut}, '0');
 
-		this.timeline.fromTo(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.chestnut.roty), ease: Expo.easeOut}, '0');
-		this.timeline.fromTo(benchMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.bench.roty), ease: Expo.easeOut}, '0');
+		this.timeline.fromTo(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.chestnut.roty), ease: Circ.easeInOut}, '0');
+		this.timeline.fromTo(benchMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.bench.roty), ease: Circ.easeInOut}, '0');
 
 		this.playSound();
 	}
