@@ -10,9 +10,8 @@
 		</div>
 		<div id="quote" ref="quote">
 			<div class="container" ref="container">
-				<div class="sentence"><span>Ça </span><span>m'a </span><span>coupé </span><span>le </span><span>souffle</span><span>. </span></div>
 				<div class="sentence"><span>Jamais,</span></div>
-				<div class="sentence"><span>avant </span><span>ces </span><span>derniers </span><span>jours</span><span>, </span></div>
+				<div class="sentence"><span> avant </span><span>ces </span><span>derniers </span><span>jours</span><span>, </span></div>
 				<div class="sentence"><span>je </span><span>n'avais </span><span>pressenti </span><span>ce </span><span>que </span><span>voulait </span><span>dire </span></div>
 				<div class="sentence"><span>exister</span></div>
 			</div>
@@ -23,6 +22,7 @@
 <script>
 	
 import Emitter from '../../core/Emitter';
+import SoundManager from '../../sound/SoundManager';
 
 export default {
 
@@ -88,6 +88,8 @@ export default {
 		// this.circles.push(this.progressCircle);
 
 		this.$refs.loading.appendChild(this.svgProgress);
+
+		this.setupQuoteAnimation();
 	},
 
 	methods: {
@@ -105,8 +107,6 @@ export default {
 			});
 
 			if (this.state == 1) {
-				// setTimeout(()=>{Emitter.emit('LOADING_COMPLETE');}, 1000);
-				// 
 				let tl = new TimelineLite()
 				tl.to(this.$refs.loading, 1, {
 					delay: 2,
@@ -114,7 +114,7 @@ export default {
 					onComplete: () => {
 						Emitter.off('OBJ_LOADED', this.updateLoading);
 						TweenLite.set(this.$refs.loading, {display: 'none'});
-						this.quoteAnimation();
+						this.playQuoteAnimation();
 					}
 				}, 0)
 				.to(this.circles, 2, {
@@ -127,30 +127,72 @@ export default {
 			}
 		},
 
-		quoteAnimation() {
+		setupQuoteAnimation() {
 
 			let sentences = Array.from(this.$refs.container.childNodes);
-			let tl = new TimelineMax();
-			tl.pause();
+			this.quoteTl = new TimelineMax();
+			this.quoteTl.pause();
 
+			let delay = 0;
 			for (let i = 0; i < sentences.length; i++) {
 				if( sentences[i].nodeType == Node.ELEMENT_NODE ) {
-					console.log(sentences[i].childNodes);
-					tl.staggerTo(Array.from(sentences[i].childNodes), 1, {
-						opacity: 1,
-						y: 0,
-						ease: Power3.easeOut,
-						onStart: () => {
-							// console.log('Start tween n°' + i);
-						},
-						onComplete: () => {
-							// console.log('End tween n°' + i);
-						}
-					}, .2);
+					let duration = 1;
+					switch(i) {
+						case 0:
+							delay = 0;
+							duration = .1
+							break;
+						case 1:
+							delay = 0;
+							break;
+						case 2:
+							delay = "+=0.8";
+							break;
+						case 3:
+							delay = "+=0";
+							duration = 3;
+							break;
+					}
+
+					let words = Array.from(sentences[i].childNodes);
+
+					if(words.length > 1){
+						this.quoteTl.staggerTo(words, duration, {
+							opacity: 1,
+							y: 0,
+							ease: Power3.easeOut
+						}, .2, delay);
+					}
+					else {
+						this.quoteTl.to(words[0], duration, {
+							opacity: 1,
+							y: 0,
+							ease: Power3.easeOut
+						}, delay);
+					}
 				}
 			}
 
-			tl.play();
+			this.quoteTl.eventCallback("onComplete", () => {
+				TweenLite.to(this.$refs.quote, 2, {
+					opacity: 0,
+					onStart: () => {
+						console.log('Start fadeOut');
+					},
+					onComplete: () => {
+						console.log('End fadeOut');
+						TweenLite.set(this.$el, {
+							display: 'none'
+						});
+						Emitter.emit('LOADING_COMPLETE');
+					}
+				});
+			});
+		},
+
+		playQuoteAnimation() {
+			this.quoteTl.play();
+			SoundManager.play('01');
 		}
 	}
 }
@@ -237,12 +279,11 @@ export default {
 					color: $white;
 					font-size: 44px;
 					line-height: 1.5em;
-					&:last-child {
-					}
 				}
 
 				&:last-child {
 					flex-basis: 100%;
+					transform: translateY(1em);
 					text-align: center;
 					span {
 						font-size: 54px;
