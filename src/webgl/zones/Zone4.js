@@ -142,7 +142,7 @@ class Zone4 extends Zone{
 			volume: 3
 		});
 
-		this.datas = new DataEmitter({
+		this.datas = new DataEmitter(this.controlsContainer, ['fountain1', 'fountain2'], {
 			x: 17,
 			y: 2,
 			z: 6,

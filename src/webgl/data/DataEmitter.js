@@ -1,11 +1,16 @@
+import NumberUtils from '../utils/number-utils'; 
+
 class DataEmitter {
 
 	/**
 	 * @constructor
 	 */
-	constructor(options) {
+	constructor(controlContainer, datas, options) {
 		this.group = new THREE.Group();
 
+
+		this.datas = datas;
+		this.controlContainer = controlContainer;
 		this.posZ = options.z;
 		this.posY = options.y;
 		this.posX = options.x;
@@ -26,6 +31,7 @@ class DataEmitter {
 		//this.addHelper();
 		this.addParticles();
 		this.addLines();
+		this.addTextDatas();
 
 	}
 
@@ -48,7 +54,7 @@ class DataEmitter {
 
 		this.pMaterial = new THREE.PointsMaterial( {
 			color: 0x939393,
-			size: 3,
+			size: 4,
 			//blending: THREE.AdditiveBlending,
 			fog: true,
 			transparent: true,
@@ -104,6 +110,43 @@ class DataEmitter {
 		this.group.add( this.linesMesh );
 	}
 
+	addPlane(name) {
+		let texture = new THREE.TextureLoader().load( "assets2d/datas/" + name + ".png" );
+		let geometry = new THREE.PlaneGeometry( 1, 0.5);
+		let material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, map: texture, transparent: true} );
+		let meshPlane = new THREE.Mesh( geometry, material );
+		
+		this.group.add( meshPlane );
+
+
+		let randomID = NumberUtils.getRandomIntInclusive(0, this.maxParticles);
+		let dataParticle = this.particlesData[this.randomID];
+
+		let dataX  = this.posX + this.particlePositions[ randomID * 3];
+		let dataY  = this.posY + this.particlePositions[ randomID * 3 + 1];
+		let dataZ  = this.posZ + this.particlePositions[ randomID * 3 + 2];
+
+		meshPlane.position.x = dataX;
+		meshPlane.position.y = dataY;
+		meshPlane.position.z = dataZ;
+
+		let dataText = {
+			mesh: meshPlane,
+			particle: dataParticle,
+			id: randomID
+		};
+
+		return dataText;
+	}
+
+	addTextDatas() {
+		this.textDatas = [];
+		for( let i = 0; i < this.datas.length; i++) {
+			let dataText = this.addPlane(this.datas[i]);
+			this.textDatas.push(dataText);
+		}
+	}
+
 	update() {
 		let vertexpos = 0;
 		let colorpos = 0;
@@ -113,9 +156,13 @@ class DataEmitter {
 			// get the particle
 			let particleData = this.particlesData[i];
 
-			this.particlePositions[ i * 3     ] += particleData.velocity.x;
-			this.particlePositions[ i * 3 + 1 ] += particleData.velocity.y;
-			this.particlePositions[ i * 3 + 2 ] += particleData.velocity.z;
+			let partX = this.particlePositions[ i * 3     ];
+			let partY = this.particlePositions[ i * 3 + 1 ];
+			let partZ = this.particlePositions[ i * 3 + 2 ];
+
+			this.particlePositions[ i * 3     ] = partX + particleData.velocity.x;
+			this.particlePositions[ i * 3 + 1 ] = partY + particleData.velocity.y;
+			this.particlePositions[ i * 3 + 2 ] = partZ + particleData.velocity.z;
 
 			if ( this.particlePositions[ i * 3 + 1 ] < -this.boxSide/2 || this.particlePositions[ i * 3 + 1 ] > this.boxSide/2 )
 				particleData.velocity.y = -particleData.velocity.y;
@@ -126,6 +173,20 @@ class DataEmitter {
 
 			if ( this.effectController.limitConnections && particleData.numConnections >= this.effectController.maxConnections )
 				continue;
+
+			for (let j = 0; j < this.textDatas.length; j++) {
+
+				let currentData = this.textDatas[j];
+				let currentMesh = currentData.mesh;
+
+				if( i === currentData.id) {
+					currentMesh.position.x = this.posX + this.particlePositions[ i * 3     ];
+					currentMesh.position.y = this.posY + this.particlePositions[ i * 3 + 1 ];
+					currentMesh.position.z = this.posZ + this.particlePositions[ i * 3 + 2 ];
+				}
+
+				currentMesh.lookAt(this.controlContainer.position);
+			}
 
 			// Check collision
 			for ( let j = i + 1; j < this.maxParticles; j++ ) {
