@@ -1,8 +1,14 @@
 <template>
 	<div id="end-screen">
 		<img src="/images/logo_sm_white.png" alt="">
-		<div class="restart">
-			<span>Rejouer l'expérience</span>
+		<div class="restart" @mouseenter="animateRectangle" @mouseleave="stopRectangle">
+			<div class="rectangle" ref="rectangle">
+				<span class="side left" ref="rectangleLeft"></span>
+				<span class="side bottom" ref="rectangleBottom"></span>
+				<span class="side right" ref="rectangleRight"></span>
+				<span class="side top" ref="rectangleTop"></span>
+			</div>
+			<span class="restartButton">Rejouer l'expérience</span>
 		</div>
 		<div class="more">
 			<div class="col">
@@ -47,9 +53,35 @@ export default {
 	},
 
 	mounted() {
+		this.tl = new TimelineMax({paused: true});
+
+		this.tl.to(this.$refs.rectangleLeft, .5/3, {
+			y:0
+		}).to(this.$refs.rectangleBottom, .5, {
+			x:0
+		}).to(this.$refs.rectangleRight, .5/3, {
+			y:0
+		}).to(this.$refs.rectangleTop, .5, {
+			x:0
+		});
+
+		this.tween = this.tl.tweenTo(this.tl.duration(), {
+			ease: Power3.easeInOut,
+			paused: true
+		});
+
 	},
 
 	methods: {
+		animateRectangle() {
+			console.log('animateRectangle');
+			this.tween.play();
+		},
+
+		stopRectangle() {
+			console.log('stopRectangle');
+			this.tween.reverse();
+		}
 	},
 
 	components: {
@@ -85,11 +117,56 @@ export default {
 
 		.restart {
 			margin: 12vh auto;
-			display: inline-block;
-			padding: 2em;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
 			border: solid 1px $second-color;
-			width: auto;
-			span {
+			width: 280px;
+			height: 70px;
+			position: relative;
+			.rectangle {
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				overflow: hidden;
+				.side {
+					display: inline-block;
+					position: absolute;
+					background-color: $second-color;
+					$border-size: 2px;
+					&.left {
+						left: 0;
+						top: 0;
+						bottom: 0;
+						width: $border-size;
+						transform: translateY(-100%);
+					}
+					&.bottom {
+						left: 0;
+						right: 0;
+						bottom: 0;
+						height: $border-size;
+						transform: translateX(-100%);
+					}
+					&.right {
+						top: 0;
+						right: 0;
+						bottom: 0;
+						width: $border-size;
+						transform: translateY(100%);
+					}
+					&.top {
+						left: 0;
+						top: 0;
+						right: 0;
+						height: $border-size;
+						transform: translateX(100%);
+					}
+				}
+			}
+			.restartButton {
 				position: relative;
 				&:before, &:after {
 					content: '';
