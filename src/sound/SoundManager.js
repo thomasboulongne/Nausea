@@ -176,6 +176,14 @@ class Manager {
 				}
 			},
 			{
+				'name': 'hover_button',
+				'file': 'hover_button',
+				'options': {
+					'volume': 1,
+					'loop': false
+				}
+			},
+			{
 				'name': 'materialize',
 				'file': 'materialize',
 				'options': {
@@ -194,6 +202,46 @@ class Manager {
 			{
 				'name': 'progressioncomplete',
 				'file': 'ProgressionComplete',
+				'options': {
+					'volume': 1,
+					'loop': false
+				}
+			},
+			{
+				'name': 'tip',
+				'file': 'tip',
+				'options': {
+					'volume': 1,
+					'loop': false
+				}
+			},
+			{
+				'name': 'out',
+				'file': 'out',
+				'options': {
+					'volume': 1,
+					'loop': false
+				}
+			},
+			{
+				'name': 'tick',
+				'file': 'tick',
+				'options': {
+					'volume': 1,
+					'loop': false
+				}
+			},
+			{
+				'name': 'complete',
+				'file': 'complete',
+				'options': {
+					'volume': 1,
+					'loop': false
+				}
+			},
+			{
+				'name': 'transition_page',
+				'file': 'transition_page',
 				'options': {
 					'volume': 1,
 					'loop': false

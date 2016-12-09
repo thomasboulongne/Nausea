@@ -6,6 +6,7 @@
 <script>
 
 import Emitter from '../../core/Emitter';
+import SoundManager from '../../sound/SoundManager';
 
 export default {
 
@@ -35,6 +36,7 @@ export default {
 	methods: {
 		rtl_start(path) {
 			this.rtl_on = true;
+			SoundManager.play('transition_page');
 			TweenLite.fromTo(this.$el, .8, {
 				left: '100%',
 				width: '60%'
@@ -59,6 +61,7 @@ export default {
 
 		ltr_start(path) {
 			this.ltr_on = true;
+			SoundManager.play('transition_page');
 			TweenLite.fromTo(this.$el, .8, {
 				left: '-100%',
 				width: '60%',

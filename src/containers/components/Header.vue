@@ -1,7 +1,7 @@
 <template>
 	<header>
 		<img src="/images/logo_sm.png" alt="Nausea" id="logo">
-		<div id="discover" :class="clicked ? 'hover' : ''">
+		<div id="discover" :class="clicked ? 'hover' : ''" @mouseenter="hoverSound">
 			<a :href="'/'" @click="discoverClick($event)" v-html="link.text"></a>
 			<div class="icon" @click="discoverClick($event)"></div>
 			<div class="lines" @click="discoverClick($event)">
@@ -15,6 +15,7 @@
 <script>
 
 import Emitter from '../../core/Emitter';
+import SoundManager from '../../sound/SoundManager';
 
 export default {
 
@@ -47,6 +48,11 @@ export default {
 			event.preventDefault();
 			this.clicked = true;
 			this.tl.restart();
+			SoundManager.play('tick');
+		},
+
+		hoverSound() {
+			SoundManager.play('hover_button');
 		}
 	},
 

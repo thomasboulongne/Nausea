@@ -630,10 +630,14 @@ class ExperienceScene {
 				}
 			}
 			else {
-				if(this.INTERSECTED != null && !this.INTERSECTED.animated)
-					this.INTERSECTED.endHoverAnimation();
+				if(this.INTERSECTED != null) {
+					this.cursor.onMouseLeave();
+
+					if(!this.INTERSECTED.animated){
+						this.INTERSECTED.endHoverAnimation();
+					}
+				}
 				
-				this.cursor.onMouseLeave();
 			}
 			this.INTERSECTED = this.intersect;
 		}

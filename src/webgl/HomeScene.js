@@ -18,7 +18,7 @@ import Emitter from '../core/Emitter';
 import Lights from './lights/Lights';
 import HomeLights from './lights/HomeLights';
 
-import { debounce, throttle } from 'lodash';
+import { throttle } from 'lodash';
 
 class HomeScene {
 
@@ -82,10 +82,6 @@ class HomeScene {
 		this.initObjects();
 
 		this.addEventListeners();
-
-		this.throttledMouseEnter = throttle(this.onMouseEnter.bind(this), 800);
-
-		this.debouncedMouseLeave = debounce(this.onMouseLeave.bind(this), 500);
 
 		this.exitFlag = false;
 
@@ -355,13 +351,6 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		if(this.endStartAnimation && this.enableHoverSound && !SoundManager.get('hover').playing() && !this.INTERSECTED ) {
-			SoundManager.get('hover').volume(1);
-			SoundManager.get('hover').stop();
-			SoundManager.play('hover');
-		}
-
-
 		if(!this.in) {
 			Emitter.emit('HOME_MOUSEENTER');
 
@@ -375,9 +364,6 @@ class HomeScene {
 
 		this.in = false;
 
-		if(this.enableHoverSound && SoundManager.get('hover').playing()) {
-			SoundManager.get('hover').fade(1,0,1000);
-		}
 		this.cursor.onMouseLeave();
 	}
 
@@ -412,7 +398,7 @@ class HomeScene {
 	}
 
 	exit() {
-
+		this.startRaycast = false;
 		if(!this.exitFlag) {
 			SoundManager.play('enter');
 			let exitTime = .7;
@@ -468,19 +454,18 @@ class HomeScene {
 			let intersects = this.raycaster.intersectObjects( this.raycastMeshes, true );
 
 			if ( intersects.length == 0 ) {
+				if(this.INTERSECTED) {
+					this.onMouseLeave();
+				}
 				this.INTERSECTED = false;
 			}
 			else {
+				if(!this.INTERSECTED) {
+					this.onMouseEnter();
+				}
 				this.enableHoverSound = true;
-				this.debouncedMouseLeave();
-				this.throttledMouseEnter();
 				this.INTERSECTED = true;
 			}
-		}
-
-		if(!this.INTERSECTED) {
-			this.enableHoverSound = false;
-			this.cursor.onMouseLeave();
 		}
 
 		this.composer.reset();

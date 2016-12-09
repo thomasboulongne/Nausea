@@ -1,5 +1,6 @@
 import './WebglCursor.scss';
 import Emitter from '../../core/Emitter';
+import SoundManager from '../../sound/SoundManager';
 
 class WebglCursor {
 	
@@ -154,8 +155,8 @@ class WebglCursor {
 				}
 			},
 			onComplete: () => {
+				SoundManager.play('complete');
 				Emitter.emit(this.eventKey);
-				console.log('onComplete cursor');
 			}
 		}).pause();
 	}
@@ -177,10 +178,14 @@ class WebglCursor {
 
 	onMouseEnter() {
 		this.tween.timeScale(1).play();
+		SoundManager.play('tick');
+		SoundManager.play('progressbar');
 	}
 
 	onMouseLeave() {
 		this.tween.timeScale(3).reverse();
+		SoundManager.get('progressbar').stop();
+		SoundManager.play('out');
 	}
 
 	updateSVG(elt, duration, SVGSize, size, offset, current) {

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import SoundManager from '../../sound/SoundManager';
 
 export default {
 
@@ -63,6 +64,7 @@ export default {
 
 	methods: {
 		show() {
+			SoundManager.play('tip');
 			this.tlShow.play();
 		},
 
