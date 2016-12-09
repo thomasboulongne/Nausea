@@ -3,6 +3,7 @@
 		<header-comp :link="link" ref="header"></header-comp>
 		<webgl-experience v-show="page == 'experience'" ref="gl"></webgl-experience>
 		<text-comp v-show="page == 'text'"></text-comp>
+		<endscreen-comp v-if="false"></endscreen-comp>
 		<footer-comp ref="footer"></footer-comp>
 		<transition></transition>
 	</div>
@@ -15,6 +16,7 @@ import WebglExperienceComponent from './components/WebglExperience';
 import FooterComponent from './components/Footer';
 import TextComponent from './Text';
 import Transition from './components/Transition';
+import EndscreenComponent from './components/Endscreen';
 
 import Emitter from '../core/Emitter';
 
@@ -79,6 +81,7 @@ export default {
 		'footer-comp': FooterComponent,
 		'header-comp': HeaderComponent,
 		'text-comp': TextComponent
+		'endscreen-comp': EndscreenComponent
 	}
 }
 
