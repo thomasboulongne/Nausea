@@ -25,7 +25,7 @@ export default {
 		this.tlShow.pause();
 		this.tlShow.to(this.$el, .5, {
 			display: 'flex',
-			width: '310px'
+			width: '350px'
 		})
 		.to([this.$refs.img, this.$refs.text], 0.4, {
 			display: 'block',
@@ -86,17 +86,18 @@ export default {
 		left: 50%;
 		transform: translate(-50%, -50%);
 		background: $white-bright;
-		padding: 1.5em;
 		font-family: 'BaskervilleMT';
 		box-shadow: 0 0 10px 4px rgba(170, 170, 170, 0.5);
+		height: 90px;
 		img {
-			height: 3em;
-			margin-right: 1.5em;
+			height: 100%;
+			margin-right: 1em;
 			display: none;
 		}
 		span {
 			display: none;
 			flex-grow: 1;
+			padding: 1.5em;
 		}
 	}
 </style>

@@ -23,8 +23,6 @@ class Spline1 extends Spline {
 			new THREE.Vector3(-1, 2, 8)
 		];
 		super.init();
-
-		console.log('init spline', this.controlsContainer);
 	}
 
 	createGeometry() {

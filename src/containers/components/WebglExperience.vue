@@ -1,6 +1,10 @@
 <template>
 	<div :class="['webgl', 'experience']">
 		<tooltip-comp :img="ttImg" :text="ttText" ref="tooltip"></tooltip-comp>
+		<div class="chapter" ref="chapter">
+			<div class="counter" ref="counter">Chap. {{chapter.number}}/IV</div>
+			<div class="name" ref="name">{{chapter.name}}</div>
+		</div>
 	</div>
 </template>
 
@@ -26,13 +30,18 @@ export default {
 				}
 			],
 			ttImg: '',
-			ttText: ''
+			ttText: '',
+			chapter: {
+				number: '',
+				name: ''
+			}
 		};
 	},
 
 	created() {
 		Emitter.on('SHOW_TT', this.showTooltip.bind(this));
 		Emitter.on('HIDE_TT', this.hideTooltip.bind(this));
+		Emitter.on('ENTER_ZONE', this.showChapter.bind(this));
 	},
 
 	mounted() {
@@ -41,6 +50,16 @@ export default {
 		this.$el.appendChild(this.canvas);
 
 		this.scene.addCanvasElement(this.canvas);
+
+		this.tl = new TimelineLite({paused: true});
+		this.tl.set(this.$refs.chapter, {
+			display: 'block'
+		})
+		.staggerTo([this.$refs.counter, this.$refs.name], 1, {
+			opacity: 1,
+			y:0,
+			onComplete: () => setTimeout(() => this.tl.reverse(), 1500)
+		}, .3);
 	},
 
 	methods: {
@@ -54,6 +73,29 @@ export default {
 		hideTooltip(tooltip) {
 			tooltip--;
 			this.$refs.tooltip.hide();
+		},
+
+		showChapter(name, number) {
+			switch(number) {
+				case 1:
+					this.chapter.number = 'I';
+					break;
+				case 2:
+					this.chapter.number = 'II';
+					break;
+				case 3:
+					this.chapter.number = 'III';
+					break;
+				case 4:
+					this.chapter.number = 'IV';
+					break;
+			}
+
+			console.log('Chap number', number, 'Chap compilé', this.chapter.number);
+
+			this.chapter.name = name;
+
+			this.tl.play();
 		}
 
 	},
@@ -74,6 +116,31 @@ export default {
 			top: 0;
 			left: 0;
 			opacity: 0;
+		}
+
+		.chapter {
+			position: absolute;
+			display: none;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			z-index: 1;
+			.counter {
+				font-size: 36px;
+				display: block;
+				opacity: 0;
+				transform: translateY(100%);
+				color: #7e7e7e;
+			}
+			.name {
+				margin-top: .3em;
+				font-size: 72px;
+				display: block;
+				opacity: 0;
+				transform: translateY(100%);
+				color: #585858;
+			}
 		}
 	}
 

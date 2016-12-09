@@ -19,6 +19,7 @@ class Zone3 extends Zone {
 		this.nbChestnuts = 1;
 		this.nbShrubs = 3;
 		this.idZone = 3;
+		this.name = 'La Statue';
 	}
 
 	init(statue, chestnuts, shrubs) {
@@ -134,8 +135,8 @@ class Zone3 extends Zone {
 
 	}
 
-	playAnim() {
-		super.playAnim();
+	playAnim(nb) {
+		super.playAnim(nb);
 		this.scene.add(this.datas.group);
 		let statue = this.statue.object.mesh;
 		this.timeline.from(statue.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');

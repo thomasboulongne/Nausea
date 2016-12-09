@@ -116,8 +116,9 @@ class Zone {
 		this.timeline.play();
 	}
 
-	playAnim () {
-		Emitter.emit('ENTER_ZONE');
+	playAnim (zoneNumber) {
+		console.log('Zone number', zoneNumber);
+		Emitter.emit('ENTER_ZONE', this.name, zoneNumber);
 		this.animated = true;
 		for(let i = 0; i < this.objects.length; i++) {
 			this.objects[i].object.material.transparent = false;
