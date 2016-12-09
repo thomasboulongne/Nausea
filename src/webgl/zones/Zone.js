@@ -16,6 +16,7 @@ class Zone {
 		this.scene = scene;
 		this.controlsContainer = controlsContainer;
 		this.zoomParams = zoomParams;
+		this.idZone;
 
 		this.animated = false;
 
@@ -51,8 +52,9 @@ class Zone {
 		for(let i = 0; i < this.objects.length; i++) {
 			let obj = this.objects[i].object;
 			if(obj.material.fragmentShader) {
-				this.hoverTl.to(obj.material.uniforms.opacity, 2.2, {value: 1}, 0);
-				this.hoverTl.to(obj.mesh.rotation, 2.2, {y: NumberUtils.toRadians(10), ease: Circ.easeIn}, 0);
+				this.hoverTl.to(obj.material.uniforms.opacity, 3.1, {value: 1}, 0);
+				if(this.objects[i].rotate)
+					this.hoverTl.to(obj.mesh.rotation, 3.1, {y: NumberUtils.toRadians(10), ease: Circ.easeInOut}, 0);
 			}
 		}
 
@@ -64,19 +66,41 @@ class Zone {
 		this.initHoverTimeline();
 		this.tweenTime = { time : 0};
 		this.timeline = new TimelineMax();
-		this.timeline.to(this.tweenTime, 7, {time: 2, ease: Circ.easeOut, onComplete: () => {
-			this.animate = false;
-		}});
+		this.timeline.to(this.tweenTime, 7, {
+			time: 2,
+			ease: Circ.easeOut,
+			onComplete: () => {
+				this.animate = false;
+				
+			}
+		});
 
 		this.timeline.pause();
 	}
 
 	addListeners() {
-		Emitter.on('END_ZONE1', () => {
-			this.playEndZoneSound(0);
-		});
-		Emitter.on('END_ZONE4', () => {
-			this.playEndZoneSound(1);
+		// Emitter.on('LEAVE_ZONE', () => {
+		// 	this.playEndZoneSound(0);
+		// });
+		// Emitter.on('END_ZONE4', () => {
+		// 	this.playEndZoneSound(1);
+		// });
+		Emitter.on('LEAVE_ZONE', (idZone) => {
+			if(idZone === 1) {
+				// Play sound after scene 1 and disable hover during this time
+			}
+			switch (idZone) {
+				case 1:
+					// PLay sound, play with fog
+					this.playEndZoneSound(0);
+					break;
+				case 4:
+					// PLay sound, play with fog
+					this.playEndZoneSound(1);
+					break;
+				default:
+					break;
+			}
 		});
 	}
 
@@ -85,15 +109,24 @@ class Zone {
 	}
 
 	playAnim () {
+		Emitter.emit('ENTER_ZONE');
 		this.animated = true;
+		for(let i = 0; i < this.objects.length; i++) {
+			this.objects[i].object.material.transparent = false;
+		}
 		this.playTimeline();
 
 		this.zoomParams.strength = 0.020;
 
-		TweenMax.delayedCall(2, () => {
+		TweenMax.delayedCall(1, () => {
 			this.spline.enableSpline();
 		});
 
+		for(let i = 0; i < this.objects.length; i++) {
+			const curObj = this.objects[i];
+			if(curObj.rotate)
+				this.timeline.to(curObj.object.mesh.rotation, 11, {'y': NumberUtils.toRadians(curObj.roty), ease: Circ.easeInOut}, '0');
+		}
 
 		SoundManager.play('materialize');
 	}
@@ -110,7 +143,6 @@ class Zone {
 
 	endHoverAnimation() {
 		this.hoverTl.reverse();
-		//this.objects[i].object.material.uniforms.opacity.value = 0;
 	}
 
 	addToGUI(gui) {

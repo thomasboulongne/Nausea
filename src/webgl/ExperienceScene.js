@@ -577,6 +577,10 @@ class ExperienceScene {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
+		Emitter.on('ENTER_ZONE', this.onEnterZone.bind(this));
+		Emitter.on('LEAVE_ZONE', (idZone) => {
+			this.onLeaveZone(idZone);
+		});
 
 		window.addEventListener('keydown', this.toggleCamera.bind(this));
 	}
@@ -593,6 +597,14 @@ class ExperienceScene {
 	startZoneAnimation() {
 		if(this.INTERSECTED != null)
 			this.INTERSECTED.playAnim();
+	}
+
+	onEnterZone() {
+		TweenMax.to(this.scene.fog, 1, {density: 0.12, delay: 1});
+	}
+	onLeaveZone(idZone) {
+		console.log('leave zone', idZone);
+		TweenMax.to(this.scene.fog, 1, {density: 0.08});
 	}
 
 	/**

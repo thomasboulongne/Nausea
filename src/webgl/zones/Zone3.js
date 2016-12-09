@@ -18,6 +18,7 @@ class Zone3 extends Zone {
 		//properties to count how many objects to clone
 		this.nbChestnuts = 1;
 		this.nbShrubs = 3;
+		this.idZone = 3;
 	}
 
 	init(statue, chestnuts, shrubs) {
@@ -29,6 +30,7 @@ class Zone3 extends Zone {
 			'y' : 0,
 			'z' : -2.5,
 			'scale' : 1.1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 71,
 			'rotz' : 0
@@ -41,6 +43,7 @@ class Zone3 extends Zone {
 			'y' : 0,
 			'z' : -7.5,
 			'scale' : 0.8,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 175,
 			'rotz' : 0
@@ -53,6 +56,7 @@ class Zone3 extends Zone {
 			'y' : 0,
 			'z' : -1.47,
 			'scale' : 0.9,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -65,6 +69,7 @@ class Zone3 extends Zone {
 			'y' : 0,
 			'z' : -4,
 			'scale' : 1.2,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -77,6 +82,7 @@ class Zone3 extends Zone {
 			'y' : 0,
 			'z' : -3,
 			'scale' : 0.71,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
