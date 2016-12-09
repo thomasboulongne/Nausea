@@ -49,7 +49,7 @@ export default {
 
 		let lastR = 1;
 		for (let i = lastR; i > 0; i -= 0.35) {
-			this.svg.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + window.innerHeight * i + '" stroke-width="1" stroke="#262626"/></circle>';
+			this.svg.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + window.innerHeight * i + '" stroke-width="1" stroke="#262626" fill="none"/></circle>';
 			lastR = i;
 		}
 
@@ -70,7 +70,7 @@ export default {
 		});
 
 		let radius = window.innerHeight * lastR;
-		this.svgProgress.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + radius + '" stroke-width="4" stroke="#FFFFFF" transform="rotate(-90, ' + cx + ', ' + cy + ')"/></circle>';
+		this.svgProgress.innerHTML += '<circle cx="' + cx + '" cy="' + cy + '" r="' + radius + '" stroke-width="4" stroke="#FFFFFF" fill="none" transform="rotate(-90, ' + cx + ', ' + cy + ')"/></circle>';
 
 		this.progressCircle = this.svgProgress.childNodes[this.svgProgress.childNodes.length - 1];
 
@@ -209,6 +209,7 @@ export default {
 		z-index: 3;
 		background-color: #000000;
 		opacity: 1;
+		background-image: url('/images/noise.png');
 
 		#home-logo {
 			position: absolute;
@@ -261,7 +262,9 @@ export default {
 		right: 0;
 		bottom: 0;
 
-		background-image: url('/images/noise.png');
+		background-image: url('/images/background_quote.png');
+		background-size: cover;
+		background-repeat: no-repeat;
 		z-index: 2;
 		.container {
 			position: absolute;
