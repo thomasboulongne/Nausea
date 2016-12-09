@@ -37,6 +37,14 @@ class Zone {
 	}
 
 	init() {
+
+		for(let i = 0; i < this.objects.length; i++) {
+			const obj = this.objects[i];
+			if(!(obj.object.options.materialize)) {
+				obj.object.material.opacity = 0;
+			}
+		}
+
 		SoundManager.get('materialize').volume(0.35);
 		this.soundsEndZone = ['04', '10'];
 	}
@@ -71,9 +79,9 @@ class Zone {
 			ease: Circ.easeOut,
 			onComplete: () => {
 				this.animate = false;
-				
-			}
-		});
+				this.scene.add(this.datas.group);
+			},
+		}, '1');
 
 		this.timeline.pause();
 	}
@@ -118,7 +126,7 @@ class Zone {
 
 		this.zoomParams.strength = 0.020;
 
-		TweenMax.delayedCall(1, () => {
+		TweenMax.delayedCall(2, () => {
 			this.spline.enableSpline();
 		});
 
@@ -126,6 +134,16 @@ class Zone {
 			const curObj = this.objects[i];
 			if(curObj.rotate)
 				this.timeline.to(curObj.object.mesh.rotation, 11, {'y': NumberUtils.toRadians(curObj.roty), ease: Circ.easeInOut}, '0');
+			if(!(curObj.object.options.materialize)) {
+				this.timeline.to(curObj.object.material, 3 , {'opacity': 1, ease: Expo.easeOut, onComplete: () => {
+					curObj.object.material.transparent = false;
+				}}, '0');
+				this.timeline.fromTo(curObj.object.mesh.scale, 3, 
+					{'x': 0.6, y: '0.8', z: '0.8', ease: Expo.easeOut},
+					{'x': 1.2, y: '1.2', z: '1.2', ease: Expo.easeOut},
+				'0');
+				this.timeline.from(curObj.object.mesh.rotation, 3, {'y': NumberUtils.toRadians(-10)}, '0');
+			}
 		}
 
 		SoundManager.play('materialize');

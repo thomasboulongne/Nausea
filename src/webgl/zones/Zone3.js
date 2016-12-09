@@ -32,7 +32,7 @@ class Zone3 extends Zone {
 			'scale' : 1.1,
 			'rotate' : true,
 			'rotx' : 0,
-			'roty' : 71,
+			'roty' : 91,
 			'rotz' : 0
 		};
 
