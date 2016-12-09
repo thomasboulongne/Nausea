@@ -147,32 +147,32 @@ class Manager {
 				'name': 'atmos01',
 				'file': 'atmos01',
 				'options': {
-					'volume': 0.8,
-					'loop': false
+					'volume': 0.75,
+					'loop': true
 				}
 			},
 			{
 				'name': 'atmos02',
 				'file': 'atmos02',
 				'options': {
-					'volume': 0.8,
-					'loop': false
-				}
-			},
-			{
-				'name': 'atmos04',
-				'file': 'atmos04',
-				'options': {
-					'volume': 0.8,
-					'loop': false
+					'volume': 0.75,
+					'loop': true
 				}
 			},
 			{
 				'name': 'atmos05',
 				'file': 'atmos05',
 				'options': {
-					'volume': 0.8,
-					'loop': false
+					'volume': 0.75,
+					'loop': true
+				}
+			},
+			{
+				'name': 'atmos06',
+				'file': 'atmos06',
+				'options': {
+					'volume': 0.75,
+					'loop': true
 				}
 			},
 			{

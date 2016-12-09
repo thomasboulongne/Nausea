@@ -702,8 +702,14 @@ class ExperienceScene {
 					SoundManager.play('04');
 				});
 				break;
+			case 2:
+				SoundManager.play('atmos02');
+				break;
+			case 3:
+				SoundManager.play('atmos05');
+				break;
 			case 4:
-				this.outro();
+				SoundManager.play('atmos06');
 				break;
 			default:
 				break;
