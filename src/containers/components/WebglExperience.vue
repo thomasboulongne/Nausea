@@ -19,6 +19,10 @@ export default {
 				{
 					img: '/images/tip1.gif',
 					text: 'Placez votre curseur sur un élément pour le matérialiser.'
+				},
+				{
+					img: '/images/tip2.gif',
+					text: 'Placez votre curseur sur un élément pour le matérialiser.'
 				}
 			],
 			ttImg: '',

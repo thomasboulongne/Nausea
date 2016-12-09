@@ -91,6 +91,7 @@ export default {
 		background: $white-bright;
 		padding: 1.5em;
 		font-family: 'BaskervilleMT';
+		box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.5);
 		img {
 			height: 3em;
 			margin-right: 1.5em;

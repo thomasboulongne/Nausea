@@ -84,7 +84,7 @@ class WebglCursor {
 			attr: {
 				'stroke-dasharray': progress.pathLength_spread,
 				'stroke-dashoffset': -progress.pathLength_spread,
-				'stroke-width': 3
+				'stroke-width': 5
 			}
 		});
 
@@ -183,7 +183,7 @@ class WebglCursor {
 	}
 
 	onMouseLeave() {
-		this.tween.timeScale(3).reverse();
+		this.tween.timeScale(2).reverse();
 		SoundManager.get('progressbar').stop();
 		SoundManager.play('out');
 	}
