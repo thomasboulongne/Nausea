@@ -627,6 +627,7 @@ class ExperienceScene {
 				if(this.INTERSECTED == null) {
 					this.intersect.startHoverAnimation();
 					this.cursor.onMouseEnter();
+					setTimeout(() => Emitter.emit('HIDE_TT', 1), 500);
 				}
 			}
 			else {

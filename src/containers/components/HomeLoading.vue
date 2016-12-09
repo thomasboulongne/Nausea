@@ -136,20 +136,21 @@ export default {
 			let delay = 0;
 			for (let i = 0; i < sentences.length; i++) {
 				if( sentences[i].nodeType == Node.ELEMENT_NODE ) {
-					let duration = 1;
+					console.log(i);
+					let duration = 2;
 					switch(i) {
 						case 0:
 							delay = 0;
 							duration = .1
 							break;
-						case 1:
-							delay = 0;
-							break;
 						case 2:
-							delay = "+=0.8";
+							delay = .7;
 							break;
-						case 3:
-							delay = "-=0.5";
+						case 4:
+							delay = 3.4;
+							break;
+						case 6:
+							delay = 6;
 							duration = 3;
 							break;
 					}
@@ -164,6 +165,7 @@ export default {
 						}, .2, delay);
 					}
 					else {
+						console.log(words[0], delay);
 						this.quoteTl.to(words[0], duration, {
 							opacity: 1,
 							y: 0,
@@ -267,26 +269,25 @@ export default {
 			position: absolute;
 			display: flex;
 			flex-wrap: wrap;
-			width: 50%;
+			width: 33%;
 			justify-content: center;
 			.sentence {
 				span {
+					font-family: 'BaskervilleMT';
 					opacity: 0;
 					transform: translateY(0.3em);
 					white-space: pre;
 					display: inline-block;
-					color: $white;
+					color: $third-color;
 					font-size: 44px;
 					line-height: 1.5em;
+					font-weight: 100;
 				}
 
 				&:last-child {
 					flex-basis: 100%;
-					transform: translateY(1em);
+					transform: translateY(0.3em);
 					text-align: center;
-					span {
-						font-size: 54px;
-					}
 				}
 			}
 		}

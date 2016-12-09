@@ -26,8 +26,7 @@ export default {
 
 	created() {
 		Emitter.on('LOADING_COMPLETE', this.showElements.bind(this));
-		Emitter.on('HOME_MOUSEENTER', this.hideEnter.bind(this));
-		Emitter.on('HOME_MOUSELEAVE', this.showEnter.bind(this));
+		Emitter.on('HOME_ENDENTER', this.showTooltip.bind(this));
 	},
 
 	mounted() {
@@ -46,28 +45,14 @@ export default {
 				opacity: 1,
 				ease: Power2.easeIn
 			});
-
-			this.showEnter(3);
 		},
 
-		showEnter(delay) {
-			if(delay === undefined)
-				delay = 1;
-
-			if(this.$refs.enter) {
-				TweenLite.to(this.$refs.enter, .8, {
-					delay: delay,
+		showTooltip() {
+			if(this.$refs.tooltip) {
+				TweenLite.to(this.$refs.tooltip, .8, {
 					opacity: 1,
-					ease: Power2.easeIn
-				});
-			}
-		},
-
-		hideEnter() {
-			if(this.$refs.enter) {
-				TweenLite.to(this.$refs.enter, .3, {
-					opacity: .0,
-					ease: Power2.easeIn
+					y: 0,
+					ease: Power3.easeOut
 				});
 			}
 		}
@@ -131,13 +116,14 @@ export default {
 			position: absolute;
 			bottom: 13%;
 			left: 50%;
-			transform: translateX(-50%);
+			transform: translate(-50%, 100%);
 			text-transform: uppercase;
 			color: #bbb;
 			font-size: 11px;
 			font-family: 'Gotham-Book';
 			line-height: 2em;
 			letter-spacing: 1px;
+			opacity: 0;
 		}
 
 		footer {

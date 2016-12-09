@@ -17,7 +17,7 @@ export default {
 			obj: true,
 			tooltips: [
 				{
-					img: '/images/tip1.gif',
+					img: '/images/tip2.gif',
 					text: 'Placez votre curseur sur un élément pour le matérialiser.'
 				},
 				{
@@ -32,6 +32,7 @@ export default {
 
 	created() {
 		Emitter.on('SHOW_TT', this.showTooltip.bind(this));
+		Emitter.on('HIDE_TT', this.hideTooltip.bind(this));
 	},
 
 	mounted() {
@@ -48,7 +49,13 @@ export default {
 			this.ttImg = this.tooltips[tooltip].img;
 			this.ttText = this.tooltips[tooltip].text;
 			this.$refs.tooltip.show();
+		},
+
+		hideTooltip(tooltip) {
+			tooltip--;
+			this.$refs.tooltip.hide();
 		}
+
 	},
 
 	components: {

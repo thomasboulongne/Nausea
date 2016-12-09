@@ -393,6 +393,7 @@ class HomeScene {
 				this.boundMouseMove = event => this.updateCameraPosition(event);
 				window.addEventListener('mousemove', this.boundMouseMove);
 				this.endStartAnimation = true;
+				Emitter.emit('HOME_ENDENTER');
 			}
 		}, "-=0.5");
 	}

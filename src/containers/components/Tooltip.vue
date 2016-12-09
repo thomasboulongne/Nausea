@@ -34,11 +34,8 @@ export default {
 		})
 		.to(this.$el, 1, {
 			top: '10%',
-			ease: Power3.easeInOut,
-			onComplete: () => {
-				setTimeout(this.hide, 3000);
-			}
-		}, 2);
+			ease: Power3.easeInOut
+		}, 4);
 
 		this.tlHide = new TimelineLite();
 		this.tlHide.pause();
@@ -91,7 +88,7 @@ export default {
 		background: $white-bright;
 		padding: 1.5em;
 		font-family: 'BaskervilleMT';
-		box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.5);
+		box-shadow: 0 0 10px 4px rgba(170, 170, 170, 0.5);
 		img {
 			height: 3em;
 			margin-right: 1.5em;
