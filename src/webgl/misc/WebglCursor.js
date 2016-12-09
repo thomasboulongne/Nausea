@@ -155,6 +155,7 @@ class WebglCursor {
 			},
 			onComplete: () => {
 				Emitter.emit(this.eventKey);
+				console.log('onComplete cursor');
 			}
 		}).pause();
 	}

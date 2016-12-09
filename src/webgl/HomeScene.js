@@ -12,7 +12,7 @@ import Particles from './objects/Particles';
 import Skybox from './objects/Skybox';
 import Store from './WebGLStore';
 
-import SoundManager from './sound/SoundManager';
+import SoundManager from '../sound/SoundManager';
 import Emitter from '../core/Emitter';
 
 import Lights from './lights/Lights';
@@ -87,13 +87,12 @@ class HomeScene {
 
 		this.debouncedMouseLeave = debounce(this.onMouseLeave.bind(this), 500);
 
+		this.exitFlag = false;
+
 	}
 
 	destructor() {
 		this.removeEventListeners();
-		for (let i = 0; i < this.sounds.length; i++) {
-			this.sounds[i].unload();
-		}
 		this.scene = null;
 	}
 
@@ -172,25 +171,14 @@ class HomeScene {
 	setSounds() {
 		this.enableHoverSound = true;
 
-		this.loadSounds();
-
 		this.setAmbiantSound();
-	}
-
-	loadSounds() {
-		this.sounds = {};
-		this.sounds['ambiant'] = SoundManager.load('ambiant.wav', {loop: true});
-		this.sounds['exist'] = SoundManager.load('exist.wav');
-		this.sounds['enter'] = SoundManager.load('Enter.mp3');
-		this.sounds['hover'] = SoundManager.load('Hover.mp3');
-		this.sounds['progression'] = SoundManager.load('ProgressBar.mp3');
 	}
 
 	/**
 	 * Create sound manager
 	 */
 	setAmbiantSound() {
-		SoundManager.play(this.sounds.ambiant);
+		SoundManager.play('atmos01');
 	}
 
 	initObjects() {
@@ -245,6 +233,18 @@ class HomeScene {
 			},
 			{
 				'name': 'streetLamp',
+				'materialize': false
+			},
+			{
+				'name': 'root',
+				'materialize': false
+			},
+			{
+				'name': 'root2',
+				'materialize': false
+			},
+			{
+				'name': 'root02',
 				'materialize': false
 			}
 		];
@@ -313,8 +313,6 @@ class HomeScene {
 		TweenMax.ticker.addEventListener('tick', this.bindRender);
 		this.bindEnter = this.enter.bind(this);
 		Emitter.on('LOADING_COMPLETE', this.bindEnter);
-		this.bindExit = this.exit.bind(this);
-		Emitter.on('EXPERIENCE_CLICKED', this.bindExit);
 	}
 
 	/**
@@ -325,7 +323,6 @@ class HomeScene {
 		this.domElement.removeEventListener('click', this.bindClick);
 		TweenMax.ticker.removeEventListener('tick', this.bindRender);
 		Emitter.off('LOADING_COMPLETE', this.bindEnter);
-		Emitter.off('EXPERIENCE_CLICKED', this.bindExit);
 		window.removeEventListener('mousemove', this.boundMouseMove);
 	}
 
@@ -358,22 +355,28 @@ class HomeScene {
 	}
 
 	onMouseEnter() {
-		if(this.endStartAnimation && this.enableHoverSound && !this.sounds['hover'].playing() & !this.INTERSECTED ) {
-			this.sounds['hover'].volume(1);
-			this.sounds['hover'].stop();
-			this.sounds['hover'].play();
+		if(this.endStartAnimation && this.enableHoverSound && !SoundManager.get('hover').playing() && !this.INTERSECTED ) {
+			SoundManager.get('hover').volume(1);
+			SoundManager.get('hover').stop();
+			SoundManager.play('hover');
 		}
 
-		Emitter.emit('HOME_MOUSEENTER');
 
-		this.cursor.onMouseEnter();
+		if(!this.in) {
+			Emitter.emit('HOME_MOUSEENTER');
+
+			this.cursor.onMouseEnter();
+		}
+		this.in = true;
 	}
 
 	onMouseLeave() {
 		Emitter.emit('HOME_MOUSELEAVE');
 
+		this.in = false;
+
 		if(this.enableHoverSound && this.sounds['hover'].playing()) {
-			this.sounds['hover'].fade(1,0,1000);
+			SoundManager.get('hover').fade(1,0,1000);
 		}
 		this.cursor.onMouseLeave();
 	}
@@ -409,28 +412,33 @@ class HomeScene {
 	}
 
 	exit() {
-		this.sounds['enter'].play();
-		let exitTime = .7;
-		let tl = new TimelineLite();
-		tl.to(this.camera.position, exitTime, {
-			x: -.1,
-			y: .9,
-			z: .2,
-			ease: Power4.easeIn,
-			onComplete: ()=>{
-				Emitter.emit('GOTO_EXPERIENCE');
-			}
-		}, 0)
-		.to(this.center, exitTime, {
-			x: -.1,
-			y: .9,
-			z: .2,
-			ease: Power4.easeIn,
-		}, 0)
-		.to(this.passes[1].params, exitTime * .7, {
-			boost: 7,
-			ease: Power4.easeIn,
-		}, .3);
+
+		if(!this.exitFlag) {
+			SoundManager.play('enter');
+			let exitTime = .7;
+			let tl = new TimelineLite();
+			tl.to(this.camera.position, exitTime, {
+				x: -.1,
+				y: .9,
+				z: .2,
+				ease: Power4.easeIn,
+				onComplete: ()=>{
+					Emitter.emit('GOTO_EXPERIENCE');
+				}
+			}, 0)
+			.to(this.center, exitTime, {
+				x: -.1,
+				y: .9,
+				z: .2,
+				ease: Power4.easeIn,
+			}, 0)
+			.to(this.passes[1].params, exitTime * .7, {
+				boost: 7,
+				ease: Power4.easeIn,
+			}, .3);
+		}
+
+		this.exitFlag = true;
 	}
 
 	/**

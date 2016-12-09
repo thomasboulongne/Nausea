@@ -4,7 +4,7 @@ import Spline4 from '../splines/Spline4';
 import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
-import SoundManager from '../sound/SoundManager';
+import SoundManager from '../../sound/SoundManager';
 
 class Zone4 extends Zone{
 
@@ -148,9 +148,7 @@ class Zone4 extends Zone{
 
 		super.init();
 
-		this.sound = SoundManager.load('07-devoilee.mp3', {
-			volume: 3
-		});
+		this.sound = SoundManager.get('07').volume(3);
 
 		this.datas = new DataEmitter(this.controlsContainer, ['fountain1', 'fountain2'], {
 			x: 17,

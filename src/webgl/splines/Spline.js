@@ -1,4 +1,4 @@
-import SoundManager from '../sound/SoundManager';
+import SoundManager from '../../sound/SoundManager';
 
 import Emitter from '../../core/Emitter';
 
@@ -28,7 +28,6 @@ class Spline {
 	init() {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
 		this.initTimeline();
-		this.backSound = SoundManager.load('back.mp3');
 	}
 
 	initTimeline () {
@@ -44,7 +43,7 @@ class Spline {
 		this.timeline
 			.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut})
 			.to(this.controlsContainer.position, 0.2, {x: 0, y: 0, z:0}, '-=0.2');
-		SoundManager.play(this.backSound);
+		SoundManager.play('back');
 		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.0025, ease: Circ.easeInOut, onComplete: () => {
 			this.disableSpline();
 			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0, onComplete: () => {

@@ -1,5 +1,6 @@
-import SoundManager from '../sound/SoundManager';
+import SoundManager from '../../sound/SoundManager';
 import Emitter from '../../core/Emitter';
+import Dat from 'dat-gui';
 
 import NumberUtils from '../utils/number-utils';
 
@@ -36,10 +37,8 @@ class Zone {
 	}
 
 	init() {
-		this.soundMaterialize = SoundManager.load('materialize.mp3', {
-			volume: 0.35
-		});
-		this.soundsEndZone = [SoundManager.load('04-cache.mp3'), SoundManager.load('10-debordait.mp3')];
+		SoundManager.get('materialize').volume(0.35);
+		this.soundsEndZone = ['04', '10'];
 	}
 
 	setMeshNames () {
@@ -129,7 +128,7 @@ class Zone {
 				this.timeline.to(curObj.object.mesh.rotation, 11, {'y': NumberUtils.toRadians(curObj.roty), ease: Circ.easeInOut}, '0');
 		}
 
-		SoundManager.play(this.soundMaterialize);
+		SoundManager.play('materialize');
 	}
 
 	playEndZoneSound (id) {
@@ -190,10 +189,23 @@ class Zone {
 	 */
 	addScene() {
 		for ( let i = 0; i < this.objects.length; i++) {
-			this.scene.add(this.objects[i].object.mesh);
-			this.objects[i].object.mesh.position.set(this.objects[i].x, this.objects[i].y, this.objects[i].z);
-			this.objects[i].object.mesh.rotation.set(NumberUtils.toRadians(this.objects[i].rotx), NumberUtils.toRadians(this.objects[i].roty), NumberUtils.toRadians(this.objects[i].rotz));
-			this.objects[i].object.mesh.scale.set(this.objects[i].scale, this.objects[i].scale, this.objects[i].scale);
+			let obj = this.objects[i];
+			this.scene.add(obj.object.mesh);
+			obj.object.mesh.position.set(obj.x, obj.y, obj.z);
+			obj.object.mesh.rotation.set(NumberUtils.toRadians(obj.rotx), NumberUtils.toRadians(obj.roty), NumberUtils.toRadians(obj.rotz));
+			obj.object.mesh.scale.set(obj.scale, obj.scale, obj.scale);
+			if(obj.name == 'root') {
+				this.gui = new Dat.GUI();
+				this.gui.add(obj.object.mesh.scale, 'x', 0, 10);
+				this.gui.add(obj.object.mesh.scale, 'y', 0, 10);
+				this.gui.add(obj.object.mesh.scale, 'z', 0, 10);
+				this.gui.add(obj.object.mesh.position, 'x', -3, Math.PI * 2);
+				this.gui.add(obj.object.mesh.position, 'y', -3, Math.PI * 2);
+				this.gui.add(obj.object.mesh.position, 'z', -3, Math.PI * 2);
+				this.gui.add(obj.object.mesh.rotation, 'x', 0, Math.PI * 2);
+				this.gui.add(obj.object.mesh.rotation, 'y', 0, Math.PI * 2);
+				this.gui.add(obj.object.mesh.rotation, 'z', 0, Math.PI * 2);
+			}
 		}
 	}
 

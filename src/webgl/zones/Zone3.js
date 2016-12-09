@@ -4,7 +4,7 @@ import Spline3 from '../splines/Spline3';
 import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
-import SoundManager from '../sound/SoundManager';
+import SoundManager from '../../sound/SoundManager';
 
 class Zone3 extends Zone {
 
@@ -96,9 +96,7 @@ class Zone3 extends Zone {
 
 		super.init();
 
-		this.sound = SoundManager.load('05-la.mp3', {
-			volume: 3
-		});
+		this.sound = SoundManager.get('05').volume(3);
 
 		this.datas = new DataEmitter(this.controlsContainer, ['statue1', 'statue2', 'statue3'], {
 			x: 6,
@@ -121,7 +119,7 @@ class Zone3 extends Zone {
 	}
 
 	playSound() {
-		SoundManager.play(this.sound);
+		SoundManager.play('05');
 	}
 
 	/**
