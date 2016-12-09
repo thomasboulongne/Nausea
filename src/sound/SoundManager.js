@@ -11,7 +11,7 @@ class Manager {
 				'name': '01',
 				'file': '01-exister',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -19,7 +19,7 @@ class Manager {
 				'name': '02',
 				'file': '02-jardinpublic',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -27,7 +27,7 @@ class Manager {
 				'name': '03',
 				'file': '03-assis',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -35,7 +35,7 @@ class Manager {
 				'name': '04',
 				'file': '04-cache',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -43,7 +43,7 @@ class Manager {
 				'name': '05',
 				'file': '05-la',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -51,7 +51,7 @@ class Manager {
 				'name': '06',
 				'file': '06-decor',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -59,7 +59,7 @@ class Manager {
 				'name': '07',
 				'file': '07-devoilee',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -67,7 +67,7 @@ class Manager {
 				'name': '08',
 				'file': '08-existants',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -75,7 +75,7 @@ class Manager {
 				'name': '09',
 				'file': '09-trop',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -91,7 +91,7 @@ class Manager {
 				'name': '11',
 				'file': '11-trop',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -99,7 +99,7 @@ class Manager {
 				'name': '12',
 				'file': '12-moi',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -107,7 +107,7 @@ class Manager {
 				'name': '13',
 				'file': '13-eternite',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -115,7 +115,7 @@ class Manager {
 				'name': '14',
 				'file': '14-objets',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -123,7 +123,7 @@ class Manager {
 				'name': '15',
 				'file': '15-boursouflure',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -131,7 +131,7 @@ class Manager {
 				'name': '16',
 				'file': '16-aller',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},
@@ -139,7 +139,7 @@ class Manager {
 				'name': '17',
 				'file': '17-cadavre',
 				'options': {
-					'volume': 1,
+					'volume': 3,
 					'loop': false
 				}
 			},

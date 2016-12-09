@@ -16,6 +16,7 @@ class Zone {
 		this.scene = scene;
 		this.controlsContainer = controlsContainer;
 		this.zoomParams = zoomParams;
+		this.idZone;
 
 		this.animated = false;
 
@@ -36,6 +37,14 @@ class Zone {
 	}
 
 	init() {
+
+		for(let i = 0; i < this.objects.length; i++) {
+			const obj = this.objects[i];
+			if(!(obj.object.options.materialize)) {
+				obj.object.material.opacity = 0;
+			}
+		}
+
 		SoundManager.get('materialize').volume(0.35);
 		this.soundsEndZone = ['04', '10'];
 	}
@@ -51,8 +60,9 @@ class Zone {
 		for(let i = 0; i < this.objects.length; i++) {
 			let obj = this.objects[i].object;
 			if(obj.material.fragmentShader) {
-				this.hoverTl.to(obj.material.uniforms.opacity, 2.2, {value: 1}, 0);
-				this.hoverTl.to(obj.mesh.rotation, 2.2, {y: NumberUtils.toRadians(10), ease: Circ.easeIn}, 0);
+				this.hoverTl.to(obj.material.uniforms.opacity, 3.1, {value: 1}, 0);
+				if(this.objects[i].rotate)
+					this.hoverTl.to(obj.mesh.rotation, 3.1, {y: NumberUtils.toRadians(10), ease: Circ.easeInOut}, 0);
 			}
 		}
 
@@ -64,19 +74,41 @@ class Zone {
 		this.initHoverTimeline();
 		this.tweenTime = { time : 0};
 		this.timeline = new TimelineMax();
-		this.timeline.to(this.tweenTime, 7, {time: 2, ease: Circ.easeOut, onComplete: () => {
-			this.animate = false;
-		}});
+		this.timeline.to(this.tweenTime, 7, {
+			time: 2,
+			ease: Circ.easeOut,
+			onComplete: () => {
+				this.animate = false;
+				this.scene.add(this.datas.group);
+			},
+		}, '1');
 
 		this.timeline.pause();
 	}
 
 	addListeners() {
-		Emitter.on('END_ZONE1', () => {
-			this.playEndZoneSound(0);
-		});
-		Emitter.on('END_ZONE4', () => {
-			this.playEndZoneSound(1);
+		// Emitter.on('LEAVE_ZONE', () => {
+		// 	this.playEndZoneSound(0);
+		// });
+		// Emitter.on('END_ZONE4', () => {
+		// 	this.playEndZoneSound(1);
+		// });
+		Emitter.on('LEAVE_ZONE', (idZone) => {
+			if(idZone === 1) {
+				// Play sound after scene 1 and disable hover during this time
+			}
+			switch (idZone) {
+				case 1:
+					// PLay sound, play with fog
+					this.playEndZoneSound(0);
+					break;
+				case 4:
+					// PLay sound, play with fog
+					this.playEndZoneSound(1);
+					break;
+				default:
+					break;
+			}
 		});
 	}
 
@@ -85,7 +117,11 @@ class Zone {
 	}
 
 	playAnim () {
+		Emitter.emit('ENTER_ZONE');
 		this.animated = true;
+		for(let i = 0; i < this.objects.length; i++) {
+			this.objects[i].object.material.transparent = false;
+		}
 		this.playTimeline();
 
 		this.zoomParams.strength = 0.020;
@@ -94,6 +130,21 @@ class Zone {
 			this.spline.enableSpline();
 		});
 
+		for(let i = 0; i < this.objects.length; i++) {
+			const curObj = this.objects[i];
+			if(curObj.rotate)
+				this.timeline.to(curObj.object.mesh.rotation, 11, {'y': NumberUtils.toRadians(curObj.roty), ease: Circ.easeInOut}, '0');
+			if(!(curObj.object.options.materialize)) {
+				this.timeline.to(curObj.object.material, 3 , {'opacity': 1, ease: Expo.easeOut, onComplete: () => {
+					curObj.object.material.transparent = false;
+				}}, '0');
+				this.timeline.fromTo(curObj.object.mesh.scale, 3, 
+					{'x': 0.6, y: '0.8', z: '0.8', ease: Expo.easeOut},
+					{'x': 1.2, y: '1.2', z: '1.2', ease: Expo.easeOut},
+				'0');
+				this.timeline.from(curObj.object.mesh.rotation, 3, {'y': NumberUtils.toRadians(-10)}, '0');
+			}
+		}
 
 		SoundManager.play('materialize');
 	}
@@ -110,7 +161,6 @@ class Zone {
 
 	endHoverAnimation() {
 		this.hoverTl.reverse();
-		//this.objects[i].object.material.uniforms.opacity.value = 0;
 	}
 
 	addToGUI(gui) {

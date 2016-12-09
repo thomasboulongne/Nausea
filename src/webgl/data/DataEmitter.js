@@ -28,6 +28,8 @@ class DataEmitter {
 			particleCount: 25
 		};
 
+		this.leftParticles = [];
+
 		//this.addHelper();
 		this.addParticles();
 		this.addLines();
@@ -118,9 +120,10 @@ class DataEmitter {
 		
 		this.group.add( meshPlane );
 
-
-		let randomID = NumberUtils.getRandomIntInclusive(0, this.maxParticles);
-		let dataParticle = this.particlesData[this.randomID];
+		let rand = NumberUtils.getRandomIntInclusive(0, this.leftParticles.length);
+		let randomID = this.leftParticles[rand];
+		let dataParticle = this.particlesData[randomID];
+		this.leftParticles.splice(randomID, 1);
 
 		let dataX  = this.posX + this.particlePositions[ randomID * 3];
 		let dataY  = this.posY + this.particlePositions[ randomID * 3 + 1];
@@ -140,6 +143,9 @@ class DataEmitter {
 	}
 
 	addTextDatas() {
+		for(let i = 0; i < this.maxParticles; i++) {
+			this.leftParticles.push(i);
+		}
 		this.textDatas = [];
 		for( let i = 0; i < this.datas.length; i++) {
 			let dataText = this.addPlane(this.datas[i]);

@@ -18,6 +18,7 @@ class Zone4 extends Zone{
 		//properties to count how many objects to clone
 		this.nbBenches = 4;
 		this.nbStreetLamps = 4;
+		this.idZone = 4;
 	}
 
 	init(fountain, benches, streetLamps) {
@@ -29,6 +30,7 @@ class Zone4 extends Zone{
 			'y' : 0.35,
 			'z' : 6.2,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -41,6 +43,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 1.8,
 			'scale' : 1,
+			'rotate' : false,
 			'rotx' : 0,
 			'roty' : 278,
 			'rotz' : 0
@@ -53,6 +56,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 4.8,
 			'scale' : 1,
+			'rotate' : false,
 			'rotx' : 0,
 			'roty' : 345,
 			'rotz' : 0
@@ -65,6 +69,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 7.3,
 			'scale' : 1,
+			'rotate' : false,
 			'rotx' : 0,
 			'roty' : 44,
 			'rotz' : 0
@@ -77,6 +82,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 3.5,
 			'scale' : 1,
+			'rotate' : false,
 			'rotx' : 0,
 			'roty' : 234,
 			'rotz' : 0
@@ -89,6 +95,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 10,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -101,6 +108,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 3,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -113,6 +121,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 6.2,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -125,6 +134,7 @@ class Zone4 extends Zone{
 			'y' : 0,
 			'z' : 1.8,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
