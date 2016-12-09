@@ -1,5 +1,5 @@
 import NumberUtils from '../utils/number-utils';
-import SoundManager from '../sound/SoundManager';
+import SoundManager from '../../sound/SoundManager';
 
 class AnimationManager {
 

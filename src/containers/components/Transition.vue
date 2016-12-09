@@ -97,6 +97,7 @@ export default {
 		width: 100%;
 		left: 100%;
 		background: black;
+		background-image: url('/images/noise.png'); 
 		z-index: 4;
 	}
 

@@ -1,4 +1,4 @@
-import SoundManager from '../sound/SoundManager';
+import SoundManager from '../../sound/SoundManager';
 import Emitter from '../../core/Emitter';
 import Dat from 'dat-gui';
 

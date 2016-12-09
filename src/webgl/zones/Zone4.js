@@ -4,7 +4,7 @@ import Spline4 from '../splines/Spline4';
 import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
-import SoundManager from '../sound/SoundManager';
+import SoundManager from '../../sound/SoundManager';
 
 class Zone4 extends Zone{
 
