@@ -1,9 +1,9 @@
 <template>
 	<div id="experience">
-		<header-comp :link="link" ref="header"></header-comp>
+		<header-comp :link="link" ref="header" v-if="header"></header-comp>
 		<webgl-experience v-show="page == 'experience'" ref="gl"></webgl-experience>
 		<text-comp v-show="page == 'text'"></text-comp>
-		<endscreen-comp v-if="false"></endscreen-comp>
+		<endscreen-comp v-if="end"></endscreen-comp>
 		<footer-comp ref="footer"></footer-comp>
 		<transition></transition>
 	</div>
@@ -24,7 +24,9 @@ export default {
 
 	data() {
 		return {
-			page: 'experience'
+			page: 'experience',
+			header: true,
+			end: false
 		};
 	},
 
@@ -60,6 +62,10 @@ export default {
 	methods: {
 		addEventListeners() {
 			Emitter.on('INTRO_END', this.showComponents.bind(this));
+			Emitter.on('END_SCREEN', () => {
+				this.header = false;
+				this.end = true;
+			});
 		},
 
 		showComponents() {
