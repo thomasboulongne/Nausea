@@ -439,10 +439,16 @@ class ExperienceScene {
 		});
 
 		this.skybox = new Skybox('assets2d/skybox/');
+		this.skybox2 = new Skybox('assets2d/homeSkybox/');
 
 		this.skybox.load()
 		.then( texture => {
 			this.scene.background = texture;
+		});
+
+		this.skybox2.load()
+		.then( texture => {
+			this.texture2 = texture;
 		});
 		
 	}
@@ -546,6 +552,44 @@ class ExperienceScene {
 		}, '-=1.5');
 	}
 
+	outro() {
+		// launch
+		let tl = new TimelineMax();
+		
+
+		tl.add( () => {
+			SoundManager.play('10');
+		}, '3');
+
+		tl.add( () => {
+			SoundManager.play('16');
+		}, '22');
+
+		tl.add( () => {
+			SoundManager.play('11');
+		}, '41');
+
+		tl.add( () => {
+			SoundManager.play('13');
+		}, '46');
+
+		tl.add( () => {
+			Emitter.emit('END_SCREEN');
+			this.scene.background = this.texture2;
+		}, '46')
+		
+		tl.add( () => {
+			this.endLights = true;
+		}, '2');
+
+		tl.to(this.passes[2].params, 20, {
+			strength: 0.2
+		}, '3');
+		tl.to(this.camera, 20, {
+			fov: 20
+		}, '3');
+	}
+
 	// createLeaves() {
 	// 	let numberLeaves = 4;
 
@@ -605,7 +649,20 @@ class ExperienceScene {
 	}
 	onLeaveZone(idZone) {
 		console.log('leave zone', idZone);
-		TweenMax.to(this.scene.fog, 1, {density: 0.08});
+		TweenMax.to(this.scene.fog, 1, {density: 0.12 - idZone/100});
+
+		switch (idZone) {
+			case 1:
+				TweenMax.delayedCall(3, () => {
+					SoundManager.play('04');
+				});
+				break;
+			case 4:
+				this.outro();
+				break;
+			default:
+				break;
+		}
 	}
 
 	/**
@@ -617,6 +674,12 @@ class ExperienceScene {
 
 		//Particles 
 		//this.particles.update();
+		//console.log(this.lights.list[0]);
+
+		// if(this.endLights)
+		// 	this.lights.list[1].intensity = 1 + Math.cos(Date.now()/1000)*5;
+
+		//console.log(this.lights.list[0].intensity)
 
 		if(this.zones && this.enabledRaycast) {
 

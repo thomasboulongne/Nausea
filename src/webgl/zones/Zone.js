@@ -97,18 +97,18 @@ class Zone {
 			if(idZone === 1) {
 				// Play sound after scene 1 and disable hover during this time
 			}
-			switch (idZone) {
-				case 1:
-					// PLay sound, play with fog
-					this.playEndZoneSound(0);
-					break;
-				case 4:
-					// PLay sound, play with fog
-					this.playEndZoneSound(1);
-					break;
-				default:
-					break;
-			}
+			// switch (idZone) {
+			// 	case 1:
+			// 		// PLay sound, play with fog
+			// 		this.playEndZoneSound(0);
+			// 		break;
+			// 	case 4:
+			// 		// PLay sound, play with fog
+			// 		this.playEndZoneSound(1);
+			// 		break;
+			// 	default:
+			// 		break;
+			// }
 		});
 	}
 
