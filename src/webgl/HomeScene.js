@@ -87,6 +87,8 @@ class HomeScene {
 
 		this.debouncedMouseLeave = debounce(this.onMouseLeave.bind(this), 500);
 
+		this.exitFlag = false;
+
 	}
 
 	destructor() {
@@ -410,29 +412,33 @@ class HomeScene {
 	}
 
 	exit() {
-		console.log('ENTER SOUND PLAY');
-		SoundManager.play('enter');
-		let exitTime = .7;
-		let tl = new TimelineLite();
-		tl.to(this.camera.position, exitTime, {
-			x: -.1,
-			y: .9,
-			z: .2,
-			ease: Power4.easeIn,
-			onComplete: ()=>{
-				Emitter.emit('GOTO_EXPERIENCE');
-			}
-		}, 0)
-		.to(this.center, exitTime, {
-			x: -.1,
-			y: .9,
-			z: .2,
-			ease: Power4.easeIn,
-		}, 0)
-		.to(this.passes[1].params, exitTime * .7, {
-			boost: 7,
-			ease: Power4.easeIn,
-		}, .3);
+
+		if(!this.exitFlag) {
+			SoundManager.play('enter');
+			let exitTime = .7;
+			let tl = new TimelineLite();
+			tl.to(this.camera.position, exitTime, {
+				x: -.1,
+				y: .9,
+				z: .2,
+				ease: Power4.easeIn,
+				onComplete: ()=>{
+					Emitter.emit('GOTO_EXPERIENCE');
+				}
+			}, 0)
+			.to(this.center, exitTime, {
+				x: -.1,
+				y: .9,
+				z: .2,
+				ease: Power4.easeIn,
+			}, 0)
+			.to(this.passes[1].params, exitTime * .7, {
+				boost: 7,
+				ease: Power4.easeIn,
+			}, .3);
+		}
+
+		this.exitFlag = true;
 	}
 
 	/**

@@ -149,7 +149,7 @@ export default {
 							delay = "+=0.8";
 							break;
 						case 3:
-							delay = "+=0";
+							delay = "-=0.5";
 							duration = 3;
 							break;
 					}
@@ -174,19 +174,18 @@ export default {
 			}
 
 			this.quoteTl.eventCallback("onComplete", () => {
-				TweenLite.to(this.$refs.quote, 2, {
+				let tlOut = new TimelineLite();
+				tlOut.to(this.$refs.quote, 2, {
 					opacity: 0,
-					onStart: () => {
-						console.log('Start fadeOut');
-					},
 					onComplete: () => {
-						console.log('End fadeOut');
 						TweenLite.set(this.$el, {
 							display: 'none'
 						});
-						Emitter.emit('LOADING_COMPLETE');
 					}
-				});
+				})
+				.add(() => {
+					Emitter.emit('LOADING_COMPLETE');
+				}, 0);
 			});
 		},
 
