@@ -130,9 +130,7 @@ class Zone2 extends Zone {
 
 		super.init();
 
-		this.sound = SoundManager.load('06-decor.mp3', {
-			volume: 4
-		});
+		this.sound = SoundManager.get('06').volume(4);
 
 		this.datas = new DataEmitter(this.controlsContainer, ['stand1', 'stand2', 'stand3'], {
 			x: -16,
@@ -180,7 +178,7 @@ class Zone2 extends Zone {
 	}
 
 	playSound() {
-		SoundManager.play(this.sound);
+		SoundManager.play('04');
 	}
 
 	initSpline() {

@@ -90,9 +90,7 @@ class Zone1 extends Zone {
 
 		super.init();
 
-		this.sound = SoundManager.load('03-assis.mp3', {
-			volume: 3
-		});
+		SoundManager.get('03').volume(3);
 
 		this.datas = new DataEmitter(this.controlsContainer, ['chest1', 'chest2', 'chest3'], {
 			x: 0,
@@ -140,7 +138,7 @@ class Zone1 extends Zone {
 	}
 
 	playSound() {
-		SoundManager.play(this.sound);
+		SoundManager.play('03');
 	}
 
 

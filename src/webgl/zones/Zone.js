@@ -36,10 +36,8 @@ class Zone {
 	}
 
 	init() {
-		this.soundMaterialize = SoundManager.load('materialize.mp3', {
-			volume: 0.35
-		});
-		this.soundsEndZone = [SoundManager.load('04-cache.mp3'), SoundManager.load('10-debordait.mp3')];
+		SoundManager.get('materialize').volume(0.35);
+		this.soundsEndZone = ['04', '10'];
 	}
 
 	setMeshNames () {
@@ -97,7 +95,7 @@ class Zone {
 		});
 
 
-		SoundManager.play(this.soundMaterialize);
+		SoundManager.play('materialize');
 	}
 
 	playEndZoneSound (id) {

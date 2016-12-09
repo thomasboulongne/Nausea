@@ -138,9 +138,7 @@ class Zone4 extends Zone{
 
 		super.init();
 
-		this.sound = SoundManager.load('07-devoilee.mp3', {
-			volume: 3
-		});
+		this.sound = SoundManager.get('07').volume(3);
 
 		this.datas = new DataEmitter(this.controlsContainer, ['fountain1', 'fountain2'], {
 			x: 17,

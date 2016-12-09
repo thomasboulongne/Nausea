@@ -62,8 +62,6 @@ class ExperienceScene {
 
 		this.setComposer();
 
-		this.loadSounds();
-
 		this.setAmbiantSound();
 
 		this.createObjects();
@@ -137,14 +135,7 @@ class ExperienceScene {
 
 	setAmbiantSound() {
 
-		SoundManager.play(this.soundAmbiant);
-	}
-
-	loadSounds () {
-		this.soundAmbiant = SoundManager.load('ambiant.wav', {
-			volume: .25
-		});
-		this.soundIntro = SoundManager.load('02-jardinpublic.mp3');
+		SoundManager.play('atmos01');
 	}
 
 	createObjects() {
@@ -534,7 +525,7 @@ class ExperienceScene {
 
 		cameraTl
 		.add(() => {
-			SoundManager.play(this.soundIntro);
+			SoundManager.play('02');
 		}, "+=4")
 		.to(this.passes[1].params, 4, {
 			delay: 2,

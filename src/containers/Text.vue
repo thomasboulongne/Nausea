@@ -57,9 +57,7 @@ export default {
 		background-repeat: no-repeat;
 		background-size: 80vh auto;
 		background-position: top left; 
-		+footer {
-		    box-shadow: 0px -20px 130px 40px rgba(255,255,255,1);
-		}
+		box-shadow: inset 0px -70px 130px 40px rgba(255,255,255,1);
 	}
 
 	#content {
