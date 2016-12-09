@@ -3,7 +3,7 @@
 		<header-comp :link="link" ref="header"></header-comp>
 		<webgl-experience v-show="page == 'experience'" ref="gl"></webgl-experience>
 		<text-comp v-show="page == 'text'"></text-comp>
-		<endscreen-comp v-if="false"></endscreen-comp>
+		<endscreen-comp v-if="true"></endscreen-comp>
 		<footer-comp ref="footer"></footer-comp>
 		<transition></transition>
 	</div>
@@ -80,7 +80,7 @@ export default {
 		'webgl-experience': WebglExperienceComponent,
 		'footer-comp': FooterComponent,
 		'header-comp': HeaderComponent,
-		'text-comp': TextComponent
+		'text-comp': TextComponent,
 		'endscreen-comp': EndscreenComponent
 	}
 }

@@ -26,8 +26,8 @@
 				<div class="flex-wrapper">
 					<h4>Partager<br>l'expérience</h4>
 					<ul>
-						<li><a href="/">Twitter</a></li>
-						<li><a href="/">Facebook</a></li>
+						<li><a href="/"><img src="/images/twitter.svg" alt="" class="icon">Twitter</a></li>
+						<li><a href="/"><img src="/images/facebook.svg" alt="" class="icon">Facebook</a></li>
 					</ul>
 				</div>
 			</div>
@@ -150,6 +150,11 @@ export default {
 							display: inline-block;
 							margin-top: 2rem;
 							a {
+								.icon {
+									display: inline-block;
+									height: 0.8em;
+									margin-right: 1em;
+								}
 								color: $third-color;
 							}
 						}
