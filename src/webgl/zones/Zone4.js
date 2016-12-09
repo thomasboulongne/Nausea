@@ -171,7 +171,7 @@ class Zone4 extends Zone{
 	}
 
 	playSound() {
-		SoundManager.play(this.sound);
+		SoundManager.play("07");
 	}
 
 	/**

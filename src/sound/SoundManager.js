@@ -83,7 +83,7 @@ class Manager {
 				'name': '10',
 				'file': '10-debordait',
 				'options': {
-					'volume': 3,
+					'volume': 1,
 					'loop': false
 				}
 			},

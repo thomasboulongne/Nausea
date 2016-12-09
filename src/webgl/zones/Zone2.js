@@ -187,7 +187,7 @@ class Zone2 extends Zone {
 	}
 
 	playSound() {
-		SoundManager.play('04');
+		SoundManager.play('06');
 	}
 
 	initSpline() {
