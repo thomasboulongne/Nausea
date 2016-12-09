@@ -3,7 +3,7 @@ import Spline1 from '../splines/Spline1';
 
 import DataEmitter from '../data/DataEmitter';
 
-import NumberUtils from '../utils/number-utils';
+//import NumberUtils from '../utils/number-utils';
 import SoundManager from '../../sound/SoundManager';
 
 class Zone1 extends Zone {
@@ -17,6 +17,7 @@ class Zone1 extends Zone {
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
 		this.nbMinerals = 3;
+		this.idZone = 1;
 	}
 
 	init(chestnuts, benches, minerals) {
@@ -28,6 +29,7 @@ class Zone1 extends Zone {
 			'y' : 0,
 			'z' : 12,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 139,
 			'rotz' : 0
@@ -40,6 +42,7 @@ class Zone1 extends Zone {
 			'y' : 0.15,
 			'z' : 10.9,
 			'scale' : 1,
+			'rotate' : false,
 			'rotx' : 0,
 			'roty' : 130,
 			'rotz' : 0
@@ -52,6 +55,7 @@ class Zone1 extends Zone {
 			'y' : 0,
 			'z' : 8,
 			'scale' : 1.4,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 238,
 			'rotz' : 0
@@ -64,6 +68,7 @@ class Zone1 extends Zone {
 			'y' : 0,
 			'z' : 9.6,
 			'scale' : 0.5,
+			'rotate' : true,
 			'rotx' : 322,
 			'roty' : 75,
 			'rotz' : 258
@@ -76,6 +81,7 @@ class Zone1 extends Zone {
 			'y' : 0,
 			'z' : 6.2,
 			'scale' : 0.5,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 175,
 			'rotz' : 0
@@ -126,13 +132,13 @@ class Zone1 extends Zone {
 	playAnim() {
 		super.playAnim();
 		this.scene.add(this.datas.group);
-		let chestnutMesh = this.chestnut.object.mesh;
-		let benchMesh = this.bench.object.mesh;
+		// let chestnutMesh = this.chestnut.object.mesh;
+		// let benchMesh = this.bench.object.mesh;
 
-		this.timeline.from(chestnutMesh.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
+		//this.timeline.to(chestnutMesh.scale, 10, {x: 1.2, y: 1.2, z:1.2, ease: Circ.easeInOut}, '0');
 
-		this.timeline.fromTo(chestnutMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.chestnut.roty), ease: Expo.easeOut}, '0');
-		this.timeline.fromTo(benchMesh.rotation, 10, {'y': NumberUtils.toRadians(10)}, {'y': NumberUtils.toRadians(this.bench.roty), ease: Expo.easeOut}, '0');
+		// this.timeline.to(chestnutMesh.rotation, 12, {'y': NumberUtils.toRadians(this.chestnut.roty), ease: Circ.easeInOut}, '0');
+		// this.timeline.to(benchMesh.rotation, 12, {'y': NumberUtils.toRadians(this.bench.roty), ease: Circ.easeInOut}, '0');
 
 		this.playSound();
 	}

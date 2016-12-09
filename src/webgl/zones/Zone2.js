@@ -20,6 +20,7 @@ class Zone2 extends Zone {
 		this.nbChestnuts = 1;
 		this.nbStreetLamps = 4;
 		this.nbShrubs = 2;
+		this.idZone = 2;
 	}
 
 	init(stand, chestnuts, streetLamps, shrubs) {
@@ -31,6 +32,7 @@ class Zone2 extends Zone {
 			'y' : -0.2,
 			'z' : 0,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 349,
 			'rotz' : 0
@@ -43,6 +45,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 5,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 260,
 			'rotz' : 0
@@ -55,6 +58,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 0.7,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -67,6 +71,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 3,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -79,6 +84,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 5.7,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -91,6 +97,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 8.5,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -103,6 +110,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : -4.9,
 			'scale' : 0.6,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -115,6 +123,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : -6,
 			'scale' : 0.7,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -178,7 +187,7 @@ class Zone2 extends Zone {
 	}
 
 	playSound() {
-		SoundManager.play('04');
+		SoundManager.play('06');
 	}
 
 	initSpline() {
