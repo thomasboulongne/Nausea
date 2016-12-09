@@ -1,9 +1,9 @@
 <template>
 	<div id="experience">
-		<header-comp :link="link" ref="header" v-if="header"></header-comp>
+		<header-comp :link="link" ref="header" v-show="header"></header-comp>
 		<webgl-experience v-show="page == 'experience'" ref="gl"></webgl-experience>
 		<text-comp v-show="page == 'text'"></text-comp>
-		<endscreen-comp v-if="end"></endscreen-comp>
+		<endscreen-comp v-show="end"></endscreen-comp>
 		<footer-comp ref="footer"></footer-comp>
 		<transition></transition>
 	</div>

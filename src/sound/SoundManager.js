@@ -83,7 +83,7 @@ class Manager {
 				'name': '10',
 				'file': '10-debordait',
 				'options': {
-					'volume': 1,
+					'volume': 2,
 					'loop': false
 				}
 			},
@@ -147,7 +147,31 @@ class Manager {
 				'name': 'atmos01',
 				'file': 'atmos01',
 				'options': {
-					'volume': 1,
+					'volume': 0.8,
+					'loop': false
+				}
+			},
+			{
+				'name': 'atmos02',
+				'file': 'atmos02',
+				'options': {
+					'volume': 0.8,
+					'loop': false
+				}
+			},
+			{
+				'name': 'atmos04',
+				'file': 'atmos04',
+				'options': {
+					'volume': 0.8,
+					'loop': false
+				}
+			},
+			{
+				'name': 'atmos05',
+				'file': 'atmos05',
+				'options': {
+					'volume': 0.8,
 					'loop': false
 				}
 			},

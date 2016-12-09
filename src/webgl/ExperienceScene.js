@@ -713,20 +713,20 @@ class ExperienceScene {
 		TweenMax.to(this.scene.fog, 1, {density: 0.08});
 		this.enabledRaycast = true;
 
-		// switch(idZone) {
-		// 	case 1:
-		// 		this.add(this.videos[0].mesh);
-		// 		this.videos[0].play();
-		// 		setTimeout(() => {
-		// 			this.add(this.videos[1].mesh);
-		// 			this.videos[1].play()}
-		// 		, 2000);
-		// 		break;
-		// 	case 2:
-		// 		this.add(this.videos[2].mesh);
-		// 		this.videos[2].play();
-		// 		break;
-		// }
+		switch(idZone) {
+			case 1:
+				this.add(this.videos[0].mesh);
+				this.videos[0].play();
+				setTimeout(() => {
+					this.add(this.videos[1].mesh);
+					this.videos[1].play()}
+				, 2000);
+				break;
+			case 2:
+				this.add(this.videos[2].mesh);
+				this.videos[2].play();
+				break;
+		}
 	}
 
 	/**
@@ -745,7 +745,7 @@ class ExperienceScene {
 
 		//console.log(this.lights.list[0].intensity)
 
-		if(this.zones && this.enabledRaycast) {
+		if(this.zones) {
 
 			this.intersect = null;
 
