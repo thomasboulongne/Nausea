@@ -546,42 +546,12 @@ class ExperienceScene {
 		}, '-=1.5');
 	}
 
-	// createLeaves() {
-	// 	let numberLeaves = 4;
-
-	// 	let texture = new THREE.TextureLoader().load( "assets2d/leaves.png" );
-	// 	// texture.wrapS = THREE.RepeatWrapping;
-	// 	// texture.wrapT = THREE.RepeatWrapping;
-	// 	//texture.repeat.set( 4, 4 );
-
-	// 	let geometry = new THREE.PlaneGeometry( 15, 15, 1);
-	// 	let material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, map: texture, transparent: true} );
-	// 	let plane = new THREE.Mesh( geometry, material );
-	// 	this.scene.add( plane );
-	// 	plane.position.z = 11;
-	// 	plane.position.y = 7;
-	// 	console.log(plane);
-
-	// 	this.leaf = new THREE.Object3D();
-
-	// 	for(let i = 0; i < numberLeaves; i++) {
-	// 		let leaf = plane.clone();
-	// 		leaf.rotation.y = i * 45;
-
-	// 		this.scene.add(leaf);
-	// 		this.leaf.children.push(leaf);
-	// 	}
-
-	// }
-
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
 		Emitter.on('ENTER_ZONE', this.onEnterZone.bind(this));
-		Emitter.on('LEAVE_ZONE', (idZone) => {
-			this.onLeaveZone(idZone);
-		});
+		Emitter.on('LEAVE_ZONE', this.onLeaveZone);
 
 		window.addEventListener('keydown', this.toggleCamera.bind(this));
 	}
@@ -596,16 +566,20 @@ class ExperienceScene {
 	}
 
 	startZoneAnimation() {
-		if(this.INTERSECTED != null)
+		if(this.INTERSECTED != null) {
 			this.INTERSECTED.playAnim();
+			this.enabledRaycast = false;
+		}
 	}
 
 	onEnterZone() {
 		TweenMax.to(this.scene.fog, 1, {density: 0.12, delay: 1});
 	}
+	
 	onLeaveZone(idZone) {
 		console.log('leave zone', idZone);
 		TweenMax.to(this.scene.fog, 1, {density: 0.08});
+		this.enabledRaycast = true;
 	}
 
 	/**
