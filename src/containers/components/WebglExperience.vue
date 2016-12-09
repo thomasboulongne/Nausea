@@ -91,8 +91,6 @@ export default {
 					break;
 			}
 
-			console.log('Chap number', number, 'Chap compilé', this.chapter.number);
-
 			this.chapter.name = name;
 
 			this.tl.play();

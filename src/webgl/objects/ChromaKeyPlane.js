@@ -6,6 +6,7 @@ class ChromaKeyPlane {
 	 * @constructor
 	 */
 	constructor(video, options) {
+		this.video = video;
 
 		if( !options ) options = {};
 
@@ -20,7 +21,7 @@ class ChromaKeyPlane {
 			r = g = b = 0;
 		}
 
-		this.material = new ChromaKeyMaterial("./assets2d/videos/" + video + ".mp4", r, g, b, 0.07);
+		this.material = new ChromaKeyMaterial("./assets2d/videos/" + this.video + ".mp4", r, g, b, 0.07, {loop: false, autoplay: false});
 
 		let width = options.width ? options.width : 2;
 		let height = options.height ? options.height : 2;
@@ -32,7 +33,12 @@ class ChromaKeyPlane {
 		this.mesh.position.x = options.x ? options.x : 0;
 		this.mesh.position.y = options.y ? options.y : .8;
 		this.mesh.position.z = options.z ? options.z : 6;
-		// this.mesh.rotation.y = options.rotY ? options.rotY : Math.PI / 2;
+		this.mesh.rotation.y = options.rotY ? options.rotY : Math.PI / 2;
+		// this.mesh.scale.set(options.scale ? options.scale : 1);
+	}
+
+	play() {
+		this.material.play();
 	}
 
 	/**

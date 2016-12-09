@@ -46,7 +46,7 @@ class ExperienceScene {
 
 		this.scene = new THREE.Scene();
 
-		this.add(new THREE.AxisHelper(8));
+		// this.add(new THREE.AxisHelper(8));
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
 		this.renderer.setSize(this.width, this.height);
@@ -450,19 +450,41 @@ class ExperienceScene {
 			this.scene.background = texture;
 		});
 
-		this.video = new ChromaKeyPlane('couple', {r: 1, g: 1, b:1});
+		this.videos = [];
 
-		this.video.mesh.position.set(-13, 1.4, -.3);
-		this.video.mesh.rotation.y = 1;
-		// this.video.mesh.scale.set(0.8, 0.8, 0.8);
-		this.add(this.video.mesh);
+		this.videos.push(new ChromaKeyPlane('business_sitting', {
+			r: 1,
+			g: 1,
+			b: 1,
+			x: -3.2,
+			y: .7,
+			z: 10.3,
+			rotY: -1
+		}));
 
-		this.video2 = new ChromaKeyPlane('man_walking', {r: 1, g: 1, b:1});
+		this.videos.push(new ChromaKeyPlane('man_sitting_tree', {
+			r: 1,
+			g: 1,
+			b: 1,
+			x: 1.3,
+			y: .68,
+			z: 10.3,
+			rotY: 1
+		}));
 
-		this.video2.mesh.position.set(-9, .6, 3.8);
-		this.video2.mesh.rotation.y = 1.3;
-		this.video2.mesh.scale.set(1.3, 1.3, 1.3);
-		this.add(this.video2.mesh);
+		this.videos.push(new ChromaKeyPlane('couple', {
+			r: 1,
+			g: 1,
+			b: 1,
+			x: -13,
+			y: 1.4,
+			z: -.3,
+			rotY: 1
+		}));
+
+		// for (let i = 0; i < this.videos.length; i++) {
+		// 	this.add(this.videos[i].mesh);
+		// }
 		
 	}
 
@@ -602,6 +624,21 @@ class ExperienceScene {
 		console.log(idZone);
 		TweenMax.to(this.scene.fog, 1, {density: 0.08});
 		this.enabledRaycast = true;
+
+		// switch(idZone) {
+		// 	case 1:
+		// 		this.add(this.videos[0].mesh);
+		// 		this.videos[0].play();
+		// 		setTimeout(() => {
+		// 			this.add(this.videos[1].mesh);
+		// 			this.videos[1].play()}
+		// 		, 2000);
+		// 		break;
+		// 	case 2:
+		// 		this.add(this.videos[2].mesh);
+		// 		this.videos[2].play();
+		// 		break;
+		// }
 	}
 
 	/**
