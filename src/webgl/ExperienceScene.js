@@ -46,6 +46,8 @@ class ExperienceScene {
 
 		this.scene = new THREE.Scene();
 
+		this.countZones = 0;
+
 		// this.add(new THREE.AxisHelper(8));
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true});
@@ -693,10 +695,12 @@ class ExperienceScene {
 	}
 
 	onLeaveZone(idZone) {
+		this.countZones ++;
+		console.log('visited zones', this.countZones)
 		console.log('leave zone', idZone);
 		TweenMax.to(this.scene.fog, 1, {density: 0.12 - idZone/100});
 
-		switch (idZone) {
+		switch (this.countZones) {
 			case 1:
 				TweenMax.delayedCall(3, () => {
 					SoundManager.play('04');
@@ -709,6 +713,7 @@ class ExperienceScene {
 				SoundManager.play('atmos05');
 				break;
 			case 4:
+				this.outro();
 				SoundManager.play('atmos06');
 				break;
 			default:
