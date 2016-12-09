@@ -538,6 +538,7 @@ class ExperienceScene {
 				this.controls.enabled = true;
 				this.enabledRaycast = true;
 				this.cursor = new WebglCursor(this.domElement, 'ZONE_FOCUSED', {color: '#4a4a4a'});
+				Emitter.emit('SHOW_TT', 1);
 			}
 		}, '-=2')
 		.add(() => {
@@ -629,10 +630,14 @@ class ExperienceScene {
 				}
 			}
 			else {
-				if(this.INTERSECTED != null && !this.INTERSECTED.animated)
-					this.INTERSECTED.endHoverAnimation();
+				if(this.INTERSECTED != null) {
+					this.cursor.onMouseLeave();
+
+					if(!this.INTERSECTED.animated){
+						this.INTERSECTED.endHoverAnimation();
+					}
+				}
 				
-				this.cursor.onMouseLeave();
 			}
 			this.INTERSECTED = this.intersect;
 		}
