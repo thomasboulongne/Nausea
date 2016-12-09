@@ -17,6 +17,7 @@ class Zone1 extends Zone {
 		this.nbChestnuts = 1;
 		this.nbBenches = 1;
 		this.nbMinerals = 3;
+		this.idZone = 1;
 	}
 
 	init(chestnuts, benches, minerals) {

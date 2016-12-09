@@ -48,6 +48,7 @@ class Spline {
 		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.0025, ease: Circ.easeInOut, onComplete: () => {
 			this.disableSpline();
 			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0, onComplete: () => {
+				Emitter.emit('LEAVE_ZONE', this.zoneSpline);
 				if(this.zoneSpline === 1)
 					Emitter.emit('END_ZONE1');
 				if(this.zoneSpline === 4)

@@ -20,6 +20,7 @@ class Zone2 extends Zone {
 		this.nbChestnuts = 1;
 		this.nbStreetLamps = 4;
 		this.nbShrubs = 2;
+		this.idZone = 2;
 	}
 
 	init(stand, chestnuts, streetLamps, shrubs) {

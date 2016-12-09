@@ -18,6 +18,7 @@ class Zone4 extends Zone{
 		//properties to count how many objects to clone
 		this.nbBenches = 4;
 		this.nbStreetLamps = 4;
+		this.idZone = 4;
 	}
 
 	init(fountain, benches, streetLamps) {

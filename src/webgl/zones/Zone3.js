@@ -18,6 +18,7 @@ class Zone3 extends Zone {
 		//properties to count how many objects to clone
 		this.nbChestnuts = 1;
 		this.nbShrubs = 3;
+		this.idZone = 3;
 	}
 
 	init(statue, chestnuts, shrubs) {

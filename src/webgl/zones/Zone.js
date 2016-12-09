@@ -15,6 +15,7 @@ class Zone {
 		this.scene = scene;
 		this.controlsContainer = controlsContainer;
 		this.zoomParams = zoomParams;
+		this.idZone;
 
 		this.animated = false;
 
@@ -79,11 +80,28 @@ class Zone {
 	}
 
 	addListeners() {
-		Emitter.on('END_ZONE1', () => {
-			this.playEndZoneSound(0);
-		});
-		Emitter.on('END_ZONE4', () => {
-			this.playEndZoneSound(1);
+		// Emitter.on('LEAVE_ZONE', () => {
+		// 	this.playEndZoneSound(0);
+		// });
+		// Emitter.on('END_ZONE4', () => {
+		// 	this.playEndZoneSound(1);
+		// });
+		Emitter.on('LEAVE_ZONE', (idZone) => {
+			if(idZone === 1) {
+				// Play sound after scene 1 and disable hover during this time
+			}
+			switch (idZone) {
+				case 1:
+					// PLay sound, play with fog
+					this.playEndZoneSound(0);
+					break;
+				case 4:
+					// PLay sound, play with fog
+					this.playEndZoneSound(1);
+					break;
+				default:
+					break;
+			}
 		});
 	}
 
@@ -92,6 +110,7 @@ class Zone {
 	}
 
 	playAnim () {
+		Emitter.emit('ENTER_ZONE');
 		this.animated = true;
 		for(let i = 0; i < this.objects.length; i++) {
 			this.objects[i].object.material.transparent = false;
