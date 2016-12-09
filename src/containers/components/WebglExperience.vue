@@ -1,18 +1,33 @@
 <template>
 	<div :class="['webgl', 'experience']">
+		<tooltip-comp :img="ttImg" :text="ttText" ref="tooltip"></tooltip-comp>
 	</div>
 </template>
 
 <script>
 	
 import Scene from '../../webgl/ExperienceScene';
+import Tooltip from './Tooltip';
+import Emitter from '../../core/Emitter';
 
 export default {
 
 	data() {
 		return {
-			obj: true
+			obj: true,
+			tooltips: [
+				{
+					img: '/images/tip1.gif',
+					text: 'Placez votre curseur sur un élément pour le matérialiser.'
+				}
+			],
+			ttImg: '',
+			ttText: ''
 		};
+	},
+
+	created() {
+		Emitter.on('SHOW_TT', this.showTooltip.bind(this));
 	},
 
 	mounted() {
@@ -24,7 +39,18 @@ export default {
 	},
 
 	methods: {
+		showTooltip(tooltip) {
+			tooltip--;
+			this.ttImg = this.tooltips[tooltip].img;
+			this.ttText = this.tooltips[tooltip].text;
+			this.$refs.tooltip.show();
+		}
+	},
+
+	components: {
+		'tooltip-comp': Tooltip
 	}
+	
 }
 
 </script>

@@ -375,7 +375,7 @@ class HomeScene {
 
 		this.in = false;
 
-		if(this.enableHoverSound && this.sounds['hover'].playing()) {
+		if(this.enableHoverSound && SoundManager.get('hover').playing()) {
 			SoundManager.get('hover').fade(1,0,1000);
 		}
 		this.cursor.onMouseLeave();
