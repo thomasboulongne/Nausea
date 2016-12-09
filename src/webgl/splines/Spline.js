@@ -27,7 +27,6 @@ class Spline {
 
 	init() {
 		this.curve = new THREE.CatmullRomCurve3(this.points);
-		this.createGeometry();
 		this.initTimeline();
 		this.backSound = SoundManager.load('back.mp3');
 	}

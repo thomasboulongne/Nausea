@@ -53,7 +53,8 @@ class Zone {
 			let obj = this.objects[i].object;
 			if(obj.material.fragmentShader) {
 				this.hoverTl.to(obj.material.uniforms.opacity, 3.1, {value: 1}, 0);
-				this.hoverTl.to(obj.mesh.rotation, 3.1, {y: NumberUtils.toRadians(10), ease: Circ.easeInOut}, 0);
+				if(this.objects[i].rotate)
+					this.hoverTl.to(obj.mesh.rotation, 3.1, {y: NumberUtils.toRadians(10), ease: Circ.easeInOut}, 0);
 			}
 		}
 
@@ -99,10 +100,15 @@ class Zone {
 
 		this.zoomParams.strength = 0.020;
 
-		TweenMax.delayedCall(2, () => {
+		TweenMax.delayedCall(1, () => {
 			this.spline.enableSpline();
 		});
 
+		for(let i = 0; i < this.objects.length; i++) {
+			const curObj = this.objects[i];
+			if(curObj.rotate)
+				this.timeline.to(curObj.object.mesh.rotation, 11, {'y': NumberUtils.toRadians(curObj.roty), ease: Circ.easeInOut}, '0');
+		}
 
 		SoundManager.play(this.soundMaterialize);
 	}

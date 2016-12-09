@@ -31,6 +31,7 @@ class Zone2 extends Zone {
 			'y' : -0.2,
 			'z' : 0,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 349,
 			'rotz' : 0
@@ -43,6 +44,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 5,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 260,
 			'rotz' : 0
@@ -55,6 +57,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 0.7,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -67,6 +70,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 3,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -79,6 +83,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 5.7,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -91,6 +96,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : 8.5,
 			'scale' : 1,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -103,6 +109,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : -4.9,
 			'scale' : 0.6,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0
@@ -115,6 +122,7 @@ class Zone2 extends Zone {
 			'y' : 0,
 			'z' : -6,
 			'scale' : 0.7,
+			'rotate' : true,
 			'rotx' : 0,
 			'roty' : 0,
 			'rotz' : 0

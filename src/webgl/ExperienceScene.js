@@ -64,7 +64,7 @@ class ExperienceScene {
 
 		this.loadSounds();
 
-		this.setAmbiantSound();
+		//this.setAmbiantSound();
 
 		this.createObjects();
 

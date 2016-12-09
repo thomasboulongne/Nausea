@@ -2,7 +2,8 @@
 
  	'gui' : false,
  	'controls' : false,
- 	'materialize' : false
+ 	'materialize' : false,
+ 	'dev': true
 
 };
 
