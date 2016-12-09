@@ -21,6 +21,7 @@ class Zone2 extends Zone {
 		this.nbStreetLamps = 4;
 		this.nbShrubs = 2;
 		this.idZone = 2;
+		this.name = 'Le Kiosque';
 	}
 
 	init(stand, chestnuts, streetLamps, shrubs) {
@@ -173,8 +174,8 @@ class Zone2 extends Zone {
 		
 	}
 
-	playAnim() {
-		super.playAnim();
+	playAnim(nb) {
+		super.playAnim(nb);
 		this.scene.add(this.datas.group);
 		let stand = this.stand.object.mesh;
 		this.timeline.from(stand.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');

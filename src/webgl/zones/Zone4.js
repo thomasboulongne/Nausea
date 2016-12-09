@@ -19,6 +19,7 @@ class Zone4 extends Zone{
 		this.nbBenches = 4;
 		this.nbStreetLamps = 4;
 		this.idZone = 4;
+		this.name = 'La Fontaine';
 	}
 
 	init(fountain, benches, streetLamps) {
@@ -186,8 +187,8 @@ class Zone4 extends Zone{
 
 	}
 
-	playAnim() {
-		super.playAnim();
+	playAnim(nb) {
+		super.playAnim(nb);
 		this.scene.add(this.datas.group);
 		let fountain = this.fountain.object.mesh;
 		this.timeline.from(fountain.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');

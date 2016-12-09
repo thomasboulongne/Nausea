@@ -18,6 +18,7 @@ class Zone1 extends Zone {
 		this.nbBenches = 1;
 		this.nbMinerals = 3;
 		this.idZone = 1;
+		this.name = 'Le Maronnier';
 	}
 
 	init(chestnuts, benches, minerals) {
@@ -129,8 +130,8 @@ class Zone1 extends Zone {
 		super.initTimeline(); 
 	}
 
-	playAnim() {
-		super.playAnim();
+	playAnim(nb) {
+		super.playAnim(nb);
 		this.scene.add(this.datas.group);
 		// let chestnutMesh = this.chestnut.object.mesh;
 		// let benchMesh = this.bench.object.mesh;

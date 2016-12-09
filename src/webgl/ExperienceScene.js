@@ -56,6 +56,8 @@ class ExperienceScene {
 
 		this.enabledRaycast = false;
 
+		this.doneZonesNumber = 0;
+
 		this.setControls();
 
 		this.setLights();
@@ -551,7 +553,9 @@ class ExperienceScene {
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
 		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
 		Emitter.on('ENTER_ZONE', this.onEnterZone.bind(this));
-		Emitter.on('LEAVE_ZONE', this.onLeaveZone);
+		Emitter.on('LEAVE_ZONE', this.onLeaveZone.bind(this));
+		Emitter.on('DISABLE_RAYCAST', () => {this.enabledRaycast = false;});
+		Emitter.on('ENABLE_RAYCAST', () => {this.enabledRaycast = true;});
 
 		window.addEventListener('keydown', this.toggleCamera.bind(this));
 	}
@@ -567,17 +571,18 @@ class ExperienceScene {
 
 	startZoneAnimation() {
 		if(this.INTERSECTED != null) {
-			this.INTERSECTED.playAnim();
-			this.enabledRaycast = false;
+			this.doneZonesNumber++;
+			console.log('this.doneZonesNumber', this.doneZonesNumber);
+			this.INTERSECTED.playAnim(this.doneZonesNumber);
 		}
 	}
 
 	onEnterZone() {
 		TweenMax.to(this.scene.fog, 1, {density: 0.12, delay: 1});
 	}
-	
+
 	onLeaveZone(idZone) {
-		console.log('leave zone', idZone);
+		console.log(idZone);
 		TweenMax.to(this.scene.fog, 1, {density: 0.08});
 		this.enabledRaycast = true;
 	}
@@ -609,7 +614,7 @@ class ExperienceScene {
 					this.intersect = zone;
 				}
 			}
-			if(this.intersect != null) {
+			if(this.intersect != null && this.enabledRaycast) {
 				if(this.INTERSECTED == null) {
 					this.intersect.startHoverAnimation();
 					this.cursor.onMouseEnter();

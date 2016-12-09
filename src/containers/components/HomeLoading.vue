@@ -136,7 +136,6 @@ export default {
 			let delay = 0;
 			for (let i = 0; i < sentences.length; i++) {
 				if( sentences[i].nodeType == Node.ELEMENT_NODE ) {
-					console.log(i);
 					let duration = 2;
 					switch(i) {
 						case 0:
@@ -165,7 +164,6 @@ export default {
 						}, .2, delay);
 					}
 					else {
-						console.log(words[0], delay);
 						this.quoteTl.to(words[0], duration, {
 							opacity: 1,
 							y: 0,
