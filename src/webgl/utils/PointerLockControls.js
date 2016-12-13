@@ -1,44 +1,54 @@
+import throttle from 'lodash/throttle';
+
 /**
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.PointerLockControls = function ( camera, position, lookat ) {
+THREE.PointerLockControls = function ( camera, position, lookat, fluidity ) {
 
-	let scope = this;
+	this.orientation = 1.1;
+
+	this.fluidity = fluidity;
 
 	camera.rotation.set( 0, 0, 0 );
 
-	let pitchObject = new THREE.Object3D();
-	pitchObject.add( camera );
+	this.pitchObject = new THREE.Object3D();
+	this.pitchObject.add( camera );
 
-	let yawObject = new THREE.Object3D();
-	yawObject.position.z = position.z;
-	yawObject.position.y = position.y;
-	yawObject.position.x = position.x;
-	yawObject.add( pitchObject );
+	this.yawObject = new THREE.Object3D();
+	this.yawObject.position.z = position.z;
+	this.yawObject.position.y = position.y;
+	this.yawObject.position.x = position.x;
+	this.yawObject.add( this.pitchObject );
 
-	let PI_2 = Math.PI / 2;
+	this.mouse = new THREE.Vector2();
+
+	this.yawObject.rotation.y = -3.2;
+	this.pitchObject.rotation.x = -1;
 
 	let onMouseMove = function ( event ) {
-		if ( scope.enabled === false ) return;
+		if ( this.enabled === false ) return;
 
-		let movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-		let movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+		this.mouse.x = event.clientX ;
+		this.mouse.y = event.clientY ;
 
-		yawObject.rotation.y -= movementX * 0.002;
-		pitchObject.rotation.x -= movementY * 0.002;
+		let xRange = 3.6;
+		let yRange = 2;
 
-		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
+		let fW = window.innerWidth;
+		let fH = window.innerHeight;
 
+		let percX = this.mouse.x / fW;
+		let percY = this.mouse.y / fH;
+
+		let newX = -xRange * percX - this.orientation;
+		let newY = -yRange * percY + 1;
+
+		TweenLite.to(this.yawObject.rotation, .6, { y: newX});
+		TweenLite.to(this.pitchObject.rotation, .6, { x: newY});
 	};
 
-	this.dispose = function() {
-
-		document.removeEventListener( 'mousemove', onMouseMove, false );
-
-	};
-
-	document.addEventListener( 'mousemove', onMouseMove, false );
+	document.addEventListener( 'mousemove', throttle(onMouseMove,1).bind(this), false );
 
 	this.enabled = false;
 
@@ -48,13 +58,13 @@ THREE.PointerLockControls = function ( camera, position, lookat ) {
 
 	this.getObject = function () {
 
-		return yawObject;
+		return this.yawObject;
 
 	};
 
 	this.getPitch = function () {
 
-		return pitchObject;
+		return this.pitchObject;
 
 	};
 
@@ -67,7 +77,7 @@ THREE.PointerLockControls = function ( camera, position, lookat ) {
 
 		return function( v ) {
 
-			rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
+			rotation.set( this.pitchObject.rotation.x, this.yawObject.rotation.y, 0 );
 
 			v.copy( direction ).applyEuler( rotation );
 

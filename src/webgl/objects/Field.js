@@ -1,3 +1,5 @@
+//import NumberUtils from '../utils/number-utils';
+
 class Field {
 
 	/**
@@ -19,8 +21,8 @@ class Field {
 				// plane
 				let geometry = new THREE.PlaneGeometry(50, 50, 63, 63);
 
-				let material = new THREE.MeshPhongMaterial( {
-					color: 0x575757,
+				let material = new THREE.MeshLambertMaterial( {
+					color: 0x343434,
 					wireframe: false,
 					side: THREE.DoubleSide
 				});
@@ -29,11 +31,14 @@ class Field {
 				geometry.computeVertexNormals();
 				this.mesh = new THREE.Mesh( geometry, material );
 
+				this.mesh.position.y = -4;
+
 				this.mesh.rotation.x = - Math.PI / 2;
+				//this.mesh.rotation.z = NumberUtils.toRadians( 180 );
 
 				//set height of vertices
 				for ( let i = 0; i<this.mesh.geometry.vertices.length; i++ ) {
-					this.mesh.geometry.vertices[i].z = data[i] * 10;
+					this.mesh.geometry.vertices[i].z = data[i] * 8;
 				}
 
 				this.mesh.name = 'field';
@@ -41,7 +46,7 @@ class Field {
 			};
 
 			// load img source
-			img.src = 'assets2d/heightMap.png';
+			img.src = 'assets2d/heightMap08.png';
 		});
 
 	}
