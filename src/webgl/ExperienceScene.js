@@ -619,7 +619,7 @@ class ExperienceScene {
 		tl.add( () => {
 			Emitter.emit('END_SCREEN');
 			this.scene.background = this.texture2;
-		}, '46')
+		}, '46');
 		
 		tl.add( () => {
 			this.endLights = true;
@@ -685,7 +685,7 @@ class ExperienceScene {
 	startZoneAnimation() {
 		if(this.INTERSECTED != null) {
 			this.doneZonesNumber++;
-			console.log('this.doneZonesNumber', this.doneZonesNumber);
+			
 			this.INTERSECTED.playAnim(this.doneZonesNumber);
 		}
 	}
@@ -696,8 +696,7 @@ class ExperienceScene {
 
 	onLeaveZone(idZone) {
 		this.countZones ++;
-		console.log('visited zones', this.countZones)
-		console.log('leave zone', idZone);
+
 		TweenMax.to(this.scene.fog, 1, {density: 0.12 - idZone/100});
 
 		switch (this.countZones) {
@@ -720,7 +719,6 @@ class ExperienceScene {
 				break;
 		}
 
-		console.log(idZone);
 		TweenMax.to(this.scene.fog, 1, {density: 0.08});
 		this.enabledRaycast = true;
 
@@ -730,7 +728,8 @@ class ExperienceScene {
 				this.videos[0].play();
 				setTimeout(() => {
 					this.add(this.videos[1].mesh);
-					this.videos[1].play()}
+					this.videos[1].play();
+				}
 				, 2000);
 				break;
 			case 2:

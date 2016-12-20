@@ -79,7 +79,7 @@ class HomeScene {
 
 		this.setSounds();
 
-		this.initObjects();
+		this.createObjects();
 
 		this.addEventListeners();
 
@@ -175,85 +175,6 @@ class HomeScene {
 	 */
 	setAmbiantSound() {
 		SoundManager.play('atmos01');
-	}
-
-	initObjects() {
-		let objs = [
-			{
-				'name': 'bench',
-				'materialize': true
-			},
-			{
-				'name': 'chestnut',
-				'materialize': true
-			},
-			{
-				'name': 'fern',
-				'materialize': true
-			},
-			{
-				'name': 'fountain',
-				'materialize': true
-			},
-			{
-				'name': 'kiosque',
-				'materialize': true
-			},
-			{
-				'name': 'mineral',
-				'materialize': true
-			},
-			{
-				'name': 'sartre_bench_intro',
-				'materialize': false
-			},
-			{
-				'name': 'sartre_bench_xp',
-				'materialize': false
-			},
-			{
-				'name': 'sartres',
-				'materialize': true
-			},
-			{
-				'name': 'shrub',
-				'materialize': false
-			},
-			{
-				'name': 'stand',
-				'materialize': true
-			},
-			{
-				'name': 'statue',
-				'materialize': true
-			},
-			{
-				'name': 'streetLamp',
-				'materialize': false
-			},
-			{
-				'name': 'root',
-				'materialize': false
-			},
-			{
-				'name': 'root2',
-				'materialize': false
-			},
-			{
-				'name': 'root02',
-				'materialize': false
-			}
-		];
-
-		let promises = [];
-		for (let i = 0; i < objs.length; i++) {
-			promises.push(Store.get(objs[i].name, objs[i]));
-		}
-
-		Promise.all(promises)
-		.then(() => {
-			this.createObjects();
-		});
 	}
 
 	/**
