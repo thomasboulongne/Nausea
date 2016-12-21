@@ -17,6 +17,8 @@ class Skybox {
 
 				texture.mapping = THREE.CubeRefractionMapping;
 
+				this.texture = texture;
+
 				resolve(texture);
 			});
 		});

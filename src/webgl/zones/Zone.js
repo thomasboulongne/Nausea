@@ -1,6 +1,5 @@
 import SoundManager from '../../sound/SoundManager';
 import Emitter from '../../core/Emitter';
-import Dat from 'dat-gui';
 
 import NumberUtils from '../utils/number-utils';
 
@@ -36,37 +35,32 @@ class Zone {
 		this.addListeners();
 	}
 
-	init() {
-
-		for(let i = 0; i < this.objects.length; i++) {
-			const obj = this.objects[i];
-			if(!(obj.object.options.materialize) && obj.name != 'sartre-bench') {
-				obj.object.material.opacity = 0;
+	init(objs) {
+		for(let i = 0; i < objs.length; i++) {
+			const obj = objs[i];
+			if(!(obj.options.materialize)) {
+				obj.material.opacity = obj.options.opacity ? obj.options.opacity : 0;
 			}
+			this.objects.push(obj);
 		}
 
 		SoundManager.get('materialize').volume(0.35);
 		this.soundsEndZone = ['04', '10'];
-	}
 
-	setMeshNames () {
-		for( let i = 0;  i < this.objects.length; i++ ) {
-			this.objects[i].object.mesh.name = this.objects[i].name;
-		}
 	}
 
 	initHoverTimeline () {
-		this.hoverTl = new TimelineMax();
+		this.hoverTl = new TimelineMax({paused: true});
+
 		for(let i = 0; i < this.objects.length; i++) {
-			let obj = this.objects[i].object;
+			let obj = this.objects[i];
 			if(obj.material.fragmentShader) {
 				this.hoverTl.to(obj.material.uniforms.opacity, 3.1, {value: 1}, 0);
-				if(this.objects[i].rotate)
+				if(obj.options.rotate) {
 					this.hoverTl.to(obj.mesh.rotation, 3.1, {y: NumberUtils.toRadians(10), ease: Circ.easeInOut}, 0);
+				}
 			}
 		}
-
-		this.hoverTl.pause();
 	}
 
 	initTimeline () {
@@ -117,11 +111,11 @@ class Zone {
 	}
 
 	playAnim (zoneNumber) {
-		console.log('Zone number', zoneNumber);
+
 		Emitter.emit('ENTER_ZONE', this.name, zoneNumber);
 		this.animated = true;
 		for(let i = 0; i < this.objects.length; i++) {
-			this.objects[i].object.material.transparent = false;
+			this.objects[i].material.transparent = false;
 		}
 		this.playTimeline();
 
@@ -133,17 +127,17 @@ class Zone {
 
 		for(let i = 0; i < this.objects.length; i++) {
 			const curObj = this.objects[i];
-			if(curObj.rotate)
-				this.timeline.to(curObj.object.mesh.rotation, 11, {'y': NumberUtils.toRadians(curObj.roty), ease: Circ.easeInOut}, '0');
-			if(!(curObj.object.options.materialize)) {
-				this.timeline.to(curObj.object.material, 3 , {'opacity': 1, ease: Expo.easeOut, onComplete: () => {
-					curObj.object.material.transparent = false;
+			if(curObj.options.rotate)
+				this.timeline.to(curObj.mesh.rotation, 11, {'y': NumberUtils.toRadians(curObj.roty), ease: Circ.easeInOut}, '0');
+			if(!(curObj.options.materialize)) {
+				this.timeline.to(curObj.material, 3 , {'opacity': 1, ease: Expo.easeOut, onComplete: () => {
+					curObj.material.transparent = false;
 				}}, '0');
-				this.timeline.fromTo(curObj.object.mesh.scale, 3, 
+				this.timeline.fromTo(curObj.mesh.scale, 3, 
 					{'x': 0.6, y: '0.8', z: '0.8', ease: Expo.easeOut},
 					{'x': 1.2, y: '1.2', z: '1.2', ease: Expo.easeOut},
 				'0');
-				this.timeline.from(curObj.object.mesh.rotation, 3, {'y': NumberUtils.toRadians(-10)}, '0');
+				this.timeline.from(curObj.mesh.rotation, 3, {'y': NumberUtils.toRadians(-10)}, '0');
 			}
 		}
 
@@ -207,25 +201,6 @@ class Zone {
 	 * @addScene
 	 */
 	addScene() {
-		for ( let i = 0; i < this.objects.length; i++) {
-			let obj = this.objects[i];
-			this.scene.add(obj.object.mesh);
-			obj.object.mesh.position.set(obj.x, obj.y, obj.z);
-			obj.object.mesh.rotation.set(NumberUtils.toRadians(obj.rotx), NumberUtils.toRadians(obj.roty), NumberUtils.toRadians(obj.rotz));
-			obj.object.mesh.scale.set(obj.scale, obj.scale, obj.scale);
-			if(obj.name == 'root') {
-				this.gui = new Dat.GUI();
-				this.gui.add(obj.object.mesh.scale, 'x', 0, 10);
-				this.gui.add(obj.object.mesh.scale, 'y', 0, 10);
-				this.gui.add(obj.object.mesh.scale, 'z', 0, 10);
-				this.gui.add(obj.object.mesh.position, 'x', -3, Math.PI * 2);
-				this.gui.add(obj.object.mesh.position, 'y', -3, Math.PI * 2);
-				this.gui.add(obj.object.mesh.position, 'z', -3, Math.PI * 2);
-				this.gui.add(obj.object.mesh.rotation, 'x', 0, Math.PI * 2);
-				this.gui.add(obj.object.mesh.rotation, 'y', 0, Math.PI * 2);
-				this.gui.add(obj.object.mesh.rotation, 'z', 0, Math.PI * 2);
-			}
-		}
 	}
 
 	/**
@@ -234,15 +209,15 @@ class Zone {
 	update() {
 		for(let i = 0; i < this.objects.length; i++) {
 			// console.log(this.objects);
-			if(this.objects[i].object.options.materialize && this.objects[i].rotate) {
+			if(this.objects[i].options.materialize && this.objects[i].rotate) {
 				//this.objects[i].object.mesh.rotation.y += 0.01;
 			}
 		}
 
 		if(this.animate) {
 			for(let i = 0; i < this.objects.length; i++) {
-				if(this.objects[i].object.options.materialize) {
-					this.objects[i].object.material.uniforms.time.value = this.tweenTime.time;
+				if(this.objects[i].options.materialize) {
+					this.objects[i].material.uniforms.time.value = this.tweenTime.time;
 					//this.objects[i].object.options.material.uniforms.time.value = this.tweenTime.time;
 				}
 			}

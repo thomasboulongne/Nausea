@@ -4,6 +4,7 @@ import 'three/examples/js/modifiers/ExplodeModifier';
 import VertexShader from './shaders/objects/shader.vert';
 
 import LoadingManager from './utils/LoadingManager';
+import NumberUtils from './utils/number-utils';
 //import AWDLoader from './utils/AWDLoader';
 
 class AWDObject {
@@ -79,6 +80,14 @@ class AWDObject {
 		}
 		
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
+
+		if (this.options.x) this.mesh.position.x = this.options.x;
+		if (this.options.y) this.mesh.position.y = this.options.y;
+		if (this.options.z) this.mesh.position.z = this.options.z;
+		if (this.options.rotx) this.mesh.rotation.x = NumberUtils.toRadians(this.options.rotx);
+		if (this.options.roty) this.mesh.rotation.y = NumberUtils.toRadians(this.options.roty);
+		if (this.options.rotz) this.mesh.rotation.z = NumberUtils.toRadians(this.options.rotz);
+		if (this.options.scale) this.mesh.scale.set(this.options.scale,this.options.scale,this.options.scale);
 
 		this.mesh.name = this.name;
 

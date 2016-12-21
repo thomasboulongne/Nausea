@@ -1,9 +1,13 @@
 import Zone from './Zone';
+
 import Spline4 from '../splines/Spline4';
+
+import Store from '../WebGLStore';
 
 import DataEmitter from '../data/DataEmitter';
 
 import NumberUtils from '../utils/number-utils';
+
 import SoundManager from '../../sound/SoundManager';
 
 class Zone4 extends Zone{
@@ -22,145 +26,141 @@ class Zone4 extends Zone{
 		this.name = 'La Fontaine';
 	}
 
-	init(fountain, benches, streetLamps) {
+	init() {
 
-		this.fountain = {
-			'name' : 'fountain',
-			'object' : fountain,
-			'x' : 17,
-			'y' : 0.35,
-			'z' : 6.2,
-			'scale' : 1,
-			'rotate' : true,
-			'rotx' : 0,
-			'roty' : 0,
-			'rotz' : 0
-		};
+		return new Promise( resolve => {
+			Promise.all([
+				Store.get('fountain', {
+					'name' : 'fountain',
+					'x' : 17,
+					'y' : 0.35,
+					'z' : 6.2,
+					'scale' : 1,
+					'rotate' : true,
+					'rotx' : 0,
+					'roty' : 0,
+					'rotz' : 0,
+					'materialize': true
+				}),
 
-		this.bench1 = {
-			'name' : 'bench1-z4',
-			'object' : benches[0],
-			'x' : 14,
-			'y' : 0,
-			'z' : 1.8,
-			'scale' : 1,
-			'rotate' : false,
-			'rotx' : 0,
-			'roty' : 278,
-			'rotz' : 0
-		};
+				Store.get('bench', {
+					'name' : 'bench1-z4',
+					'x' : 14,
+					'y' : 0,
+					'z' : 1.8,
+					'scale' : 1,
+					'rotate' : false,
+					'rotx' : 0,
+					'roty' : 278,
+					'rotz' : 0,
+					'materialize': true
+				}),
 
-		this.bench2 = {
-			'name' : 'bench2-z4',
-			'object' : benches[1],
-			'x' : 13,
-			'y' : 0,
-			'z' : 4.8,
-			'scale' : 1,
-			'rotate' : false,
-			'rotx' : 0,
-			'roty' : 345,
-			'rotz' : 0
-		};
+				Store.get('bench', {
+					'name' : 'bench2-z4',
+					'x' : 13,
+					'y' : 0,
+					'z' : 4.8,
+					'scale' : 1,
+					'rotate' : false,
+					'rotx' : 0,
+					'roty' : 345,
+					'rotz' : 0,
+					'materialize': true
+				}),
 
-		this.bench3 = {
-			'name' : 'bench3-z4',
-			'object' : benches[2],
-			'x' : 12,
-			'y' : 0,
-			'z' : 7.3,
-			'scale' : 1,
-			'rotate' : false,
-			'rotx' : 0,
-			'roty' : 44,
-			'rotz' : 0
-		};
+				Store.get('bench', {
+					'name' : 'bench3-z4',
+					'x' : 12,
+					'y' : 0,
+					'z' : 7.3,
+					'scale' : 1,
+					'rotate' : false,
+					'rotx' : 0,
+					'roty' : 44,
+					'rotz' : 0,
+					'materialize': true
+				}),
 
-		this.bench4 = {
-			'name' : 'bench4-z4',
-			'object' : benches[3],
-			'x' : 22,
-			'y' : 0,
-			'z' : 3.5,
-			'scale' : 1,
-			'rotate' : false,
-			'rotx' : 0,
-			'roty' : 234,
-			'rotz' : 0
-		};
+				Store.get('bench', {
+					'name' : 'bench4-z4',
+					'x' : 22,
+					'y' : 0,
+					'z' : 3.5,
+					'scale' : 1,
+					'rotate' : false,
+					'rotx' : 0,
+					'roty' : 234,
+					'rotz' : 0,
+					'materialize': true
+				}),
 
-		this.streetLamp1 = {
-			'name' : 'streetLamp1-z4',
-			'object' : streetLamps[0],
-			'x' : 17,
-			'y' : 0,
-			'z' : 10,
-			'scale' : 1,
-			'rotate' : true,
-			'rotx' : 0,
-			'roty' : 0,
-			'rotz' : 0
-		};
+				Store.get('streetLamp', {
+					'name' : 'streetLamp1-z4',
+					'x' : 17,
+					'y' : 0,
+					'z' : 10,
+					'scale' : 1,
+					'rotate' : true,
+					'rotx' : 0,
+					'roty' : 0,
+					'rotz' : 0
+				}),
 
-		this.streetLamp2 = {
-			'name' : 'streetLamp2-z4',
-			'object' : streetLamps[1],
-			'x' : 13,
-			'y' : 0,
-			'z' : 3,
-			'scale' : 1,
-			'rotate' : true,
-			'rotx' : 0,
-			'roty' : 0,
-			'rotz' : 0
-		};
+				Store.get('streetLamp', {
+					'name' : 'streetLamp2-z4',
+					'x' : 13,
+					'y' : 0,
+					'z' : 3,
+					'scale' : 1,
+					'rotate' : true,
+					'rotx' : 0,
+					'roty' : 0,
+					'rotz' : 0
+				}),
 
-		this.streetLamp3 = {
-			'name' : 'streetLamp3-z4',
-			'object' : streetLamps[2],
-			'x' : 12,
-			'y' : 0,
-			'z' : 6.2,
-			'scale' : 1,
-			'rotate' : true,
-			'rotx' : 0,
-			'roty' : 0,
-			'rotz' : 0
-		};
+				Store.get('streetLamp', {
+					'name' : 'streetLamp3-z4',
+					'x' : 12,
+					'y' : 0,
+					'z' : 6.2,
+					'scale' : 1,
+					'rotate' : true,
+					'rotx' : 0,
+					'roty' : 0,
+					'rotz' : 0
+				}),
 
-		this.streetLamp4 = {
-			'name' : 'streetLamp4-z4',
-			'object' : streetLamps[3],
-			'x' : 20.6,
-			'y' : 0,
-			'z' : 1.8,
-			'scale' : 1,
-			'rotate' : true,
-			'rotx' : 0,
-			'roty' : 0,
-			'rotz' : 0
-		};
+				Store.get('streetLamp', {
+					'name' : 'streetLamp4-z4',
+					'x' : 20.6,
+					'y' : 0,
+					'z' : 1.8,
+					'scale' : 1,
+					'rotate' : true,
+					'rotx' : 0,
+					'roty' : 0,
+					'rotz' : 0
+				})
+			])
+			.then( objs => {
+				super.init(objs);
 
-		//Splice experience arrays
-		benches.splice(0,this.nbBenches);
-		streetLamps.splice(0, this.nbStreetLamps);
+				this.sound = SoundManager.get('07').volume(3);
 
-		this.objects.push(this.fountain, this.bench1, this.bench2, this.bench3, this.bench4, this.streetLamp1, this.streetLamp2, this.streetLamp3, this.streetLamp4);
+				this.datas = new DataEmitter(this.controlsContainer, ['fountain1', 'fountain2'], {
+					x: 17,
+					y: 2,
+					z: 6,
+					particles: 30,
+					side: 3.5,
+					minDistance: 1.15
+				});
 
-		super.init();
-
-		this.sound = SoundManager.get('07').volume(3);
-
-		this.datas = new DataEmitter(this.controlsContainer, ['fountain1', 'fountain2'], {
-			x: 17,
-			y: 2,
-			z: 6,
-			particles: 30,
-			side: 3.5,
-			minDistance: 1.15
+				this.initSpline();
+				resolve();
+			});
 		});
-
-		this.initSpline();
 	}
 
 	setMeshNames () {
@@ -190,7 +190,7 @@ class Zone4 extends Zone{
 	playAnim(nb) {
 		super.playAnim(nb);
 		this.scene.add(this.datas.group);
-		let fountain = this.fountain.object.mesh;
+		let fountain = this.objects[0].mesh;
 		this.timeline.from(fountain.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(fountain.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');
 
@@ -201,7 +201,7 @@ class Zone4 extends Zone{
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline4(this.fountain, this.scene, this.controlsContainer, this.zoomParams);
+		this.spline = new Spline4(this.objects[0].mesh.position, this.scene, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 
@@ -210,7 +210,8 @@ class Zone4 extends Zone{
 	 */
 	update() {
 		super.update();
-		this.spline.update();
+		if(this.spline)
+			this.spline.update();
 	}
 
 }
