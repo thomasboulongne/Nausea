@@ -7,8 +7,8 @@ class Zone0 extends Zone {
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene) {
-		super(scene);
+	constructor() {
+		super();
 	}
 
 	init() {

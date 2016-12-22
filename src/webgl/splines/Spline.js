@@ -1,5 +1,7 @@
 import SoundManager from '../../sound/SoundManager';
 
+import SceneManager from '../SceneManager';
+
 import Emitter from '../../core/Emitter';
 
 class Spline {
@@ -7,11 +9,10 @@ class Spline {
 	/**
 	* @constructor
 	*/
-	constructor(target, scene, controlsContainer, zoomParams) {
+	constructor(target, controlsContainer, zoomParams) {
 
 		this.target = target;
 		this.zoomParams = zoomParams;
-		this.scene = scene;
 		this.controlsContainer = controlsContainer;
 
 		this.count = 0;
@@ -75,7 +76,7 @@ class Spline {
 	}
 
 	disableSpline() {
-		this.scene.remove(this.line);
+		SceneManager.remove('experience', this.line);
 		this.enabledSpline = false;
 	}
 

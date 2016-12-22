@@ -16,8 +16,8 @@ class Zone4 extends Zone{
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation, controlsContainer, zoomParams) {
-		super(scene, orientation, controlsContainer, zoomParams);
+	constructor(orientation, controlsContainer, zoomParams) {
+		super(orientation, controlsContainer, zoomParams);
 
 		//properties to count how many objects to clone
 		this.nbBenches = 4;
@@ -189,7 +189,6 @@ class Zone4 extends Zone{
 
 	playAnim(nb) {
 		super.playAnim(nb);
-		this.scene.add(this.datas.group);
 		let fountain = this.objects[0].mesh;
 		this.timeline.from(fountain.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(fountain.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');

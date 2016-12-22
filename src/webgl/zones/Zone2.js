@@ -16,8 +16,8 @@ class Zone2 extends Zone {
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation, controlsContainer, zoomParams) {
-		super(scene, orientation, controlsContainer, zoomParams);
+	constructor(orientation, controlsContainer, zoomParams) {
+		super(orientation, controlsContainer, zoomParams);
 
 		this.idZone = 2;
 		this.name = 'Le Kiosque';
@@ -167,7 +167,6 @@ class Zone2 extends Zone {
 
 	playAnim(nb) {
 		super.playAnim(nb);
-		this.scene.add(this.datas.group);
 		let stand = this.objects[0].mesh;
 		this.timeline.from(stand.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(stand.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');

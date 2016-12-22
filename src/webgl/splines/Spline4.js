@@ -5,9 +5,9 @@ class Spline4 extends Spline {
 	/**
 	* @constructor
 	*/
-	constructor(target, scene, controlsContainer, zoomParams) {
+	constructor(target, controlsContainer, zoomParams) {
 
-		super(target, scene, controlsContainer, zoomParams);
+		super(target, controlsContainer, zoomParams);
 		this.zoneSpline = 4;
 	}
 
@@ -22,27 +22,6 @@ class Spline4 extends Spline {
 			new THREE.Vector3(21, 1.3, 11)
 		];
 		super.init();
-	}
-
-	createGeometry() {
-		super.createGeometry();
-	}
-
-	enableSpline() {
-		super.enableSpline();
-	}
-
-	disableSpline() {
-		super.disableSpline();
-	}
-
-	/**
-	 * @method
-	 * @name update
-	 * @description Triggered on every TweenMax tick
-	 */
-	update() {
-		super.update();
 	}
 
 }

@@ -12,8 +12,8 @@ class Zone1 extends Zone {
 	/**
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation, controlsContainer, zoomParams) {
-		super(scene, orientation, controlsContainer, zoomParams);
+	constructor(orientation, controlsContainer, zoomParams) {
+		super(orientation, controlsContainer, zoomParams);
 
 		this.idZone = 1;
 		this.name = 'Le Maronnier';
@@ -121,20 +121,6 @@ class Zone1 extends Zone {
 		super.initTimeline(); 
 	}
 
-	playAnim(nb) {
-		super.playAnim(nb);
-		this.scene.add(this.datas.group);
-		// let chestnutMesh = this.chestnut.object.mesh;
-		// let benchMesh = this.bench.object.mesh;
-
-		//this.timeline.to(chestnutMesh.scale, 10, {x: 1.2, y: 1.2, z:1.2, ease: Circ.easeInOut}, '0');
-
-		// this.timeline.to(chestnutMesh.rotation, 12, {'y': NumberUtils.toRadians(this.chestnut.roty), ease: Circ.easeInOut}, '0');
-		// this.timeline.to(benchMesh.rotation, 12, {'y': NumberUtils.toRadians(this.bench.roty), ease: Circ.easeInOut}, '0');
-
-		this.playSound();
-	}
-
 	playSound() {
 		SoundManager.play('03');
 	}
@@ -144,7 +130,7 @@ class Zone1 extends Zone {
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline1(this.objects[0].mesh.position, this.scene, this.controlsContainer, this.zoomParams);
+		this.spline = new Spline1(this.objects[0].mesh.position, this.controlsContainer, this.zoomParams);
 		this.spline.init();
 	}
 

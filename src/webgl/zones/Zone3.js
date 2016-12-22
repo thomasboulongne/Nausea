@@ -16,8 +16,8 @@ class Zone3 extends Zone {
 	 * @constructor
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation, controlsContainer, zoomParams) {
-		super(scene, orientation, controlsContainer, zoomParams);
+	constructor(orientation, controlsContainer, zoomParams) {
+		super(orientation, controlsContainer, zoomParams);
 
 		this.idZone = 3;
 		this.name = 'La Statue';
@@ -133,7 +133,6 @@ class Zone3 extends Zone {
 
 	playAnim(nb) {
 		super.playAnim(nb);
-		this.scene.add(this.datas.group);
 		let statue = this.objects[0].mesh;
 		this.timeline.from(statue.scale, 10, {'x': 0.8, 'y': 0.8, z:'0.8', ease: Expo.easeOut}, '0');
 		this.timeline.from(statue.rotation, 10, {'y': NumberUtils.toRadians(-205), ease: Expo.easeOut}, '0');

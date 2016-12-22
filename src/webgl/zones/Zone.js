@@ -1,6 +1,8 @@
 import SoundManager from '../../sound/SoundManager';
 import Emitter from '../../core/Emitter';
 
+import SceneManager from '../SceneManager';
+
 import NumberUtils from '../utils/number-utils';
 
 class Zone {
@@ -10,9 +12,8 @@ class Zone {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(scene, orientation, controlsContainer, zoomParams) {
+	constructor(orientation, controlsContainer, zoomParams) {
 
-		this.scene = scene;
 		this.controlsContainer = controlsContainer;
 		this.zoomParams = zoomParams;
 		this.idZone;
@@ -67,17 +68,15 @@ class Zone {
 		this.animate = true;
 		this.initHoverTimeline();
 		this.tweenTime = { time : 0};
-		this.timeline = new TimelineMax();
+		this.timeline = new TimelineMax({paused: true});
 		this.timeline.to(this.tweenTime, 7, {
 			time: 2,
 			ease: Circ.easeOut,
 			onComplete: () => {
 				this.animate = false;
-				this.scene.add(this.datas.group);
+				SceneManager.add('experience', this.datas.group);
 			},
 		}, '1');
-
-		this.timeline.pause();
 	}
 
 	addListeners() {

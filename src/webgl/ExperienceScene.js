@@ -14,6 +14,8 @@ import ChromaKeyPlane from './objects/ChromaKeyPlane';
 
 import SoundManager from '../sound/SoundManager';
 
+import SceneManager from './SceneManager';
+
 import Emitter from '../core/Emitter';
 
 import Lights from './lights/Lights';
@@ -36,6 +38,7 @@ class ExperienceScene {
 	constructor(domElement) {
 		if(Config.gui) this.gui = new Dat.GUI();
 
+
 		this.domElement = domElement;
 
 		this.INTERSECTED = null;
@@ -44,6 +47,8 @@ class ExperienceScene {
 		this.height = window.innerHeight;
 
 		this.scene = new THREE.Scene();
+
+		SceneManager.addScene('experience', this);
 
 		this.countZones = 0;
 
@@ -166,11 +171,11 @@ class ExperienceScene {
 			this.add(this.particles.mesh);
 
 			this.zones = [
-				new Zone0(this.scene),
-				new Zone1(this.scene, {x: [882,1059],y: [541,674]}, this.controlsContainer, this.passes[2].params),
-				new Zone2(this.scene, {x: [1407,1640], y: [555,696]}, this.controlsContainer, this.passes[2].params),
-				new Zone3(this.scene, {x: [132,252], y: [553,677]}, this.controlsContainer, this.passes[2].params),
-				new Zone4(this.scene, {x: [459,552], y: [592,677]}, this.controlsContainer, this.passes[2].params),
+				new Zone0(),
+				new Zone1({x: [882,1059],y: [541,674]}, this.controlsContainer, this.passes[2].params),
+				new Zone2({x: [1407,1640], y: [555,696]}, this.controlsContainer, this.passes[2].params),
+				new Zone3({x: [132,252], y: [553,677]}, this.controlsContainer, this.passes[2].params),
+				new Zone4({x: [459,552], y: [592,677]}, this.controlsContainer, this.passes[2].params)
 			];
 
 			Promise.all([
@@ -188,6 +193,8 @@ class ExperienceScene {
 					}
 					this.zones[i].initTimeline();
 				}
+
+				Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
 				
 				this.intro();
 			});
@@ -302,7 +309,6 @@ class ExperienceScene {
 	addEventListeners() {
 		window.addEventListener('resize', this.onResize.bind(this));
 		TweenMax.ticker.addEventListener('tick', this.render.bind(this));
-		Emitter.on('ZONE_FOCUSED', this.startZoneAnimation.bind(this));
 		Emitter.on('ENTER_ZONE', this.onEnterZone.bind(this));
 		Emitter.on('LEAVE_ZONE', this.onLeaveZone.bind(this));
 		Emitter.on('DISABLE_RAYCAST', () => {this.enabledRaycast = false;});
