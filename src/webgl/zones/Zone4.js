@@ -1,6 +1,6 @@
 import Zone from './Zone';
 
-import Spline4 from '../splines/Spline4';
+import Spline from '../splines/Spline';
 
 import Store from '../WebGLStore';
 
@@ -11,20 +11,6 @@ import NumberUtils from '../utils/number-utils';
 import SoundManager from '../../sound/SoundManager';
 
 class Zone4 extends Zone{
-
-	/**
-	 * @constructor
-	 * param scene : experience scene
-	 */
-	constructor(orientation, controlsContainer, zoomParams) {
-		super(orientation, controlsContainer, zoomParams);
-
-		//properties to count how many objects to clone
-		this.nbBenches = 4;
-		this.nbStreetLamps = 4;
-		this.idZone = 4;
-		this.name = 'La Fontaine';
-	}
 
 	init() {
 
@@ -146,7 +132,7 @@ class Zone4 extends Zone{
 			.then( objs => {
 				super.init(objs);
 
-				this.sound = SoundManager.get('07').volume(3);
+				this.sound = SoundManager.get(this.soundId).volume(3);
 
 				this.datas = new DataEmitter(this.controlsContainer, ['fountain1', 'fountain2'], {
 					x: 17,
@@ -163,30 +149,6 @@ class Zone4 extends Zone{
 		});
 	}
 
-	setMeshNames () {
-		super.setMeshNames();
-	}
-
-	addToGUI(gui) {
-		super.addToGUI(gui);
-	}
-
-	playSound() {
-		SoundManager.play('07');
-	}
-
-	/**
-	 * @addScene
-	 */
-	addScene() {
-		super.addScene();
-	}
-
-	initTimeline() {
-		super.initTimeline(); 
-
-	}
-
 	playAnim(nb) {
 		super.playAnim(nb);
 		let fountain = this.objects[0].mesh;
@@ -200,17 +162,17 @@ class Zone4 extends Zone{
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline4(this.objects[0].mesh.position, this.scene, this.controlsContainer, this.zoomParams);
+		this.splinePoints = [
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(5, 0.5, 2),
+			new THREE.Vector3(10, 0.75, 5),
+			new THREE.Vector3(12, 0.65, 7),
+			new THREE.Vector3(14, 0.75, 9),
+			new THREE.Vector3(20, 1.8, 12),
+			new THREE.Vector3(21, 1.3, 11)
+		];
+		this.spline = new Spline(this.objects[0].mesh.position, this.controlsContainer, this.zoomParams, this.splinePoints, this.idZone);
 		this.spline.init();
-	}
-
-	/**
-	 * @update
-	 */
-	update() {
-		super.update();
-		if(this.spline)
-			this.spline.update();
 	}
 
 }

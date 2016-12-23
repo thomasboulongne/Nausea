@@ -1,5 +1,5 @@
 import Zone from './Zone';
-import Spline1 from '../splines/Spline1';
+import Spline from '../splines/Spline';
 
 import DataEmitter from '../data/DataEmitter';
 
@@ -8,16 +8,6 @@ import SoundManager from '../../sound/SoundManager';
 import Store from '../WebGLStore';
 
 class Zone1 extends Zone {
-
-	/**
-	 * param scene : experience scene
-	 */
-	constructor(orientation, controlsContainer, zoomParams) {
-		super(orientation, controlsContainer, zoomParams);
-
-		this.idZone = 1;
-		this.name = 'Le Maronnier';
-	}
 
 	init() {
 
@@ -83,7 +73,7 @@ class Zone1 extends Zone {
 			])
 			.then( objs => {
 
-				SoundManager.get('03').volume(3);
+				SoundManager.get(this.soundId).volume(3);
 
 				this.datas = new DataEmitter(this.controlsContainer, ['chest1', 'chest2', 'chest3'], {
 					x: 0,
@@ -102,46 +92,22 @@ class Zone1 extends Zone {
 
 	}
 
-	setMeshNames () {
-		super.setMeshNames();
-	}
-
-	addToGUI(gui) {
-		super.addToGUI(gui);
-	}
-
-	/**
-	 * @addScene
-	 */
-	addScene() {
-		super.addScene();
-	}
-
-	initTimeline() {
-		super.initTimeline(); 
-	}
-
-	playSound() {
-		SoundManager.play('03');
-	}
-
-
 	/**
 	 * @Spline
 	 */
 	initSpline() {
-		this.spline = new Spline1(this.objects[0].mesh.position, this.controlsContainer, this.zoomParams);
+		this.splinePoints = [
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(0.5, 1, 3),
+			new THREE.Vector3(1.5, 2, 6),
+			new THREE.Vector3(2, 2.5, 11),
+			new THREE.Vector3(0, 2, 14),
+			new THREE.Vector3(-1, 1, 17),
+			new THREE.Vector3(-3, 1.5, 11),
+			new THREE.Vector3(-1, 2, 8)
+		];
+		this.spline = new Spline(this.objects[0].mesh.position, this.controlsContainer, this.zoomParams, this.splinePoints, this.idZone);
 		this.spline.init();
-	}
-
-	/**
-	 * @update
-	 */
-	update() {
-		//permanant rotation
-		super.update();
-		if(this.spline)
-			this.spline.update();
 	}
 
 }

@@ -3,14 +3,6 @@ import Store from '../WebGLStore';
 
 class Zone0 extends Zone {
 
-	/**
-	 * @constructor
-	 * param scene : experience scene
-	 */
-	constructor() {
-		super();
-	}
-
 	init() {
 		return new Promise( resolve => {
 
@@ -190,23 +182,9 @@ class Zone0 extends Zone {
 		}, 5);
 	}
 
-	addToGUI(gui) {
-		super.addToGUI(gui);
-	}
-
-	playAnim() {
-		super.playAnim();
-	}
-
 	initTimeline() {
-
-	}
-
-	/**
-	 * @update
-	 */
-	update() {
-		//permanant rotation
+		//Prevent calling super.initTimeline();
+		return true;
 	}
 
 }

@@ -12,11 +12,15 @@ class Zone {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(orientation, controlsContainer, zoomParams) {
+	constructor(orientation, controlsContainer, zoomParams, idZone, name, soundId) {
 
 		this.controlsContainer = controlsContainer;
 		this.zoomParams = zoomParams;
-		this.idZone;
+		this.idZone = idZone;
+
+		this.name = name;
+
+		this.soundId = soundId;
 
 		this.animated = false;
 
@@ -149,6 +153,10 @@ class Zone {
 		});
 	}
 
+	playSound() {
+		SoundManager.play(this.soundId);
+	}
+
 	startHoverAnimation() {
 		this.hoverTl.play();
 	}
@@ -224,6 +232,9 @@ class Zone {
 
 		if(this.datas)
 			this.datas.update();
+
+		if(this.spline)
+			this.spline.update();
 	}
 
 }

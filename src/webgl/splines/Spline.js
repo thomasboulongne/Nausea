@@ -9,7 +9,7 @@ class Spline {
 	/**
 	* @constructor
 	*/
-	constructor(target, controlsContainer, zoomParams) {
+	constructor(target, controlsContainer, zoomParams, points, zoneSpline) {
 
 		this.target = target;
 		this.zoomParams = zoomParams;
@@ -19,9 +19,11 @@ class Spline {
 		this.amount = 0.001;
 		this.ratio = 100;
 
-		this.zoneSpline = 0;
+		this.zoneSpline = zoneSpline ? zoneSpline : 0;
 
 		this.enabledSpline = false;
+
+		this.points = points;
 
 	}
 

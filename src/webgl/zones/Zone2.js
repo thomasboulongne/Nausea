@@ -1,6 +1,6 @@
 import Zone from './Zone';
 
-import Spline2 from '../splines/Spline2';
+import Spline from '../splines/Spline';
 
 import Store from '../WebGLStore';
 
@@ -11,17 +11,6 @@ import NumberUtils from '../utils/number-utils';
 import SoundManager from '../../sound/SoundManager';
 
 class Zone2 extends Zone {
-
-	/**
-	 * @constructor
-	 * param scene : experience scene
-	 */
-	constructor(orientation, controlsContainer, zoomParams) {
-		super(orientation, controlsContainer, zoomParams);
-
-		this.idZone = 2;
-		this.name = 'Le Kiosque';
-	}
 
 	init() {
 
@@ -128,7 +117,7 @@ class Zone2 extends Zone {
 
 				super.init(objs);
 
-				this.sound = SoundManager.get('06').volume(4);
+				this.sound = SoundManager.get(this.soundId).volume(4);
 
 				this.datas = new DataEmitter(this.controlsContainer, ['stand1', 'stand2', 'stand3'], {
 					x: -16,
@@ -145,26 +134,6 @@ class Zone2 extends Zone {
 		});
 	}
 
-	setMeshNames () {
-		super.setMeshNames();
-	}
-
-	addToGUI(gui) {
-		super.addToGUI(gui);
-	}
-
-	/**
-	 * @addScene
-	 */
-	addScene() {
-		super.addScene();
-	}
-
-	initTimeline() {
-		super.initTimeline(); 
-		
-	}
-
 	playAnim(nb) {
 		super.playAnim(nb);
 		let stand = this.objects[0].mesh;
@@ -177,22 +146,17 @@ class Zone2 extends Zone {
 			
 	}
 
-	playSound() {
-		SoundManager.play('06');
-	}
-
 	initSpline() {
-		this.spline = new Spline2(this.objects[0].mesh.position, this.scene, this.controlsContainer, this.zoomParams);
+		this.splinePoints = [
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(-4, 0.5, 0),
+			new THREE.Vector3(-10, 1, 0),
+			new THREE.Vector3(-14, 1.5, -3),
+			new THREE.Vector3(-18, 1.5, -6),
+			new THREE.Vector3(-20, 1.5, 0),
+		];
+		this.spline = new Spline(this.objects[0].mesh.position, this.controlsContainer, this.zoomParams, this.splinePoints, this.idZone);
 		this.spline.init();
-	}
-
-	/**
-	 * @update
-	 */
-	update() {
-		super.update();
-		if(this.spline)
-			this.spline.update();
 	}
 
 }

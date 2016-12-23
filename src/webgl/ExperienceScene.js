@@ -172,10 +172,10 @@ class ExperienceScene {
 
 			this.zones = [
 				new Zone0(),
-				new Zone1({x: [882,1059],y: [541,674]}, this.controlsContainer, this.passes[2].params),
-				new Zone2({x: [1407,1640], y: [555,696]}, this.controlsContainer, this.passes[2].params),
-				new Zone3({x: [132,252], y: [553,677]}, this.controlsContainer, this.passes[2].params),
-				new Zone4({x: [459,552], y: [592,677]}, this.controlsContainer, this.passes[2].params)
+				new Zone1({x: [882,1059],y: [541,674]}, this.controlsContainer, this.passes[2].params, 1, 'Le Maronnier', '03'),
+				new Zone2({x: [1407,1640], y: [555,696]}, this.controlsContainer, this.passes[2].params, 2, 'Le Kiosque', '06'),
+				new Zone3({x: [132,252], y: [553,677]}, this.controlsContainer, this.passes[2].params, 3, 'La Statue', '05'),
+				new Zone4({x: [459,552], y: [592,677]}, this.controlsContainer, this.passes[2].params, 4, 'La Fontaine', '07')
 			];
 
 			Promise.all([
