@@ -51,9 +51,7 @@ class ChromaKeyMaterial extends THREE.ShaderMaterial {
 	}
 
 	play() {
-		console.log(this.video);
-		this.video.play()
-		.then(()=>console.log('video started'));
+		this.video.play();
 	}
 
 }

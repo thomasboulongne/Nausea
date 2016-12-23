@@ -145,7 +145,6 @@ class ExperienceScene {
 	}
 
 	setAmbiantSound() {
-
 		SoundManager.play('atmos01');
 	}
 
@@ -232,10 +231,6 @@ class ExperienceScene {
 			z: -.3,
 			rotY: 1
 		}));
-
-		// for (let i = 0; i < this.videos.length; i++) {
-		// 	this.add(this.videos[i].mesh);
-		// }
 		
 	}
 
@@ -274,36 +269,30 @@ class ExperienceScene {
 		
 
 		tl.add( () => {
+			this.endLights = true;
+		}, '2')
+		.to(this.passes[2].params, 20, {
+			strength: 0.2
+		}, '3')
+		.to(this.camera, 20, {
+			fov: 20
+		}, '3')
+		.add( () => {
 			SoundManager.play('10');
-		}, '3');
-
-		tl.add( () => {
+		}, '3')
+		.add( () => {
 			SoundManager.play('16');
-		}, '22');
-
-		tl.add( () => {
+		}, '22')
+		.add( () => {
 			SoundManager.play('11');
-		}, '41');
-
-		tl.add( () => {
+		}, '41')
+		.add( () => {
 			SoundManager.play('13');
-		}, '46');
-
-		tl.add( () => {
+		}, '46')
+		.add( () => {
 			Emitter.emit('END_SCREEN');
 			this.scene.background = this.blackSkybox.texture;
 		}, '46');
-		
-		tl.add( () => {
-			this.endLights = true;
-		}, '2');
-
-		tl.to(this.passes[2].params, 20, {
-			strength: 0.2
-		}, '3');
-		tl.to(this.camera, 20, {
-			fov: 20
-		}, '3');
 	}
 
 	addEventListeners() {
@@ -389,15 +378,6 @@ class ExperienceScene {
 	 * @description Renders/Draw the scene
 	 */
 	render() {
-
-		//Particles 
-		//this.particles.update();
-		//console.log(this.lights.list[0]);
-
-		// if(this.endLights)
-		// 	this.lights.list[1].intensity = 1 + Math.cos(Date.now()/1000)*5;
-
-		//console.log(this.lights.list[0].intensity)
 
 		if(this.zones) {
 

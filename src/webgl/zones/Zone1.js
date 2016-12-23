@@ -1,5 +1,5 @@
 import Zone from './Zone';
-import Spline from '../splines/Spline';
+import Spline from '../objects/Spline';
 
 import DataEmitter from '../data/DataEmitter';
 
@@ -106,7 +106,7 @@ class Zone1 extends Zone {
 			new THREE.Vector3(-3, 1.5, 11),
 			new THREE.Vector3(-1, 2, 8)
 		];
-		this.spline = new Spline(this.objects[0].mesh.position, this.controlsContainer, this.zoomParams, this.splinePoints, this.idZone);
+		this.spline = new Spline(this.objects[0].mesh.position, this.controlsContainer, this.zoomParams, this.splinePoints, this.id);
 		this.spline.init();
 	}
 

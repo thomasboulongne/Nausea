@@ -12,11 +12,11 @@ class Zone {
 	 * param [objects] : array of object
 	 * param scene : experience scene
 	 */
-	constructor(orientation, controlsContainer, zoomParams, idZone, name, soundId) {
+	constructor(orientation, controlsContainer, zoomParams, id, name, soundId) {
 
 		this.controlsContainer = controlsContainer;
 		this.zoomParams = zoomParams;
-		this.idZone = idZone;
+		this.id = id;
 
 		this.name = name;
 
@@ -90,11 +90,11 @@ class Zone {
 		// Emitter.on('END_ZONE4', () => {
 		// 	this.playEndZoneSound(1);
 		// });
-		Emitter.on('LEAVE_ZONE', (idZone) => {
-			if(idZone === 1) {
+		Emitter.on('LEAVE_ZONE', (zoneId) => {
+			if(zoneId === 1) {
 				// Play sound after scene 1 and disable hover during this time
 			}
-			// switch (idZone) {
+			// switch (zoneId) {
 			// 	case 1:
 			// 		// PLay sound, play with fog
 			// 		this.playEndZoneSound(0);
@@ -203,29 +203,16 @@ class Zone {
 			});
 		}
 	}
-
-	/**
-	 * @addScene
-	 */
-	addScene() {
-	}
-
+	
 	/**
 	 * @update
 	 */
 	update() {
-		for(let i = 0; i < this.objects.length; i++) {
-			// console.log(this.objects);
-			if(this.objects[i].options.materialize && this.objects[i].rotate) {
-				//this.objects[i].object.mesh.rotation.y += 0.01;
-			}
-		}
 
 		if(this.animate) {
 			for(let i = 0; i < this.objects.length; i++) {
 				if(this.objects[i].options.materialize) {
 					this.objects[i].material.uniforms.time.value = this.tweenTime.time;
-					//this.objects[i].object.options.material.uniforms.time.value = this.tweenTime.time;
 				}
 			}
 		}

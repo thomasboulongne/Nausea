@@ -1,58 +1,85 @@
+import SoundManager from '../../sound/SoundManager';
+
+import SceneManager from '../SceneManager';
+
+import Emitter from '../../core/Emitter';
+
 class Spline {
 
 	/**
 	* @constructor
 	*/
-	constructor(scene) {
+	constructor(target, controlsContainer, zoomParams, points, zoneSpline) {
 
-		this.scene = scene;
-		console.log(this.scene)
-		this.camera = this.scene.camera;
+		this.target = target;
+		this.zoomParams = zoomParams;
+		this.controlsContainer = controlsContainer;
 
-		console.log('yolo spline')
+		this.count = 0;
+		this.amount = 0.001;
+		this.ratio = 100;
 
-		this.curve = new THREE.CatmullRomCurve3([
-			new THREE.Vector3(0, 2, 0),
-			new THREE.Vector3(3, 2, 0),
-			new THREE.Vector3(5, 2, 0),
-			new THREE.Vector3(5, 2, 3),
-			new THREE.Vector3(5, 2, 5),
-			new THREE.Vector3(0, 2, 5),
-			new THREE.Vector3(0, 2, -2)
-		]);
+		this.zoneSpline = zoneSpline ? zoneSpline : 0;
 
+		this.enabled = false;
+
+		this.points = points;
+
+	}
+
+
+	init() {
+		this.curve = new THREE.CatmullRomCurve3(this.points);
+		this.initTimeline();
+	}
+
+	initTimeline () {
+		this.tweenTime = { time : 0};
+		this.timeline = new TimelineMax();
+		this.timeline.to(this.tweenTime, 10, {time: 1, onComplete: () => {
+			this.reverseTimeline();
+		}});
+		this.timeline.pause();
+	}
+
+	reverseTimeline () {
+		this.timeline
+			.to(this.tweenTime, 1.5, {time: 0, ease: Circ.easeInOut})
+			.to(this.controlsContainer.position, 0.2, {x: 0, y: 0, z:0}, '-=0.2');
+		SoundManager.play('back');
+		this.timeline.fromTo(this.zoomParams, 1.5, {strength: 0.5}, {strength: 0.0025, ease: Circ.easeInOut, onComplete: () => {
+			this.disableSpline();
+			TweenMax.to(this.controlsContainer.rotation, .6, {y: 0, onComplete: () => {
+				Emitter.emit('LEAVE_ZONE', this.zoneSpline);
+				if(this.zoneSpline === 1)
+					Emitter.emit('END_ZONE1');
+				if(this.zoneSpline === 4)
+					Emitter.emit('END_ZONE4');
+			}}, 1);
+		}}, "-=1.5");
+	}
+
+
+	createGeometry() {
 		this.geometry = new THREE.Geometry();
 		this.geometry.vertices = this.curve.getPoints(50);
 		this.material = new THREE.LineBasicMaterial({
 			color: 0xFF0000
 		});
 		
-		this.line = new THREE.Line(this.geometry, this.material); 
+		this.line = new THREE.Line(this.geometry, this.material);
 
-		this.count = 0;
-		this.amount = 0.001;
-		this.ratio = 100;
+		this.scene.add(this.line);
 	}
 
 	enableSpline() {
-		//this.scene.controls.enabled = false;
-		console.log(this.camera);
-		let init = this.curve.getPoint(0);
-		// this.camera.position.set(init.x, init.y, init.z);
-		// this.camera.lookAt(this.curve.getPoint(init));
-		this.scene.add(this.line);
-		console.log(init)
-		console.info(this.camera.position)
-		this.enabledSpline = true;
-		console.log(this.curve);
-
-
+		this.enabled = true;
+		this.timeline.play();
 	}
 
 	disableSpline() {
-		this.scene.remove(this.line);
-		this.enabledSpline = false;
-		this.scene.controls.enabled = true;
+		SceneManager.remove('experience', this.line);
+		this.enabled = false;
 	}
 
 	/**
@@ -61,48 +88,32 @@ class Spline {
 	 * @description Triggered on every TweenMax tick
 	 */
 	update() {
-		if(this.enabledSpline) {
+		if(this.enabled) {
 
-			let prevCamPos = this.curve.getPoint(this.count);
+			let prevCamPos = this.curve.getPoint(this.tweenTime.time);
 
-			this.count += this.amount;
+			let camPos = this.curve.getPoint(this.tweenTime.time + 0.01);
 
-			let camPos = this.curve.getPoint(this.count);
-			//let camRot = this.curve.getTangent(this.count);
+			let vector = {
+				x: this.target.x - camPos.x,
+				z: this.target.z - camPos.z
+			};
 
-			// this.camera.position.z = camPos.z;
-			// this.camera.position.x = camPos.x;
-			// this.camera.position.y = camPos.y + 1;
-			//console.log(camPos.z - this.scene.controls.getObject().position.z);
+			let angle = Math.atan2(vector.x, vector.z);
 
-			this.scene.controls.getObject().position.z = camPos.z;
-			this.scene.controls.getObject().position.x = camPos.x;
-			this.scene.controls.getObject().position.y = camPos.y + 1;
+			this.controlsContainer.position.z = camPos.z;
+			this.controlsContainer.position.x = camPos.x;
+			this.controlsContainer.position.y = camPos.y;
 
-			this.scene.controls.getObject().translateZ(camPos.z - prevCamPos.z);
-			this.scene.controls.getObject().translateX(camPos.x - prevCamPos.x);
-			this.scene.controls.getObject().translateY(camPos.y - prevCamPos.y);
+			this.controlsContainer.translateZ(camPos.z - prevCamPos.z);
+			this.controlsContainer.translateX(camPos.x - prevCamPos.x);
+			this.controlsContainer.translateY(camPos.y - prevCamPos.y);
 
-
-			console.log(this.scene.controls.getObject())
-
-			//console.log(this.scene.controls.getObject().translateX(camPos.x));
-
-			// this.camera.rotation.x = camRot.x;
-			// this.camera.rotation.y = camRot.y;
-			// this.camera.rotation.z = camRot.z;
-
-			//this.camera.lookAt(this.curve.getPoint(this.count));
-
-			if (this.count >= (1 - this.amount * this.ratio)) {
-				this.count = 0;
-				this.camera.position.z = 0;
-				this.disableSpline()
-			}
+			this.controlsContainer.rotation.y = angle;
 		}
 
 	}
 
 }
 
-export default Spline
+export default Spline;
