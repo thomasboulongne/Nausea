@@ -83,32 +83,6 @@ class Zone {
 		}, '1');
 	}
 
-	addListeners() {
-		// Emitter.on('LEAVE_ZONE', () => {
-		// 	this.playEndZoneSound(0);
-		// });
-		// Emitter.on('END_ZONE4', () => {
-		// 	this.playEndZoneSound(1);
-		// });
-		Emitter.on('LEAVE_ZONE', (zoneId) => {
-			if(zoneId === 1) {
-				// Play sound after scene 1 and disable hover during this time
-			}
-			// switch (zoneId) {
-			// 	case 1:
-			// 		// PLay sound, play with fog
-			// 		this.playEndZoneSound(0);
-			// 		break;
-			// 	case 4:
-			// 		// PLay sound, play with fog
-			// 		this.playEndZoneSound(1);
-			// 		break;
-			// 	default:
-			// 		break;
-			// }
-		});
-	}
-
 	playTimeline () {
 		this.timeline.play();
 	}
